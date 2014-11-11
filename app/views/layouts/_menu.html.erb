@@ -1,0 +1,48 @@
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container-fluid nav_container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<%= link_to root_url, class:"navbar-brand" do%>		
+			<div class="container-fluid">
+ 			<div class="row">
+			  <div class="col-md-2 visible-lg-inline-block"><%=image_tag 'logo.svg', class: "nav_logo"%></div>
+			  <div class="col-md-10"><div class="nav_title_en">eCampus</div><div class="nav_title_ch">國立交通大學網路教學平台</div></div>
+  			</div>
+			</div>	
+			<%end%>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse navbar-right">
+			<ul class="nav navbar-nav">
+				<li class="dropdown" id="menuLogin">
+					<a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">Login</a>
+					<div class="dropdown-menu" style="padding:17px;">
+						<form class="form" id="formLogin">
+							<input name="username" id="username" placeholder="Username" type="text">
+							<input name="password" id="password" placeholder="Password" type="password">
+							<br>
+							<button type="button" id="btnLogin" class="btn">
+								Login
+							</button>
+						</form>
+					</div>
+				</li>
+				<li>
+					<div class="form-group">
+					<input type="checkbox" name="my-checkbox" checked>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+<script>
+	$("[name='my-checkbox']").bootstrapSwitch({
+		onText: '中',
+		offText: 'EN'
+	});
+</script>

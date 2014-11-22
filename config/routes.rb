@@ -1,9 +1,15 @@
 Rails.application.routes.draw do
   
+  get 'courses/new'
+  get 'courses/info'
+  get 'courses/quiz'
+
+  get  'users/courses'
+  get  'users/logOut'
+  post 'users/signIn'
   
   get 'main/index'
   get 'main/courseSearch'
-  
   
   root 'main#index'
 

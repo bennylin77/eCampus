@@ -1,0 +1,13 @@
+<div id="current-st-container" class="transitions-enabled clearfix">
+	<%= render(partial: "course_block", collection: @st_courses)|| "none" %>
+</div>
+<div id="current-tea-container" class="transitions-enabled clearfix">
+	<%= render(partial: "course_block", collection: @tea_courses)|| "none" %>
+</div>
+
+<script>
+    $(document).ready(function() {
+      $("#current-st-container").shapeshift();
+      $("#current-tea-container").shapeshift();
+    })
+</script>

@@ -1,0 +1,25 @@
+<div class="col-sm-3 col-md-2 sidebar">
+	<ul class="nav nav-sidebar">
+		<li class="active">
+			<a href="#">課程資訊 <span class="sr-only">(current)</span></a>
+		</li>
+		<li>
+			<a href="#">線上課程</a>
+		</li>
+		<li>
+			<a href="#">消息公告</a>
+		</li>
+		<li>
+			<a href="#">作業區</a>
+		</li>
+		<li>
+			<%=link_to '測驗區', {controller: :courses, action: :quiz, id: @course_id}%>
+		</li>	
+		<li>
+			<a href="#">通訊錄</a>
+		</li>
+		<li>
+			<a href="#">學期總成績</a>
+		</li>							
+	</ul>
+</div>

@@ -11,7 +11,31 @@
 <body>
 <%= render '/layouts/menu'%>
 <div class="container-fluid main">
-<%= yield %>
+<% flash.each_with_index do |(type, message), i| %>
+  <div class="alert <%= alert_class_for(type) %> flash_<%=i%> alert-dismissible fade in">
+    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <%= message %>
+  </div>
+<% end %>	
+<%unless params[:controller]=='courses'%>
+	<%= yield %>
+<%else%>
+	<div class="row">
+	<%= render '/layouts/sidebar'%>
+	 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+	<%= yield %>
+	</div>
+	</div>
+<%end%>
 </div>
+
+
+<script>
+<% flash.each_with_index do |(type, message), i| %>
+	$(".flash_<%=i%>").fadeTo(4000, 500).slideUp(500, function(){
+    	$(".flash_<%=i%>").alert('close');
+    }); 
+<% end %>
+</script>
 </body>
 </html>

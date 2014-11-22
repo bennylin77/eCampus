@@ -1,0 +1,22 @@
+<div class="course_user_box"  id="course_user_<%=course_block['CourseId']%>" >
+	<div class="course_user_block_content" id="course_user_content_<%=course_block['CourseId']%>">
+			<div class="course_user_box_title">
+			<span class="badge progress-bar-danger">4</span>		
+			<%=link_to course_block['zhTWName'], {controller: :courses, action: :quiz, id: course_block['CourseId']}%>
+			</div>	
+			<div class="course_user_box_avatar">
+			<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+			</div>
+			<div class="course_user_box_course_no">
+			課號：<%=course_block['CourseNo']%>
+			</div>	
+			<div class="course_user_box_location">
+			上課地點：工程四館
+			</div>		
+			<div class="course_user_box_time">
+			上課時間：4EFG			
+			</div>	
+			<div class="course_user_box_description">
+			</div>				
+	</div> 				
+</div>

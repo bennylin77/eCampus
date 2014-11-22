@@ -1,0 +1,75 @@
+/*================= user course block ===================*/
+#current-st-container{
+  position: relative;  
+}
+#current-tea-container{
+  position: relative;  
+}
+.course_user_box{
+  position: absolute;  
+  width: 200px;
+  background: #ffffff;
+  border: 1px solid #94908D;  
+}
+.course_user_box_title{
+  height: 53px;
+  padding-top: 15px;
+  font-size: 13px;
+  letter-spacing: 2px;
+  background: #94908D;
+  text-align: center;
+  color: #ffffff;
+}
+.course_user_box_title a{
+  color: #ffffff;  
+}
+.course_user_box_title a:hover{
+  text-decoration: none; 
+}
+
+.course_user_box_avatar{
+  text-align: center;
+  font-size: 30px;
+}
+.course_user_box_course_no{
+  width: 95%;  
+  padding-left: 3px;
+  letter-spacing: 2px;  
+  font-size: 12px;  
+  line-height: 20px;  
+  margin: 0 auto;  
+}
+.course_user_box_location{
+  width: 95%;  
+  padding-left: 3px;
+  letter-spacing: 2px;  
+  font-size: 12px;  
+  line-height: 20px;  
+  margin: 0 auto;  
+}
+.course_user_box_time{
+  width: 95%;  
+  padding-left: 3px;
+  letter-spacing: 2px;  
+  font-size: 12px;  
+  line-height: 20px;   
+  margin: 0 auto;    
+}
+.course_user_box_description{
+  border-top: 1px solid #94908D; 
+  letter-spacing: 2.5px;  
+  font-size: 12px;  
+  line-height: 16px;  
+  width: 95%;
+  padding-left: 3px;  
+  margin: 5px auto;
+  height: 70px;
+} 
+
+/*
+#current-container > .ss-placeholder-child {
+  background: transparent;
+  border: 1px dashed blue;
+}
+*/
+  

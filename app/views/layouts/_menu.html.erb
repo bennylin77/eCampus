@@ -1,3 +1,4 @@
+<%=render '/layouts/signIn'%>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 	<div class="container-fluid nav_container">
 		<div class="navbar-header">
@@ -18,24 +19,22 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse navbar-right">
 			<ul class="nav navbar-nav">
-				<li class="dropdown" id="menuLogin">
-					<a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">Login</a>
-					<div class="dropdown-menu" style="padding:17px;">
-						<form class="form" id="formLogin">
-							<input name="username" id="username" placeholder="Username" type="text">
-							<input name="password" id="password" placeholder="Password" type="password">
-							<br>
-							<button type="button" id="btnLogin" class="btn">
-								Login
-							</button>
-						</form>
-					</div>
+				<%if session[:user].blank?%>
+				<li>
+  				<button class="btn btn-primary btn-lg" href="#signup" data-toggle="modal" data-target="#signInRegisterModal">Sign In/Register</button>			
 				</li>
+				<%end%>	
+				<li>
+				<%=link_to session[:name], {controller: 'users', action: 'courses'}, {class: "btn btn-lg btn-success", role: "button"} %>						
+				</li>									
+				<li>
+				<%=link_to '登出', '/users/logOut', {class: "btn btn-lg btn-success", role: "button"} %>
+				</li>				
 				<li>
 					<div class="form-group">
 					<input type="checkbox" name="my-checkbox" checked>
 					</div>
-				</li>
+				</li>				
 			</ul>
 		</div>
 	</div>
@@ -45,4 +44,34 @@
 		onText: '中',
 		offText: 'EN'
 	});
+
+	$('.pw_acc_error').hide();
+    var sign_in_form = $('#sign_in_form');
+    sign_in_form.submit(function (ev) {
+    	$("#inputAccount").prop('disabled', true);
+    	$("#inputPw").prop('disabled', true);
+    	$("#submitPwAccount").prop('disabled', true);    	
+        $('.pw_acc_error').hide(500);    	
+        $.ajax({
+            type: sign_in_form.attr('method'),
+            url: sign_in_form.attr('action'),
+            data: {account: $('#inputAccount').val(), password: $('#inputPw').val()},
+  			datatype: 'json',
+            success: function (data) {
+            	if (data.success)
+                	$('#signInRegisterModal').modal('hide');
+            	else
+            	{
+            		$('.pw_acc_error').html(data.ErrMsg);
+            		$('.pw_acc_error').show(500);
+    				$("#inputAccount").prop('disabled', false);
+    				$("#inputPw").prop('disabled', false);     
+    				$("#submitPwAccount").prop('disabled', false);       				       		
+            	}	
+            }
+        });
+        ev.preventDefault();
+    });
+	
+	
 </script>

@@ -22,9 +22,7 @@ class UsersController < ApplicationController
   def signIn
     result = postRequest('http://140.113.8.134/E35/AccountInfo/Authentication', {account: params[:account], password: params[:password]})    
   
-    if result['ErrMsg'].blank?
-      logger.info result['AccountId']
-      logger.info result['AccountStatus']      
+    if result['ErrMsg'].blank?   
       session[:user]=result['AccountId']      
       session[:name]=result['Name']  
       session[:token_id]=result['TokenId']        

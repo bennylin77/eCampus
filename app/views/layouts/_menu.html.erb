@@ -25,14 +25,22 @@
 				</li>
 				<%end%>	
 				<li>
-				<%=link_to session[:name], {controller: 'users', action: 'courses'}, {class: "btn btn-lg btn-success", role: "button"} %>						
-				</li>									
-				<li>
-				<%=link_to '登出', '/users/logOut', {class: "btn btn-lg btn-success", role: "button"} %>
+				<%=image_tag 'male.ico', class: "img-circle pull-right", size: '35x35'%>				
 				</li>				
 				<li>
+				<%=link_to session[:name], {controller: 'users', action: 'courses'} %>						
+				</li>	
+				<li>
+				<%=link_to 'HOME', {controller: 'users', action: 'courses'} %>							
+				</li>	
+										
+				<li>
+				<%=link_to '登出', '/users/logOut' %>
+				</li>
+						
+				<li>
 					<div class="form-group">
-					<input type="checkbox" name="my-checkbox" checked>
+						<input type="checkbox" name="my-checkbox" checked>
 					</div>
 				</li>				
 			</ul>
@@ -44,34 +52,4 @@
 		onText: '中',
 		offText: 'EN'
 	});
-
-	$('.pw_acc_error').hide();
-    var sign_in_form = $('#sign_in_form');
-    sign_in_form.submit(function (ev) {
-    	$("#inputAccount").prop('disabled', true);
-    	$("#inputPw").prop('disabled', true);
-    	$("#submitPwAccount").prop('disabled', true);    	
-        $('.pw_acc_error').hide(500);    	
-        $.ajax({
-            type: sign_in_form.attr('method'),
-            url: sign_in_form.attr('action'),
-            data: {account: $('#inputAccount').val(), password: $('#inputPw').val()},
-  			datatype: 'json',
-            success: function (data) {
-            	if (data.success)
-                	$('#signInRegisterModal').modal('hide');
-            	else
-            	{
-            		$('.pw_acc_error').html(data.ErrMsg);
-            		$('.pw_acc_error').show(500);
-    				$("#inputAccount").prop('disabled', false);
-    				$("#inputPw").prop('disabled', false);     
-    				$("#submitPwAccount").prop('disabled', false);       				       		
-            	}	
-            }
-        });
-        ev.preventDefault();
-    });
-	
-	
 </script>

@@ -2,7 +2,7 @@
 	<div class="course_user_block_content" id="course_user_content_<%=course_block['CourseId']%>">
 			<div class="course_user_box_title">
 			<span class="badge progress-bar-danger">4</span>		
-			<%=link_to course_block['zhTWName'], {controller: :courses, action: :quiz, id: course_block['CourseId']}%>
+			<%=link_to course_block['zhTWName'], {controller: :courses, action: :teaIndexQuiz, id: course_block['CourseId']}%>
 			</div>	
 			<div class="course_user_box_avatar">
 			<span class="glyphicon glyphicon-user" aria-hidden="true"></span>

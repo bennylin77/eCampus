@@ -111,3 +111,32 @@
     </div>
   </div>  
 </div>
+<script>
+	$('.pw_acc_error').hide();
+    var sign_in_form = $('#sign_in_form');
+    sign_in_form.submit(function (ev) {
+    	$("#inputAccount").prop('disabled', true);
+    	$("#inputPw").prop('disabled', true);
+    	$("#submitPwAccount").prop('disabled', true);    	
+        $('.pw_acc_error').hide(500);    	
+        $.ajax({
+            type: sign_in_form.attr('method'),
+            url: sign_in_form.attr('action'),
+            data: {account: $('#inputAccount').val(), password: $('#inputPw').val()},
+  			datatype: 'json',
+            success: function (data) {
+            	if (data.success)
+                	$('#signInRegisterModal').modal('hide');
+            	else
+            	{
+            		$('.pw_acc_error').html(data.ErrMsg);
+            		$('.pw_acc_error').show(500);
+    				$("#inputAccount").prop('disabled', false);
+    				$("#inputPw").prop('disabled', false);     
+    				$("#submitPwAccount").prop('disabled', false);       				       		
+            	}	
+            }
+        });
+        ev.preventDefault();
+    });
+</script>

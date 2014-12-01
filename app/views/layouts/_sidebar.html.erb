@@ -1,4 +1,5 @@
-<div class="col-sm-3 col-md-2 sidebar">
+<div class="col-sm-2 col-md-2 sidebar">
+	<h4 style="text-align:center">使用者經驗專題</h4>
 	<ul class="nav nav-sidebar">
 		<li class="active">
 			<a href="#">課程資訊 <span class="sr-only">(current)</span></a>
@@ -13,7 +14,7 @@
 			<a href="#">作業區</a>
 		</li>
 		<li>
-			<%=link_to '測驗區', {controller: :courses, action: :quiz, id: @course_id}%>
+			<%=link_to '測驗區', {controller: :courses, action: :teaIndexQuiz, id: @course_id}%>
 		</li>	
 		<li>
 			<a href="#">通訊錄</a>

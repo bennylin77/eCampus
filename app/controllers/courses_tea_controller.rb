@@ -1,4 +1,4 @@
-class CoursesController < ApplicationController
+class CoursesTeaController < ApplicationController
   
   before_action :set_course, only: [:info]
   
@@ -9,5 +9,6 @@ class CoursesController < ApplicationController
   private
     def set_course
       @course_id = params[:id]
-    end     
+    end  
+
 end

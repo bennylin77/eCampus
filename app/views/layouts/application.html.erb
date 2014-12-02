@@ -17,7 +17,7 @@
     <%= message %>
   </div>
 <% end %>	
-<%unless params[:controller]=='courses'%>
+<%if params[:controller]=='main' or params[:controller]=='users'%>
 	<%= yield %>
 <%else%>
 	<div class="row">

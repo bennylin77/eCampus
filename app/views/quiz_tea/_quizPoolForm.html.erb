@@ -1,0 +1,324 @@
+<div class="row" id="question_list">
+	<div class="col-sm-8">
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?</h3>
+		  </div>
+		  <div class="panel-body">
+			  <ol type="A">
+			    <li>81 min.</li>
+			    <li>108 min.</li>
+			    <li>144 min.</li>	    
+			    <li>192 min.</li>		    	    
+			  </ol>
+			<blockquote>
+			  <p>這題很簡單，你不應該不會喔！</p>
+			</blockquote>
+			<a>編輯</a>|<a>刪除(只刪此卷上的題目)</a>|<a>刪除(從題庫一起刪除)</a>   
+		  </div> 
+		</div>
+	</div>
+</div>
+
+
+
+<div class="row" role="tabpanel">
+  <!-- Nav tabs -->
+  <div class="col-sm-8">
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#self_made" aria-controls="self_made" role="tab" data-toggle="tab">自行出題</a></li>
+    <li role="presentation"><a href="#from_pool" aria-controls="from_pool" role="tab" data-toggle="tab">題庫出題</a></li>
+  </ul>
+  <!-- Tab panes -->
+  </div>
+  <div class="col-sm-8">
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active" id="self_made">
+    	<br>
+		<form action="/quiz_tea/updatePool" method="post" id="quiz_pool_form" class="form-horizontal" role="form">	
+			<div class="form-group">
+				<div class="col-sm-offset-1 col-sm-10">
+				<textarea class="form-control" rows="3" placeholder="題目" id="pool_subject"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-1 col-sm-10">
+					<select class="form-control" id="pool_category">
+						<option value="0">簡答題</option>
+						<option value="1">單選題</option>
+						<option value="2">複選題</option>
+						<option value="3">是非題</option>
+					</select>
+				</div>					
+			</div>
+			<div class="form-group">	
+				<div class="col-sm-offset-1 col-sm-10" id="option_field">	
+				</div>					
+			</div>					
+			<div class="form-group">	
+				<div class="col-sm-offset-1 col-sm-10">	
+					<textarea class="form-control" rows="3" placeholder="回饋" id="pool_comment"></textarea>
+				</div>					
+			</div>	
+			<div class="form-group">
+				<div class="col-sm-offset-1 col-sm-10">
+					<button type="submit" class="btn btn-default" id="submitBasic">
+						儲存
+					</button>
+				</div>
+			</div>				
+		</form>	    		
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="from_pool">
+    	<br>    	
+    	妳看不到 看不到 看不到 因為我還沒做 還沒做 還沒做
+    </div>
+  </div>
+  </div>
+</div>
+
+
+<script>
+
+	function editQuestion( pool_id, question_id, category, subject, option, comment)
+	{
+		
+		pool_id
+		
+		pool_subject
+		
+		
+		
+	}
+
+
+	function addQuestion( pool_id, question_id, category, subject, options, comment) {
+		var $div_question_container = $("<div>", {id: "question_container_"+question_id, class: "col-sm-8"});	    
+		var $div_panel_container = $("<div>", {class: "panel panel-default"});
+		var $div_panel_heading_container = $("<div>", {class: "panel-heading"});
+		var $div_panel_title_container = $("<h3>", {class: "panel-title"});
+		var $div_panel_body_container = $("<div>", {class: "panel-body"});
+		var $div_comment_container = $("<blockquote>", {});	
+	
+		switch(category) {
+	    case '0':
+			var $div_options_container = $("<p>", {class: "text-left"});
+			for(firstKey in options);
+			$div_options_container.html(options[firstKey]);	
+			var $div_edit = $("<div>", {id: "pool_edit_"+pool_id, style: "cursor: pointer; dispaly: inline-block"});
+			$div_edit.html("編輯");
+			$div_edit.click(function(){  
+				$("#pool_subject").val(subject);
+				$("#pool_category").val(category).change();				
+				$('#quiz_pool_form textarea[name="options[]"]').val(options[firstKey]); 		
+				$("#pool_comment").val(comment);					
+			});				
+	        break;
+	    case '1':
+			var $div_options_container = $("<ol>", {type: "A"});	    
+			$.each( options, function( k, v ){
+				$div_options_container.append($("<li>").html(v));	
+			});	    
+			var $div_edit = $("<div>", {id: "pool_edit_"+pool_id, style: "cursor: pointer; dispaly: inline-block"});
+			$div_edit.html("編輯");
+			$div_edit.click(function(){  
+				$("#pool_subject").val(subject);
+				$("#pool_category").val(category).change();		
+				$.each( options, function( k, v ){
+		            $('.option_list_field').append('<li>'+
+		            '<div class="row">'+
+		            '<div class="col-sm-5"><textarea class="form-control" rows="2" placeholder="選項" name="options[]">'+v+'</textarea></div>'+
+		            '<div class="col-sm-2"><label class="checkbox-inline"><input type="radio" name="answers[]">此為解答</label></div>'+             
+		            '<div class="col-sm-1"><a href="#" class="remove_option btn btn-danger">刪除</a></div>'+
+		            '</div>'+
+		            '</li>');						
+				});	 						
+				$("#pool_comment").val(comment);					
+			});	
+			
+			
+	        break;
+	    case '2':
+	    
+	    
+	        break;
+	    case '3':
+	    
+	    
+	        break;		
+		} 		
+		$div_panel_title_container.html(subject);					
+		$div_panel_heading_container.append($div_panel_title_container);	
+		$div_panel_body_container.append($div_options_container);
+		$div_comment_container.html(comment);		
+		$div_panel_body_container.append($div_comment_container);	
+		$div_panel_body_container.append($div_edit);											
+		$div_panel_container.append($div_panel_heading_container);		
+		$div_panel_container.append($div_panel_body_container);
+		$div_question_container.append($div_panel_container);		
+		$('#question_list').append($div_question_container);
+/*
+var $div = $("<div>", {id: "foo", class: "a"});
+$div.click(function(){  });
+$("#box").append($div);
+
+var newDiv = $(document.createElement('div')).attr({ id: 'area_block_' + area_index.toString(), class: 'tr'});
+newDiv.append("<select id='area_"+
+area_index.toString()+
+"' name='area["+
+area_index.toString()+
+"]'></select>"+	
+"<input id='location_"+
+area_index.toString()+
+"' name='location["+
+area_index.toString()+
+"]' size='10' type='text' placeholder='地點' value='"+
+location+
+"'/>"
+);
+newDiv.appendTo("#areaField");
+$(group_options).each(function() {
+$('#area_'+area_index.toString()).append($("<option>").attr('value',this.val).text(this.text));
+});
+if (area)
+$('#area_'+area_index.toString()).val(area);
+area_index++;
+	<div class="col-sm-8">
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+		    <h3 class="panel-title"> 	
+			One pipe can fill a tank three times as fast as another pipe. If together the two pipes can fill the tank in 36 minutes, then the slower pipe alone will be able to fill the tank in: 
+			</h3>
+		  </div>
+		  <div class="panel-body">
+			  <ol type="A">
+			    <li>81 min.</li>
+			    <li>108 min.</li>
+			    <li>144 min.</li>	    
+			    <li>192 min.</li>		    	    
+			  </ol>
+			<blockquote>
+			  <p>這題更簡單，你也是不應該不會喔！</p>
+			</blockquote>  	  
+		  </div>
+		</div>
+	</div>
+*/	
+	}
+	addQuestion('abc', 'def', '1', "盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?", { 7: "Saab", 6: "Volvo", 81: "BMW", 65: "GIANT"}, "這題更簡單，你也是不應該不會喔！");
+	addQuestion('abc', 'def', '0', "盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?", { 99: "Toyota"}, "這題更簡單，你也是不應該不會喔！");
+$(function() {
+	
+	
+	$( "#pool_category" ).change(function() {
+		$("#option_field").empty();
+		switch($(this).val()) {
+	    case '0':
+	        $("#option_field").append('<textarea class="form-control" rows="3" placeholder="答案" name="options[]"></textarea>');
+	        break;
+	    case '1':
+	   		$("#option_field").append('<ol type="A" class="option_list_field"></ol><a class="btn btn-default add_option_button_single">新增選項</a>');
+	        break;
+	    case '2':
+	   		$("#option_field").append('<ol type="A" class="option_list_field"></ol><a class="btn btn-default add_option_button_multi">新增選項</a>');	    
+	        break;
+	    case '3':
+	        $("#option_field").append('');	    
+	        break;                
+		} 
+	});	
+	$("#pool_category").val('0').change();
+    //var option_index = 1; //initlal text box count
+    
+    //single
+    $('#option_field').on("click",".add_option_button_single", function(e){ //on add input button click
+        	e.preventDefault();
+            //option_index++; 
+            $('.option_list_field').append('<li>'+
+            '<div class="row">'+
+            '<div class="col-sm-5"><textarea class="form-control" rows="2" placeholder="選項" name="options[]"></textarea></div>'+
+            '<div class="col-sm-2"><label class="checkbox-inline"><input type="radio" name="answers[]">此為解答</label></div>'+             
+            '<div class="col-sm-1"><a href="#" class="remove_option btn btn-danger">刪除</a></div>'+
+            '</div>'+
+            '</li>');
+    });
+    $('#option_field').on("click",".remove_option", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent().parent().parent('li').remove(); //option_index--;
+    })     
+    //multi
+    $('#option_field').on("click",".add_option_button_multi", function(e){ //on add input button click
+        	e.preventDefault();
+            //option_index++; 
+            $('.option_list_field').append('<li>'+
+            '<div class="row">'+
+            '<div class="col-sm-5"><textarea class="form-control" rows="2" placeholder="選項" name="options[]"></textarea></div>'+
+            '<div class="col-sm-2"><label class="checkbox-inline"><input type="checkbox" name="answers[]">此為解答</label></div>'+             
+            '<div class="col-sm-1"><a href="#" class="remove_option btn btn-danger">刪除</a></div>'+
+            '</div>'+
+            '</li>');
+    });
+    $('#option_field').on("click",".remove_option", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent().parent().parent('li').remove(); //option_index--;
+    })    
+	// handle ajax submit
+	var quiz_pool_form = $('#quiz_pool_form');
+	quiz_pool_form.submit(function(ev) {		
+		//handle options
+		var options = []; 
+		$('#quiz_pool_form textarea[name="options[]"]').each(function() {
+		    options.push($(this).val()); 
+		});		
+		//handle answers		
+		var answers = []; 	
+		switch($('#pool_category').val()) {
+	    case '0':
+	    	answers.push(true);
+	        break;
+	    case '1':
+			$('#quiz_pool_form input[name="answers[]"]').each(function() {
+				if($(this).prop('checked'))
+				{
+			    	answers.push(true); 				
+				}
+				else
+			    	answers.push(false); 		
+			});		       
+	        break;
+	    case '2':
+			$('#quiz_pool_form input[name="answers[]"]').each(function() {
+				if($(this).prop('checked'))
+				{
+			    	answers.push(true); 				
+				}
+				else
+			    	answers.push(false); 				
+			});		 	    
+	        break;     
+	    case '3':   
+	        break;	                   
+		} 
+	
+		$.ajax({
+			type : quiz_pool_form.attr('method'),
+			url : quiz_pool_form.attr('action'),
+			data : {
+				Subject : $('#pool_subject').val(),				
+				Category: $('#pool_category').val(),
+				Comment:  $('#pool_comment').val(),
+				Options: options,
+				Answers: answers
+			},
+			datatype : 'json',
+			success : function(data) {
+				if (data.success) {
+					courseAlertShow('alert-success', '成功新增題目')
+				} else {
+					courseAlertShow('alert-danger', 'test')
+				}
+			}
+		});
+		ev.preventDefault();
+	});    
+    
+});
+</script>

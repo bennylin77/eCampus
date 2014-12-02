@@ -1,8 +1,9 @@
 <div class="col-sm-2 col-md-2 sidebar">
 	<h4 style="text-align:center">使用者經驗專題</h4>
 	<ul class="nav nav-sidebar">
-		<li class="active">
-			<a href="#">課程資訊 <span class="sr-only">(current)</span></a>
+		<%if params[:controller]=='courses' or params[:controller]=='quiz'%>
+		<li <%if params[:controller]=='courses'%>class="active"<%end%>>
+			<%=link_to '課程資訊', { controller: 'courses', action: 'info', id: @course_id }%>
 		</li>
 		<li>
 			<a href="#">線上課程</a>
@@ -13,14 +14,37 @@
 		<li>
 			<a href="#">作業區</a>
 		</li>
-		<li>
-			<%=link_to '測驗區', {controller: :courses, action: :teaIndexQuiz, id: @course_id}%>
+		<li <%if params[:controller]=='quiz'%>class="active"<%end%>>
+			<%=link_to '測驗區', { controller: 'quiz', action: 'index', id: @course_id }%>			
 		</li>	
 		<li>
 			<a href="#">通訊錄</a>
 		</li>
 		<li>
 			<a href="#">學期總成績</a>
-		</li>							
+		</li>	
+		<%else%>
+		<li <%if params[:controller]=='courses_tea'%>class="active"<%end%>>
+			<%=link_to '課程資訊', { controller: 'courses_tea', action: 'info', id: @course_id }%>
+		</li>
+		<li>
+			<a href="#">線上課程</a>
+		</li>
+		<li>
+			<a href="#">消息公告</a>
+		</li>
+		<li>
+			<a href="#">作業區</a>
+		</li>
+		<li <%if params[:controller]=='quiz_tea'%>class="active"<%end%>>
+			<%=link_to '測驗區', { controller: 'quiz_tea', action: 'index', id: @course_id }%>			
+		</li>	
+		<li>
+			<a href="#">通訊錄</a>
+		</li>
+		<li>
+			<a href="#">學期總成績</a>
+		</li>		
+		<%end%>						
 	</ul>
 </div>

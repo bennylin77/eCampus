@@ -1,0 +1,2 @@
+module CoursesTeaHelper
+end

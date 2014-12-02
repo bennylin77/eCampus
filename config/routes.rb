@@ -1,21 +1,26 @@
 Rails.application.routes.draw do
 
+  get  'main/index'
+  get  'main/courseSearch'
+
   get  'courses/info'
   
-  get  'courses/teaIndexQuiz'
-  get  'courses/newQuiz' 
-  get  'courses/editQuiz'  
-  post 'courses/updateBasicQuiz'
-  post 'courses/updatePoolQuiz'
-  
-  
+  get  'courses_tea/info'  
+
   get  'users/courses'
   get  'users/logOut'
   post 'users/signIn'
   
-  get  'main/index'
-  get  'main/courseSearch'
-  
+  get  'quiz/index'
+  get  'quiz/show' 
+  get  'quiz/take'  
+     
+  get  'quiz_tea/index'
+  get  'quiz_tea/new' 
+  get  'quiz_tea/edit'  
+  post 'quiz_tea/updateBasic'
+  post 'quiz_tea/updatePool'
+   
   root 'main#index'
 
   # The priority is based upon order of creation: first created -> highest priority.

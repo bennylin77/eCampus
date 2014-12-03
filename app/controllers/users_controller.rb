@@ -16,7 +16,6 @@ class UsersController < ApplicationController
     else
       flash[:error]=result['ErrorMessage']   
     end
-   
   end
   
   def signIn

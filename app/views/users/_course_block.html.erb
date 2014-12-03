@@ -3,9 +3,9 @@
 			<div class="course_user_box_title">
 			<span class="badge progress-bar-danger">4</span>	
 			<%if course_block['StudentId'].blank?%>	
-				<%=link_to course_block['zhTWName'], {controller: :courses_tea, action: :info, id: course_block['CourseId']}%>
+				<%=link_to course_block['zhTWName'], {controller: :courses_tea, action: :info, course_id: course_block['CourseId']}%>
 			<%else%>
-				<%=link_to course_block['zhTWName'], {controller: :courses, action: :info, id: course_block['CourseId']}%>			
+				<%=link_to course_block['zhTWName'], {controller: :courses, action: :info, course_id: course_block['CourseId']}%>			
 			<%end%>
 			</div>	
 			<div class="course_user_box_avatar">

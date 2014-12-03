@@ -1,24 +1,24 @@
 <form action="/quiz_tea/updateBasic" method="post"  id="quiz_basic_form" class="form-horizontal" role="form">
 	<div class="form-group">
 		<div class="col-sm-10">
-			<input type="text" class="form-control" name="Caption" id="Caption" placeholder="測驗名稱">
+			<input type="text" class="form-control" name="Caption" id="Caption" placeholder="測驗名稱" value="<%=@result['Caption'] %>">
 		</div>
 	</div>
 	<div class="form-group">
 		<div class="col-sm-10">
-			<textarea class="form-control" rows="3" name="Content" id="Content" placeholder="內容說明"></textarea>
+			<textarea class="form-control" rows="3" name="Content" id="Content" placeholder="內容說明"><%=@result['Content'] %></textarea>
 		</div>
 	</div>
 	<div class="form-group">
 		<label class="col-sm-1 control-label">開始時間</label>
 		<div class="col-sm-9">
-			<input type="text" class="form-control" id='datetimepickerBeginDate' name="BeginDate">
+			<input type="text" class="form-control" id='datetimepickerBeginDate' name="BeginDate" value="<%=@result['BeginDate'] %>">
 		</div>
 	</div>
 	<div class="form-group">
 		<label class="col-sm-1 control-label">截止時間</label>
 		<div class="col-sm-9">
-			<input type="text" class="form-control" id='datetimepickerEndDate' name="EndDate">
+			<input type="text" class="form-control" id='datetimepickerEndDate' name="EndDate" value="<%=@result['EndDate'] %>">
 		</div>
 	</div>
 	<div class="form-group">
@@ -95,6 +95,8 @@
 			type : quiz_basic_form.attr('method'),
 			url : quiz_basic_form.attr('action'),
 			data : {
+				QuizId: '<%= @result['QuizId']%>',
+				CourseId: '<%= @result['CourseId']%>', 
 				Caption : $('#Caption').val(),
 				Content : $('#Content').val(),
 				BeginDate : $('#datetimepickerBeginDate').val(),
@@ -107,9 +109,9 @@
 			datatype : 'json',
 			success : function(data) {
 				if (data.success) {
-					courseAlertShow('alert-success', '基本設定儲存成功')
+					courseAlertShow('alert-success', data.msg)
 				} else {
-					courseAlertShow('alert-danger', 'test')
+					courseAlertShow('alert-danger', data.msg)
 				}
 				$("#Caption").prop('disabled', false);
 				$("#Content").prop('disabled', false);

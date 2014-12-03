@@ -8,6 +8,6 @@ class CoursesController < ApplicationController
   
   private
     def set_course
-      @course_id = params[:id]
+      @course_id = params[:course_id]
     end     
 end

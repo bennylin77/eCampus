@@ -1,9 +1,9 @@
 <div role="tabpanel">
 	<ul class="nav nav-tabs">
-		<li role="presentation">
+		<li role="presentation" class="active">
 			<a href="#quizFormBasic" aria-controls="quizFormBasic" role="tab" data-toggle="tab" >基本設定</a>
 		</li>
-		<li role="presentation" class="active">
+		<li role="presentation">
 			<a href="#quizFormPool" aria-controls="quizFormPool" role="tab" data-toggle="tab" >編輯題目</a>
 		</li>
 		<li role="presentation">
@@ -12,13 +12,13 @@
 	</ul>
 	<br>
 	<div class="tab-content">
-		<div role="tabpanel" class="tab-pane fade" id="quizFormBasic">
+		<div role="tabpanel" class="tab-pane fade in active" id="quizFormBasic">
 			<%= render 'quizBasicForm'%>
 		</div>
 		<div role="tabpanel" class="tab-pane fade" id="quizFormPool">
 			<%= render 'quizPoolForm'%>
 		</div>
-		<div role="tabpanel" class="tab-pane fade in active" id="quizFormExtra">
+		<div role="tabpanel" class="tab-pane fade" id="quizFormExtra">
 			<%= render 'quizExtraForm'%>
 		</div>
 	</div>

@@ -7,4 +7,13 @@ module ApplicationHelper
       :notice => 'alert-info'
     }[flash_type.to_sym] || flash_type.to_s
   end    
+  
+  def showBlank(s)
+    if s.blank?
+      '--'
+    else  
+      simple_format( s, {}, wrapper_tag: "span")
+    end
+  end
+  
 end

@@ -59,7 +59,8 @@
 
 }
 .data_list_content {
-  line-height: 50px;  
+  min-height: 50px;  
+  line-height: 50px;
   font-size: 16px;   
 }
 .data_list_content > div > a{

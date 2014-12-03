@@ -3,7 +3,7 @@
 	<ul class="nav nav-sidebar">
 		<%if params[:controller]=='courses' or params[:controller]=='quiz'%>
 		<li <%if params[:controller]=='courses'%>class="active"<%end%>>
-			<%=link_to '課程資訊', { controller: 'courses', action: 'info', id: @course_id }%>
+			<%=link_to '課程資訊', { controller: 'courses', action: 'info', course_id: @course_id }%>
 		</li>
 		<li>
 			<a href="#">線上課程</a>
@@ -15,7 +15,7 @@
 			<a href="#">作業區</a>
 		</li>
 		<li <%if params[:controller]=='quiz'%>class="active"<%end%>>
-			<%=link_to '測驗區', { controller: 'quiz', action: 'index', id: @course_id }%>			
+			<%=link_to '測驗區', { controller: 'quiz', action: 'index', course_id: @course_id }%>			
 		</li>	
 		<li>
 			<a href="#">通訊錄</a>
@@ -25,7 +25,7 @@
 		</li>	
 		<%else%>
 		<li <%if params[:controller]=='courses_tea'%>class="active"<%end%>>
-			<%=link_to '課程資訊', { controller: 'courses_tea', action: 'info', id: @course_id }%>
+			<%=link_to '課程資訊', { controller: 'courses_tea', action: 'info', course_id: @course_id }%>
 		</li>
 		<li>
 			<a href="#">線上課程</a>
@@ -37,7 +37,7 @@
 			<a href="#">作業區</a>
 		</li>
 		<li <%if params[:controller]=='quiz_tea'%>class="active"<%end%>>
-			<%=link_to '測驗區', { controller: 'quiz_tea', action: 'index', id: @course_id }%>			
+			<%=link_to '測驗區', { controller: 'quiz_tea', action: 'index', course_id: @course_id }%>			
 		</li>	
 		<li>
 			<a href="#">通訊錄</a>

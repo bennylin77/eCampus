@@ -1,6 +1,6 @@
 <div class="row crud_container">
 	<div class="col-sm-offset-10 col-sm-2">
-	<%= link_to '/quiz_tea/new?id='+@course_id.to_s, class: 'new_data' do %>
+	<%= link_to '/quiz_tea/new?course_id='+@course_id.to_s, class: 'new_data' do %>
 	<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 	<% end %>
 	</div>
@@ -10,8 +10,26 @@
   <div class="col-sm-2">測驗名稱</div>
   <div class="col-sm-2">開始時間</div>
   <div class="col-sm-2">截止時間</div>
-  <div class="col-sm-2">繳交情況</div>
+  <div class="col-sm-2"></div>
 </div>	
+
+<%@draft.each do |d| %>
+<div class="row data_list_content">
+  <div class="col-sm-4"></div>	
+  <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
+  	<%=link_to '/quiz_tea/edit?quiz_id='+d['QuizId']+'&course_id='+d['CourseId'] do%>	  
+	  <div class="row">
+		  <div class="col-sm-3"><%=showBlank d['Caption']%></div>	
+		  <div class="col-sm-3"><%=showBlank d['BeginDate']%></div>
+		  <div class="col-sm-3"><%=showBlank d['EndDate']%></div>
+		  <div class="col-sm-3"></div>
+	  </div>
+	<%end%>
+  </div>	
+</div>	
+<%end%>
+
+
 <div class="row data_list_content">
   <div class="col-sm-4"></div>	
   <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
@@ -25,6 +43,7 @@
 	</a>
   </div>	
 </div>	
+
 <div class="row data_list_content">
   <div class="col-sm-4"></div>	
   <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  

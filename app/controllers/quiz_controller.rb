@@ -6,7 +6,6 @@ class QuizController < ApplicationController
 # quiz for stu
   def index
     #result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListDraft', {CourseId: @course_id, UserId: session[:user], IP: request.remote_ip })   
-    #logger.info request.remote_ip
     #logger.info result  
   end
 
@@ -20,10 +19,10 @@ class QuizController < ApplicationController
   
   private
     def set_course
-      @course_id = params[:id]
+      @course_id = params[:course_id]
     end 
     def set_quiz
-      @quiz_id = params[:id]
+      @quiz_id = params[:quiz_id]
     end     
   
 end

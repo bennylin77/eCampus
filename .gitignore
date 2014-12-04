@@ -14,3 +14,8 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+/config/secret.yml
+/db/schema.rb
+/public
+#/config/initializers/setup_mail.rb

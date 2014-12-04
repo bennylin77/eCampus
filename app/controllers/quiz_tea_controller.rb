@@ -34,10 +34,11 @@ class QuizTeaController < ApplicationController
   end  
   
   def updateBasic 
-    result = postRequest('http://140.113.8.134/Quiz/QuizV2/UpdateDraft', {Caption: params[:Caption], Content: params[:Content], BeginDate: params[:BeginDate], EndDate: params[:EndDate], QuizId: params[:QuizId], CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})   
+    result = postRequest('http://140.113.8.134/Quiz/QuizV2/UpdateDraft', {Caption: params[:Caption], Content: params[:Content], BeginDate: params[:BeginDate], EndDate: params[:EndDate], QuizType: params[:QuizType],  
+                                                                          Invited: params[:Invited], Notify: params[:Notify], IsDisorder: params[:IsDisorder], QuizId: params[:QuizId], CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})   
 
     if result['Success']
-      render json: {success: true, msg: result['ErrorMessage'] }  
+      render json: {success: true, msg: '成功更新基本設定' }  
     else
       render json: {success: false, msg: result['ErrorMessage'] }     
     end       

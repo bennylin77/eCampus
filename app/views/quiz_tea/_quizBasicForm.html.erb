@@ -23,23 +23,14 @@
 	</div>
 	<div class="form-group">
 		<label class="col-sm-1 control-label">種類</label>
-		<div class="col-sm-9">
-			<select class="form-control" name="QuizType" id="QuizType">
-				<option value="1">隨堂考</option>
-				<option value="2">期中考</option>
-				<option value="3">期末考</option>
-				<option value="0">其它</option>
-			</select>
+		<div class="col-sm-9">			
+			<%=select_tag("QuizType", options_for_select([["隨堂考","1"],["期中考","2"],["期末考","3"],["其它","0"]], @result['QuizType']), class: "form-control", id: "QuizType")%>	
 		</div>
 	</div>
 	<div class="form-group">
 		<label class="col-sm-1 control-label">參與方式</label>
 		<div class="col-sm-9">
-			<select class="form-control" name="Invited" id="Invited">
-				<option value="0">所有修課生</option>
-				<option value="1">指定組別</option>
-				<option value="2">分組(一組交一份)</option>
-			</select>
+			<%=select_tag("QuizType", options_for_select([["所有修課生","0"],["指定組別","1"],["分組(一組交一份)","2"]], @result['Invited']), class: "form-control", id: "Invited")%>	
 		</div>
 	</div>
 	<div class="form-group">
@@ -59,10 +50,7 @@
 	<div class="form-group">
 		<label class="col-sm-1 control-label">試題排列</label>
 		<div class="col-sm-9">
-			<select class="form-control" name="IsDisorder" id="IsDisorder">
-				<option value="0">依序</option>
-				<option value="1">隨機排序</option>
-			</select>
+			<%=select_tag("IsDisorder", options_for_select([["依序","0"],["隨機排序","1"]], @result['IsDisorder']), class: "form-control", id: "IsDisorder")%>	
 		</div>
 	</div>
 	<div class="form-group">

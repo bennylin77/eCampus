@@ -9,6 +9,7 @@ class QuizTeaController < ApplicationController
       @draft=result['DataCollection']
     else
       flash[:error]=result['ErrorMessage']   
+      redirect_to controller: 'users', action: 'courses'
     end    
   end
   
@@ -25,9 +26,8 @@ class QuizTeaController < ApplicationController
   
   def edit           
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewDraft', {QuizId: @quiz_id, CourseId: @course_id, UserId: session[:user], IP: request.remote_ip})   
-    logger.info result
     if result['Success']
-      @result=result['DataCollection']     
+      @result=result['DataCollection']       
     else
       flash[:error]=result['ErrorMessage']   
     end     
@@ -46,15 +46,65 @@ class QuizTeaController < ApplicationController
   
   def updatePool
 
+    result = postRequest('http://140.113.8.134/Quiz/QuestionPool/CreatePoolDraft', {Subject: params[:Subject], Comment: params[:Comment], CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})         
+    if result['Success']
+      logger.info result['DataCollection']['PoolId']
+      #result = postRequest('http://140.113.8.134/Quiz/QuestionPool/UpdateDelPoolDraft', {Subject: params[:Subject], Comment: params[:Comment], isDelete: false, PoolId: result['DataCollection']['PoolId'], CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})         
+
+      result = postRequest('http://140.113.8.134/Quiz/QuizV2/CreateQuestion', {PoolId: result['DataCollection']['PoolId'], QuizId: params[:QuizId], UserId: session[:user], IP: request.remote_ip})       
+    
+    
+    
+      render json: {success: true, msg: result['ErrorMessage']}  
+    else
+      render json: {success: false, msg: result['ErrorMessage'] }     
+    end    
+
     params[:Options].each_with_index do |value, index|   
       logger.info value
       logger.info params[:Answers][index]
     end
-    
-    
-    render json: {success: true}     
+     
   end
   
+  def listQuestions
+    result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: params[:QuizId], UserId: session[:user], IP: request.remote_ip})       
+    
+    
+    if result['Success']     
+      pools=Array.new  
+      unless result['DataCollection'].blank?
+        result['DataCollection'].each do |q|  
+          result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPoolDraft', { PoolId: q['PoolId'], UserId: session[:user], IP: request.remote_ip})   
+          result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: q['PoolId'], UserId: session[:user], IP: request.remote_ip})   
+          options=Array.new      
+          unless result_ops['DataCollection'].blank?          
+            result_ops['DataCollection'].each do |o|
+              options <<
+              {                
+                option_id: o['OptionId'],
+                content: o['Content'],
+                isAnswer: o['isAnswer'],               
+              }  
+            end
+          end  
+          pools <<
+          {
+            pool_id: q['PoolId'],
+            question_id: q['QuestionId'],
+            category: q['Category'],
+            subject: q['Subject'],
+            comment: q['Comment'],
+            options: options
+          }          
+             
+        end
+      end
+      render json: {success: true, msg: '成功更新基本設定', pools: pools }  
+    else
+      render json: {success: false, msg: result['ErrorMessage'] }     
+    end          
+  end
   
   private
     def set_course

@@ -17,6 +17,15 @@ class QuizController < ApplicationController
     
   end  
   
+  def submitAnswers
+    params[:Answers].each_with_index do |value, index|   
+      logger.info value
+      logger.info value.second      
+      
+    end    
+    render json: {success: true, msg: '成功更新基本設定' }  
+  end
+  
   private
     def set_course
       @course_id = params[:course_id]

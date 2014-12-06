@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   get  'main/courseSearch'
 
   get  'courses/info'
-  
   get  'courses_tea/info'  
 
   get  'users/courses'
@@ -14,11 +13,12 @@ Rails.application.routes.draw do
   get  'quiz/index'
   get  'quiz/show' 
   get  'quiz/take'  
-  post 'quiz/take'
+  post 'quiz/submitAnswers'
      
   get  'quiz_tea/index'
   get  'quiz_tea/new' 
   get  'quiz_tea/edit'  
+  get  'quiz_tea/listQuestions'
   post 'quiz_tea/updateBasic'
   post 'quiz_tea/updatePool'
    

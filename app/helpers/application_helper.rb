@@ -16,4 +16,11 @@ module ApplicationHelper
     end
   end
   
+  def toFrontEndTimeFormat(t)
+    unless t.blank?
+      if t =~ /\/Date\((\d+)\)\//
+        Time.at($1.to_i/1000.0).strftime('%Y/%m/%d %H:%M')
+      end
+    end  
+  end
 end

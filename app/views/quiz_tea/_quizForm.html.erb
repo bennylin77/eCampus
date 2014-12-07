@@ -1,17 +1,27 @@
 <div role="tabpanel">
-	<ul class="nav nav-tabs">
+	<ul class="nav nav-tabs course-tabs">
 		<li role="presentation" class="active">
-			<a href="#quizFormBasic" aria-controls="quizFormBasic" role="tab" data-toggle="tab" >基本設定</a>
+			<a href="#quizFormBasic" aria-controls="quizFormBasic" role="tab" data-toggle="tab">
+				<%=image_tag 'hexagonal-582B32.svg', class: ""%><span>基本設定</span>
+			</a>
 		</li>
 		<li role="presentation">
-			<a href="#quizFormPool" aria-controls="quizFormPool" role="tab" data-toggle="tab" >編輯題目</a>
+			<a href="#quizFormPool" aria-controls="quizFormPool" role="tab" data-toggle="tab" >
+				<%=image_tag 'hexagonal-827D2B.svg', class: ""%><span>編輯題目</span>
+			</a>
 		</li>
 		<li role="presentation">
-			<a href="#quizFormExtra" aria-controls="quizFormExtra" role="tab" data-toggle="tab" >答案/成績設定</a>
+			<a href="#quizFormExtra" aria-controls="quizFormExtra" role="tab" data-toggle="tab" >
+				<%=image_tag 'hexagonal-6E7182.svg', class: ""%><span>答案/成績設定</span>
+			</a>
 		</li>
+		<li role="presentation">
+			<a href="#quizFormExtra" aria-controls="quizFormExtra" role="tab" data-toggle="tab" >
+				<%=image_tag 'hexagonal-7D7872.svg', class: ""%><span>發佈設定</span>
+			</a>
+		</li>		
 	</ul>
-	<br>
-	<div class="tab-content">
+	<div class="tab-content course-tab-content">
 		<div role="tabpanel" class="tab-pane fade in active" id="quizFormBasic">
 			<%= render 'quizBasicForm'%>
 		</div>
@@ -21,5 +31,8 @@
 		<div role="tabpanel" class="tab-pane fade" id="quizFormExtra">
 			<%= render 'quizExtraForm'%>
 		</div>
+		<div role="tabpanel" class="tab-pane fade" id="quizFormPublish">
+			<%= render 'quizPublishForm'%>
+		</div>		
 	</div>
 </div>

@@ -80,28 +80,47 @@
 
 <script>
 	
-	function editQuestion( pool_id, question_id, category, subject, option, comment)
+	function editQuestion(course_id, pool_id, question_id, category, subject, option, comment)
 	{		
 		pool_id
 		
 		pool_subject
 	}
 	// add Question
-	function addQuestion( pool_id, question_id, category, subject, options, comment) {
+	function addQuestion(course_id, pool_id, question_id, category, subject, options, comment) {
 		var $div_question_container = $("<div>", {id: "question_container_"+question_id, class: "col-sm-8"});	    
 		var $div_panel_container = $("<div>", {class: "panel panel-default"});
 		var $div_panel_heading_container = $("<div>", {class: "panel-heading"});
 		var $div_panel_title_container = $("<h3>", {class: "panel-title"});
 		var $div_panel_body_container = $("<div>", {class: "panel-body"});
 		var $div_comment_container = $("<blockquote>", {});	
-	
+		var $div_edit = $("<div>", {id: "pool_edit_"+pool_id, style: "cursor: pointer; dispaly: inline-block"});
+		$div_edit.html("編輯");	
+		var $div_del = $("<div>", {id: "pool_del_"+pool_id, style: "cursor: pointer; dispaly: inline-block"});			
+		$div_del.html("| 刪除");		
+		$div_del.click(function(){  
+			$.ajax({
+				type: "GET",
+				url: "/quiz_tea/deleteQuestion",
+				data: { QuestionId: question_id, CourseId: course_id},
+				datatype : 'json',
+				success : function(data) {
+					if (data.success) {
+						//courseAlertShow('alert-success', data.msg)
+						questionList();											
+					} else {
+						courseAlertShow('alert-danger', data.msg)
+					}
+				}			
+			});						
+		});	
+		
+		
 		switch(category) {
 	    case '0':
 			var $div_options_container = $("<p>", {class: "text-left"});
 			for(firstKey in options);
 			$div_options_container.html(options[firstKey].content);	
-			var $div_edit = $("<div>", {id: "pool_edit_"+pool_id, style: "cursor: pointer; dispaly: inline-block"});
-			$div_edit.html("編輯");
 			$div_edit.click(function(){  
 				$("#pool_subject").val(subject);
 				$("#pool_category").val(category).change();				
@@ -114,8 +133,6 @@
 			$.each( options, function( k, v ){
 				$div_options_container.append($("<li>").html(v.content));	
 			});	    
-			var $div_edit = $("<div>", {id: "pool_edit_"+pool_id, style: "cursor: pointer; dispaly: inline-block"});
-			$div_edit.html("編輯");
 			$div_edit.click(function(){  
 				$("#pool_subject").val(subject);
 				$("#pool_category").val(category).change();		
@@ -134,9 +151,7 @@
 		            $('.option_list_field').append(li_html);						
 				});	 						
 				$("#pool_comment").val(comment);					
-			});	
-			
-			
+			});		
 	        break;
 	    case '2':
 	    
@@ -152,7 +167,8 @@
 		$div_panel_body_container.append($div_options_container);
 		$div_comment_container.html(comment);		
 		$div_panel_body_container.append($div_comment_container);	
-		$div_panel_body_container.append($div_edit);											
+		$div_panel_body_container.append($div_edit);
+		$div_panel_body_container.append($div_del);														
 		$div_panel_container.append($div_panel_heading_container);		
 		$div_panel_container.append($div_panel_body_container);
 		$div_question_container.append($div_panel_container);		
@@ -173,7 +189,7 @@
 				if (data.success) {
 					//courseAlertShow('alert-success', data.msg)
 					$.each( data.pools, function( k, v ){
-						addQuestion(v.pool_id, v.question_id, v.category, v.subject, v.options, v.comment);	
+						addQuestion(v.course_id, v.pool_id, v.question_id, v.category, v.subject, v.options, v.comment);	
 					});											
 				} else {
 					courseAlertShow('alert-danger', data.msg)

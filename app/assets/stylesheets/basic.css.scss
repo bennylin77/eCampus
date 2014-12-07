@@ -1,16 +1,23 @@
-/* GLOBAL STYLES
--------------------------------------------------- */
-/* Padding below the footer and lighter body text */
+
+/*-------------------------------------------------- */
+
 body {
   font-family: Microsoft Jhenghei, 'Lato', Calibri, Arial, sans-serif;     
-  padding-bottom: 40px;
   color: #5C5C5D;
 }
-/* CUSTOMIZE THE NAVBAR
--------------------------------------------------- */
+*:focus {
+    outline: 0 !important;
+}
+a:hover {
+    background: none ;
+}
+/*-------------------------------------------------- */
 .nav_container{
   min-height: 80px;  
   background: #ffffff;
+}
+.nav_container a{
+  color: #582B32;   
 }
 .nav_logo{
   height: 50px;
@@ -18,7 +25,7 @@ body {
 .nav_title_en{
   font-size: 15px;
   line-height: 25px;
-  padding-left: 5px;
+  padding-left: 5px;  
 }
 .nav_title_ch{
   font-size: 15px;

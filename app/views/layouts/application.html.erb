@@ -20,9 +20,9 @@
 <%if params[:controller]=='main' or params[:controller]=='users'%>
 	<%= yield %>
 <%else%>
-	<div class="row">
+	<div class="row course_container">
 	<%= render '/layouts/sidebar'%>
-		<div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2">
+		<div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 course_content">
 		  <div class="alert alert-success alert-dismissible fade in" id="course_alert">
 		  </div>	 	
 		  <%= yield %>

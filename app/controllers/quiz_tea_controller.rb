@@ -45,13 +45,15 @@ class QuizTeaController < ApplicationController
   end  
   
   def updatePool
-
-    result = postRequest('http://140.113.8.134/Quiz/QuestionPool/CreatePoolDraft', {Subject: params[:Subject], Comment: params[:Comment], CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})         
-    if result['Success']
-      logger.info result['DataCollection']['PoolId']
-      #result = postRequest('http://140.113.8.134/Quiz/QuestionPool/UpdateDelPoolDraft', {Subject: params[:Subject], Comment: params[:Comment], isDelete: false, PoolId: result['DataCollection']['PoolId'], CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})         
-
-      result = postRequest('http://140.113.8.134/Quiz/QuizV2/CreateQuestion', {PoolId: result['DataCollection']['PoolId'], QuizId: params[:QuizId], UserId: session[:user], IP: request.remote_ip})       
+    logger.info params[:Subject]
+    result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/CreatePoolDraft', {Subject: params[:Subject], Comment: params[:Comment], CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})         
+    if result_pool['Success']
+      #result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/UpdateDelPoolDraft', {Subject: params[:Subject], Comment: params[:Comment], isDelete: false, PoolId: result_pool['DataCollection']['PoolId'], CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})         
+      result_op = postRequest('http://140.113.8.134/Quiz/QuestionPool/CreateOption', {PoolId: result_pool['DataCollection']['PoolId'], UserId: session[:user], IP: request.remote_ip})         
+      result_op = postRequest('http://140.113.8.134/Quiz/QuestionPool/UpdateDelOption', {Content: 123, isAnswer: true, isDelete: false, PoolId: result_pool['DataCollection']['PoolId'], OptionId: result_op['DataCollection']['OptionId'], UserId: session[:user], IP: request.remote_ip})         
+     
+      
+      result = postRequest('http://140.113.8.134/Quiz/QuizV2/CreateQuestion', {PoolId: result_pool['DataCollection']['PoolId'], QuizId: params[:QuizId], UserId: session[:user], IP: request.remote_ip})       
     
     
     
@@ -90,6 +92,7 @@ class QuizTeaController < ApplicationController
           end  
           pools <<
           {
+            course_id: q['CourseId'],
             pool_id: q['PoolId'],
             question_id: q['QuestionId'],
             category: q['Category'],
@@ -105,6 +108,19 @@ class QuizTeaController < ApplicationController
       render json: {success: false, msg: result['ErrorMessage'] }     
     end          
   end
+  
+  def deleteQuestion
+    
+    result = postRequest('http://140.113.8.134/Quiz/QuizV2/DelQuestion', {QuestionId: params[:QuestionId], CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})         
+ 
+ 
+    if result['Success']
+      render json: {success: true, msg: '成功更新基本設定' }  
+    else
+      render json: {success: false, msg: result['ErrorMessage'] }     
+    end      
+  end
+  
   
   private
     def set_course

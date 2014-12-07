@@ -1,3 +1,10 @@
+.course_container{
+
+}
+
+.course_content{
+
+}
 /*================== Sidebar ====================*/
 .sidebar {
   display: none;
@@ -13,7 +20,6 @@
     padding: 20px;
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    border-right: 1px solid #eee;
   }
 }
 /* Sidebar navigation */
@@ -69,6 +75,48 @@
 }
 .data_list_content > div > a:hover{
   opacity: 0.7; 
+}
+/*================== Tabs ====================*/
+.course-tabs{
+  font-size: 17px;
+  background: #ffffff;  
+}
+.course-tabs > li> a{
+  border: none;    
+  color: #582B32;   
+  line-height: 35px;
+  background: none !important;
+}
+
+.course-tabs > li.active > a, 
+.course-tabs > li.active > a:hover, 
+.course-tabs > li.active > a:focus {
+  border: none;  
+  background: none;
+}
+
+.course-tabs > li.active > a > span, 
+.course-tabs > li.active > a:hover > span, 
+.course-tabs > li.active > a:focus > span {
+  border-bottom:1px solid #582B32;
+  padding-bottom:2px; 
+  outline: 0; 
+}
+
+.course-tabs > li> a > img{
+  height: 20px;
+  width: 20px;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+.course-tabs > li> a > span{
+  vertical-align:text-top;
+}
+.course-tab-content{
+  min-height: 1000px;
+  background: #E8E2D4;
+  padding-top: 20px;  
+  padding-left: 20px;
 }
 /*================== Quiz ====================*/
 .quiz{

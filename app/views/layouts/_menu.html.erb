@@ -17,47 +17,34 @@
 			</div>	
 			<%end%>
 		</div>
-		<div id="navbar" class="navbar-collapse collapse navbar-right">
+		<div id="navbar" class="navbar-collapse collapse navbar-right menu_right">
 			<ul class="nav navbar-nav">
-				<%if session[:user].blank?%>
-				<li>
-  				<button class="btn btn-primary btn-lg" href="#signup" data-toggle="modal" data-target="#signInRegisterModal">Sign In/Register</button>			
-				</li>
-				<%end%>				
-				<li>
-				<%=link_to '/users/courses' do%>	
-				<%=image_tag 'male.ico', class: "img-circle", size: '35x35'%>
-				<span><%=session[:name]%></span>
-				<%end%>					
+				<li class="login_ul">
+  					<a class="login_signup" href="#signup" data-toggle="modal" data-target="#signInRegisterModal">登入 / 註冊</a>			
 				</li>		
-				<li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-list-alt"></span></a>
-                  <ul class="dropdown-menu" role="menu">
-                    <li class="dropdown-header">學生</li>                  	
-                    <li><a href="#">微分方程</a></li>
-                    <li><a href="#">西班牙文</a></li>
-                    <li><a href="#">高等會計學</a></li>
-                    <li class="divider"></li>
-                    <li class="dropdown-header">助教</li>
-                    <li><a href="#">大眾傳播理論</a></li>
+				<li class="dropdown home_ul" style="display: none;">
+					<%=link_to '/users/courses' do%>	
+					<%=image_tag 'male.ico', class: "img-circle"%>
+					<span class="user_name"><%=session[:name]%></span>
+					<%end%>					
+				</li>		
+				<li class="dropdown course_ul" style="display: none;">
+                  <a class="menu_widget" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-list-alt"></span></a>
+                  <ul class="dropdown-menu course_shortcut" role="menu">
                   </ul>
                 </li>					
-				<li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-cog"></span></a>
+				<li class="dropdown settings_ul" style="display: none;">
+                  <a class="menu_widget" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-cog"></span></a>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
+                    <li><a href="#">個人檔案</a></li>
+                    <li><a href="#">隱私設定</a></li>
+                    <li><a href="#">密碼修改</a></li>
                     <li class="divider"></li>
-                    <li class="dropdown-header">Nav header</li>
-                    <li><a href="#">Separated link</a></li>
                     <li><%=link_to '登出', '/users/logOut' %></li>
                   </ul>
                 </li>						
 				<li>
-					<div class="form-group">
-						<input type="checkbox" name="my-checkbox" checked>
-					</div>
+					<input type="checkbox" name="my-checkbox" checked>
 				</li>				
 			</ul>
 		</div>
@@ -67,5 +54,39 @@
 	$("[name='my-checkbox']").bootstrapSwitch({
 		onText: '中',
 		offText: 'EN'
-	});
+	});	
+	function courseList()
+	{
+		$('.course_shortcut').empty();
+		$.ajax({
+			type: "GET",
+			url: "/users/listCourses",
+			datatype : 'json',
+			success : function(data) {
+				if (data.success) {    
+					$('.course_shortcut').append($("<li>", {class: "dropdown-header"}).html('學生'));
+					$.each( data.course_stu, function( k, v ){
+						$('.course_shortcut').append($("<li>").html('<a href="/courses/info?course_id='+v.course_id+'">'+v.name+'</a>'));												
+					});	   										
+					$('.course_shortcut').append($("<li>", {class: "divider"}));						
+					$('.course_shortcut').append($("<li>", {class: "dropdown-header"}).html('助教'));								                    
+					$.each( data.course_tea, function( k, v ){
+						$('.course_shortcut').append($("<li>").html('<a href="/courses_tea/info?course_id='+v.course_id+'">'+v.name+'</a>'));												
+					});	  					   						
+				} else {
+					courseAlertShow('alert-danger', data.msg)
+				}
+			}			
+		});	
+	}
+
+$(function() {
+	<%if session[:user]%>
+		courseList();
+		$('.course_ul').show();
+		$('.settings_ul').show();	
+		$('.home_ul').show();			
+		$('.login_ul').hide();		
+	<%end%>	
+});		
 </script>

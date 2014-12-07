@@ -13,25 +13,55 @@ a:hover {
 }
 /*-------------------------------------------------- */
 .nav_container{
-  min-height: 80px;  
+  min-height: 60px;  
   background: #ffffff;
+  //border-bottom: 1px solid #eee;  
 }
 .nav_container a{
-  color: #582B32;   
+  color: #5C5C5D;
 }
 .nav_logo{
-  height: 50px;
+  height: 60px;
 }
 .nav_title_en{
-  font-size: 15px;
+  font-size: 17px;
   line-height: 25px;
-  padding-left: 5px;  
+  padding-left: 9px;  
 }
 .nav_title_ch{
-  font-size: 15px;
-  padding-left: 5px;  
+  font-size: 17px;
+  padding-left: 9px;  
 }
+.menu_right{
 
+}
+.menu_right > ul > li{
+  margin-left: 10px;
+  margin-top: 15px;  
+}
+.menu_right ul li .menu_widget{
+  font-size: 28px;
+  color: #582B32;
+  margin-top: 4px;     
+}
+.menu_right ul li > a:hover,
+.menu_right ul li > a:active,
+.menu_right ul li > a:focus{
+  background: none !important; 
+  opacity: 0.8;    
+}
+.menu_right ul li a > img{
+  margin-bottom: 10px;
+  height: 35px;
+  width: 35px;
+}
+.menu_right ul li .user_name{
+  font-size: 20px;
+}
+.menu_right ul li .login_signup{
+  font-size: 20px;
+  margin-top: 5px;
+}
 .margin-top-05 { margin-top: 0.5em; }
 .margin-top-10 { margin-top: 1.0em; }
 .margin-top-15 { margin-top: 1.5em; }

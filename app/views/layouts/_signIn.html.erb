@@ -126,7 +126,15 @@
   			datatype: 'json',
             success: function (data) {
             	if (data.success)
+            	{
                 	$('#signInRegisterModal').modal('hide');
+			 		courseList();
+					$('.course_ul').show();
+					$('.settings_ul').show();	
+					$('.home_ul').show();
+					$('.user_name').html(data.Name);			
+					$('.login_ul').hide();     
+				}          	       	
             	else
             	{
             		$('.pw_acc_error').html(data.ErrMsg);

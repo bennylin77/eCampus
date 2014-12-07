@@ -2,20 +2,44 @@ class UsersController < ApplicationController
   
   
   def courses
- 
     result = postRequest('http://140.113.8.134/E35/autRCrsStu/OpenSetListStu', {accountid: session[:user]})   
     if result['Success']
       @st_courses=result['DataCollection']
     else
       flash[:error]=result['ErrorMessage']   
     end
-  
     result = postRequest('http://140.113.8.134/E35/autRCrsTea/OpenSetListTea', {accountid: session[:user]})   
     if result['Success']
       @tea_courses=result['DataCollection']
     else
       flash[:error]=result['ErrorMessage']   
     end
+  end
+  
+  def listCourses
+    result_stu = postRequest('http://140.113.8.134/E35/autRCrsStu/OpenSetListStu', {accountid: session[:user]})   
+    course_stu=Array.new 
+    unless result_stu['DataCollection'].blank?
+      result_stu['DataCollection'].each do |s|
+        course_stu <<
+        {                
+          name: s['zhTWName'],           
+          course_id: s['CourseId']   
+        }        
+      end      
+    end   
+    result_tea = postRequest('http://140.113.8.134/E35/autRCrsTea/OpenSetListTea', {accountid: session[:user]})   
+    course_tea=Array.new 
+    unless result_tea['DataCollection'].blank?
+      result_tea['DataCollection'].each do |t|
+        course_tea <<
+        {                
+          name: t['zhTWName'],           
+          course_id: t['CourseId']              
+        }        
+      end      
+    end 
+    render json: {success: true, course_stu: course_stu, course_tea: course_tea  }  
   end
   
   def signIn

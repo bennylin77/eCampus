@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get  'courses_tea/info'  
 
   get  'users/courses'
+  get  'users/listCourses'
   get  'users/logOut'
   post 'users/signIn'
   

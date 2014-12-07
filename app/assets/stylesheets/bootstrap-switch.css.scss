@@ -20,17 +20,17 @@
  */
 
 .bootstrap-switch {
+  margin-top: 15px;
+  
   cursor: pointer;
- 
   display: inline-block;
-  border-radius: 4px;
+  border-radius: 8px;
   border: 1px solid;
   border-color: #582B32;
   position: relative;
-
   text-align: left;
   overflow: hidden;
-  line-height: 8px;
+  line-height: 10px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -55,9 +55,9 @@
   cursor: pointer;
   display: inline-block !important;
   height: 100%;
-  padding: 6px 12px;
+  padding: 6px 10px;
   font-size: 14px;
-  line-height: 20px;
+  line-height: 18px;
 }
 .bootstrap-switch .bootstrap-switch-handle-on,
 .bootstrap-switch .bootstrap-switch-handle-off {

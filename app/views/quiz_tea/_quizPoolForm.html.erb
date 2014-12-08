@@ -36,6 +36,7 @@
     <div role="tabpanel" class="tab-pane fade in active" id="self_made">
     	<br>
 		<form action="/quiz_tea/updatePool" method="post" id="quiz_pool_form" class="form-horizontal" role="form">	
+ 			<input type="hidden" name="pool_id" id="pool_id" value=""> 			
 			<div class="form-group">
 				<div class="col-sm-offset-1 col-sm-10">
 				<textarea class="form-control" rows="3" placeholder="題目" id="pool_subject"></textarea>
@@ -102,7 +103,7 @@
 			$.ajax({
 				type: "GET",
 				url: "/quiz_tea/deleteQuestion",
-				data: { QuestionId: question_id, CourseId: course_id},
+				data: { QuestionId: question_id, CourseId: '<%=@result['CourseId']%>'},
 				datatype : 'json',
 				success : function(data) {
 					if (data.success) {
@@ -114,14 +115,13 @@
 				}			
 			});						
 		});	
-		
-		
-		switch(category) {
+		switch(category.toString()) {
 	    case '0':
 			var $div_options_container = $("<p>", {class: "text-left"});
 			for(firstKey in options);
 			$div_options_container.html(options[firstKey].content);	
 			$div_edit.click(function(){  
+				$('#pool_id').val(pool_id);				
 				$("#pool_subject").val(subject);
 				$("#pool_category").val(category).change();				
 				$('#quiz_pool_form textarea[name="options[]"]').val(options[firstKey].content); 		
@@ -134,6 +134,7 @@
 				$div_options_container.append($("<li>").html(v.content));	
 			});	    
 			$div_edit.click(function(){  
+				$('#pool_id').val(pool_id);					
 				$("#pool_subject").val(subject);
 				$("#pool_category").val(category).change();		
 				$.each( options, function( k, v ){
@@ -293,6 +294,7 @@ $(function() {
 			type : quiz_pool_form.attr('method'),
 			url : quiz_pool_form.attr('action'),
 			data : {
+				PoolId: $('#pool_id').val(),	 
 				CourseId: '<%=@result['CourseId']%>',
 				QuizId: '<%=@result['QuizId']%>',				
 				Subject : $('#pool_subject').val(),				
@@ -304,7 +306,12 @@ $(function() {
 			datatype : 'json',
 			success : function(data) {
 				if (data.success) {
-					courseAlertShow('alert-success', '成功新增題目')
+					courseAlertShow('alert-success', '成功新增題目');
+					$('#pool_id').val('');
+					$('#pool_subject').val('');	
+					$("#pool_category").val('0').change();							
+				 	$('#pool_comment').val('');
+					$("#option_field").empty();				 					
 					questionList();					
 				} else {
 					courseAlertShow('alert-danger', data.msg)

@@ -45,33 +45,33 @@ class QuizTeaController < ApplicationController
   end  
   
   def updatePool
-    logger.info params[:Subject]
-    result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/CreatePoolDraft', {Subject: params[:Subject], Comment: params[:Comment], CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})         
-    if result_pool['Success']
-      #result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/UpdateDelPoolDraft', {Subject: params[:Subject], Comment: params[:Comment], isDelete: false, PoolId: result_pool['DataCollection']['PoolId'], CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})         
-      result_op = postRequest('http://140.113.8.134/Quiz/QuestionPool/CreateOption', {PoolId: result_pool['DataCollection']['PoolId'], UserId: session[:user], IP: request.remote_ip})         
-      result_op = postRequest('http://140.113.8.134/Quiz/QuestionPool/UpdateDelOption', {Content: 123, isAnswer: true, isDelete: false, PoolId: result_pool['DataCollection']['PoolId'], OptionId: result_op['DataCollection']['OptionId'], UserId: session[:user], IP: request.remote_ip})         
-     
-      
-      result = postRequest('http://140.113.8.134/Quiz/QuizV2/CreateQuestion', {PoolId: result_pool['DataCollection']['PoolId'], QuizId: params[:QuizId], UserId: session[:user], IP: request.remote_ip})       
-    
-    
-    
-      render json: {success: true, msg: result['ErrorMessage']}  
+    if params[:PoolId].blank?
+      result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/CreatePoolDraft', {CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})         
+      pool_id=result_pool['DataCollection']['PoolId']
+      postRequest('http://140.113.8.134/Quiz/QuizV2/CreateQuestion', {PoolId: pool_id, QuizId: params[:QuizId], UserId: session[:user], IP: request.remote_ip})        
     else
-      render json: {success: false, msg: result['ErrorMessage'] }     
-    end    
-
+      pool_id=params[:PoolId]
+    end  
+    # del update pool
+    result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/UpdateDelPoolDraft', {Subject: params[:Subject], Comment: params[:Comment], Category: params[:Category], isDelete: false, PoolId: pool_id, CourseId: params[:CourseId], UserId: session[:user], IP: request.remote_ip})         
+    # del options first
+    result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: pool_id, UserId: session[:user], IP: request.remote_ip})   
+    unless result_ops['DataCollection'].blank?          
+      result_ops['DataCollection'].each do |o|
+        postRequest('http://140.113.8.134/Quiz/QuestionPool/UpdateDelOption', {isDelete: true, PoolId: pool_id, OptionId: o['OptionId'], UserId: session[:user], IP: request.remote_ip})                              
+      end
+    end     
+    # create options   
     params[:Options].each_with_index do |value, index|   
-      logger.info value
-      logger.info params[:Answers][index]
-    end
-     
+      result_op = postRequest('http://140.113.8.134/Quiz/QuestionPool/CreateOption', {PoolId: result_pool['DataCollection']['PoolId'], UserId: session[:user], IP: request.remote_ip})         
+      result_op = postRequest('http://140.113.8.134/Quiz/QuestionPool/UpdateDelOption', {Content: value, isAnswer: params[:Answers][index], isDelete: false, PoolId: result_pool['DataCollection']['PoolId'], OptionId: result_op['DataCollection']['OptionId'], UserId: session[:user], IP: request.remote_ip})                     
+    end        
+    
+    render json: {success: true}   
   end
   
   def listQuestions
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: params[:QuizId], UserId: session[:user], IP: request.remote_ip})       
-    
     
     if result['Success']     
       pools=Array.new  
@@ -86,21 +86,21 @@ class QuizTeaController < ApplicationController
               {                
                 option_id: o['OptionId'],
                 content: o['Content'],
-                isAnswer: o['isAnswer'],               
+                isAnswer: o['IsAnswer'],               
               }  
             end
           end  
+          logger.info options
           pools <<
           {
             course_id: q['CourseId'],
             pool_id: q['PoolId'],
             question_id: q['QuestionId'],
-            category: q['Category'],
-            subject: q['Subject'],
-            comment: q['Comment'],
+            category: result_pool['DataCollection']['Category'],
+            subject: result_pool['DataCollection']['Subject'],
+            comment: result_pool['DataCollection']['Comment'],
             options: options
-          }          
-             
+          }            
         end
       end
       render json: {success: true, msg: '成功更新基本設定', pools: pools }  

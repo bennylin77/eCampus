@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   
   def postRequest(url, hash={})
     result = RestClient.post( url, hash)    
-    logger.info result 
+    #logger.info result 
     #logger.info result.cookies 
     result = result.force_encoding('utf-8').encode
     JSON.parse(result)        

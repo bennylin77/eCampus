@@ -14,7 +14,7 @@
 <div class="row data_list_content">
   <div class="col-sm-4"></div>	
   <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
-  	<%=link_to '/quiz/show?id=9988745' do%>	  
+  	<%=link_to '/quiz/show?quiz_id='+q['QuizId'] do%>	  
 	  <div class="row">
 		  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
 		  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
@@ -25,6 +25,20 @@
   </div>	
 </div>	
 <%end%>		
+<div class="row data_list_content">
+  <div class="col-sm-4"></div>	
+  <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
+  	<a href="#">	  
+	  <div class="row">
+		  <div class="col-sm-3">第五次小考</div>	
+		  <div class="col-sm-3">2014/11/11 09:00</div>
+		  <div class="col-sm-3">2014/11/11 09:00</div>
+		  <div class="col-sm-3">20個已繳 2個未繳</div>
+	  </div>
+	</a>
+  </div>	
+</div>
+
 	
 <div class="row data_list_title">
   <div class="col-sm-4">已結束測驗</div>	
@@ -72,3 +86,16 @@
 	</a>
   </div>	
 </div>	
+<div class="row data_list_content">
+  <div class="col-sm-4"></div>	
+  <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
+  	<a href="#">	  
+	  <div class="row">
+		  <div class="col-sm-3">第五次小考</div>	
+		  <div class="col-sm-3">2014/11/11 09:00</div>
+		  <div class="col-sm-3">2014/11/11 09:00</div>
+		  <div class="col-sm-3">20個已繳 2個未繳</div>
+	  </div>
+	</a>
+  </div>	
+</div>

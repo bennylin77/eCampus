@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-sm-2">即時嵌入式系統</div>		
+  <div class="col-sm-2"><%= @quiz['Caption']%></div>		
 </div>	
 <div class="row">
   <div class="col-sm-6">
@@ -9,11 +9,11 @@
 	</div>	
 	<div class="row">
 	<div class="col-sm-5">開始時間</div>
-	<div class="col-sm-7">2014/11/28 09:00</div>
+	<div class="col-sm-7"><%=toFrontEndTimeFormat @quiz['BeginDate'] %></div>
 	</div>	
 	<div class="row">
 	<div class="col-sm-5">最後入場時間</div>
-	<div class="col-sm-7">2014/11/30 21:00</div>
+	<div class="col-sm-7"><%=toFrontEndTimeFormat @quiz['EndDate'] %></div>
 	</div>	
 	<div class="row">
 	<div class="col-sm-5">作答時間</div>
@@ -25,18 +25,11 @@
 	</div>				  	
   </div>	
   	<div class="col-sm-6">
-	    強化遠端管理多網域的防火牆閘道器
-	    利用SmartWorkFlow執行任何異動的管制流程
-	    利用Provisioning Blade同時管理多台防火牆
-	    在叢集的環境裡建置及管理複雜的VPN環境
-	    綜合分析所有事件日誌，轉換為有幫助的管理資訊
-	    調整IPS安全政策，強化網路效能與安全防護之功能
-	    佈建及管理資訊安全外洩防護機制
-	    學習進階防火牆管理維護問題排除技巧
+	<%=@quiz['Content'] %>
 	</div>		
 </div>	
 
 
 <div class="row">
-  <div class="col-sm-2"><%=link_to "開始考試", {controller: 'quiz', action: 'take', id: '997878'}%></div>		
+  <div class="col-sm-2"><%=link_to "開始考試", {controller: 'quiz', action: 'take', quiz_id: @quiz['QuizId']}%></div>		
 </div>	

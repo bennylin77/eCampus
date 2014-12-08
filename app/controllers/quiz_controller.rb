@@ -16,10 +16,18 @@ class QuizController < ApplicationController
   end
 
   def show
-    
+    result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewQuiz', {QuizId: @quiz_id, UserId: session[:user], IP: request.remote_ip })    
+    if result['Success']
+      @quiz=result['DataCollection']
+    else
+      flash[:error]=result['ErrorMessage']   
+      redirect_to controller: 'users', action: 'courses'
+    end      
   end
 
   def take 
+    
+    
     
   end  
   

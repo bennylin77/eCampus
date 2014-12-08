@@ -1,7 +1,7 @@
 class QuizTeaController < ApplicationController
   
-  before_action :set_course, only: [:index, :new, :edit, :updateBasic]
-  before_action :set_quiz, only: [:edit, :updateBasic]      
+  before_action :set_course, only: [:index, :new, :edit, :updateBasic, :publish ]
+  before_action :set_quiz, only: [:edit, :updateBasic, :publish ]      
   # quiz for tea
   def index
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListDraft', {CourseId: @course_id, UserId: session[:user], IP: request.remote_ip })   
@@ -11,6 +11,14 @@ class QuizTeaController < ApplicationController
       flash[:error]=result['ErrorMessage']   
       redirect_to controller: 'users', action: 'courses'
     end    
+    result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuiz', {CourseId: @course_id, UserId: session[:user], IP: request.remote_ip })    
+    if result['Success']
+      @quiz=result['DataCollection']
+    else
+      flash[:error]=result['ErrorMessage']   
+      redirect_to controller: 'users', action: 'courses'
+    end      
+    
   end
   
   def new
@@ -32,6 +40,23 @@ class QuizTeaController < ApplicationController
       flash[:error]=result['ErrorMessage']   
     end     
   end  
+  
+  def publish    
+    result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: params[:QuizId], UserId: session[:user], IP: request.remote_ip})       
+    unless result['DataCollection'].blank?
+      result['DataCollection'].each do |q|  
+        r=postRequest('http://140.113.8.134/Quiz/QuestionPool/CreatePool', { PoolId: q['PoolId'], UserId: session[:user], IP: request.remote_ip})              
+        logger.info r
+      end
+    end       
+    result_quiz = postRequest('http://140.113.8.134/Quiz/QuizV2/CreateQuiz', {QuizId: @quiz_id, CourseId: @course_id, UserId: session[:user], IP: request.remote_ip })   
+    logger.info result_quiz
+    if result_quiz['Success']          
+    else
+      flash[:error]=result_quiz['ErrorMessage']   
+    end  
+    redirect_to controller: 'quiz_tea', action: 'index', course_id: @course_id  
+  end
   
   def updateBasic 
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/UpdateDraft', {Caption: params[:Caption], Content: params[:Content], BeginDate: params[:BeginDate], EndDate: params[:EndDate], QuizType: params[:QuizType],  

@@ -306,13 +306,13 @@ $(function() {
 			datatype : 'json',
 			success : function(data) {
 				if (data.success) {
-					courseAlertShow('alert-success', '成功新增題目');
+					courseAlertShow('alert-success', '成功新增題目');			 					
+					questionList();	
 					$('#pool_id').val('');
 					$('#pool_subject').val('');	
 					$("#pool_category").val('0').change();							
 				 	$('#pool_comment').val('');
-					$("#option_field").empty();				 					
-					questionList();					
+					$("#option_field").empty();										
 				} else {
 					courseAlertShow('alert-danger', data.msg)
 				}

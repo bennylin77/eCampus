@@ -13,12 +13,13 @@ Rails.application.routes.draw do
   
   get  'quiz/index'
   get  'quiz/show' 
-  get  'quiz/take'  
+  get  'quiz/take'     
   post 'quiz/submitAnswers'
      
   get  'quiz_tea/index'
   get  'quiz_tea/new' 
-  get  'quiz_tea/edit'  
+  get  'quiz_tea/edit'
+  get  'quiz_tea/publish'     
   get  'quiz_tea/listQuestions'
   get  'quiz_tea/deleteQuestion'
   post 'quiz_tea/updateBasic'

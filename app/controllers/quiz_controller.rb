@@ -34,7 +34,7 @@ class QuizController < ApplicationController
       #logger.info value
       #logger.info value.second       
     #end    
-=begin    
+=begin 
     material =Array.new  
     params[:Answers].each_with_index do |value, index|        
       material <<
@@ -45,8 +45,8 @@ class QuizController < ApplicationController
         Serial: "" 
       }     
     end 
-=end          
-
+        
+=end
     material = Hash.new()
     params[:Answers].each_with_index do |value, index|        
       material[index] =
@@ -57,13 +57,13 @@ class QuizController < ApplicationController
         Serial: "" 
       }     
     end 
- 
+
     #logger.info material  
     #result = postRequest('http://140.113.8.134/Quiz/QuizV2/SubmitSheet', {Material: material, QuizId: @quiz_id, UserId: session[:user], IP: request.remote_ip })    
     #aa={'0' => {SubmitId: nil, PoolId:"a5b62fc4-bb39-4c02-936d-8d11fbc2502f", Answer:"7654321", Serial:4}, '1'=> {SubmitId: nil, PoolId:"9bad40ef-a979-4047-aec0-b795e6300504", Answer:"bbbbb", Serial:5}}
     #logger.info aa
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/SubmitSheet', {UserId: "e308c735-4108-4121-8077-c9735009b076", IP:"0.0.0.0", QuizId: "35cfab66-a70f-4b99-bca0-191dd12d9f28", Material: material})    
-    #result = postRequest('http://140.113.159.109:3000/test/index', UserId: "e308c735-4108-4121-8077-c9735009b076", IP:"0.0.0.0", QuizId: "35cfab66-a70f-4b99-bca0-191dd12d9f28", 'Material[]'=> material)    
+    #result = postRequest('http://140.113.8.134/Quiz/QuizV2/SubmitSheet', UserId: "e308c735-4108-4121-8077-c9735009b076", IP:"0.0.0.0", QuizId: "35cfab66-a70f-4b99-bca0-191dd12d9f28", 'Material[]'=> material)    
     #result = postRequest('http://140.113.8.134/Quiz/QuizV2/testEEE',  {info: {UserId: "e308c735-4108-4121-8077-c9735009b076", IP:"0.0.0.0", QuizId: "35cfab66-a70f-4b99-bca0-191dd12d9f28", 'Material[]'=> material}})    
     #result = postRequest('http://140.113.159.109:3000/test/index',  UserId: "e308c735-4108-4121-8077-c9735009b076", IP:"0.0.0.0", QuizId: "35cfab66-a70f-4b99-bca0-191dd12d9f28", 'Material[]'=> material)    
     

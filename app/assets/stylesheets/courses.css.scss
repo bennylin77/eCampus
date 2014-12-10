@@ -120,6 +120,23 @@
   padding-top: 20px;  
   padding-left: 20px;
 }
+/*==================Area dropdown============-*/
+.area_dropdown{
+  cursor: pointer;
+  border-bottom: 1.5px solid #582B32;  
+  font-size: 16px;
+}
+.area_dropdown:hover{
+  opacity: 0.8;
+}
+.area_dropdown_title{
+  
+}
+.area_dropdown_icon{
+  float: right;
+}
+
+
 /*================== Quiz ====================*/
 .quiz{
   

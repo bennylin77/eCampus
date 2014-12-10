@@ -97,7 +97,6 @@ class QuizTeaController < ApplicationController
   
   def listQuestions
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: params[:QuizId], UserId: session[:user], IP: request.remote_ip})       
-    
     if result['Success']     
       pools=Array.new  
       unless result['DataCollection'].blank?

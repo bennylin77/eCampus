@@ -1,49 +1,27 @@
-<div class="row" id="question_list">
-	<div class="col-sm-8">
-		<div class="panel panel-default">
-		  <div class="panel-heading">
-		    <h3 class="panel-title">盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?</h3>
-		  </div>
-		  <div class="panel-body">
-			  <ol type="A">
-			    <li>81 min.</li>
-			    <li>108 min.</li>
-			    <li>144 min.</li>	    
-			    <li>192 min.</li>		    	    
-			  </ol>
-			<blockquote>
-			  <p>這題很簡單，你不應該不會喔！</p>
-			</blockquote>
-			<a>編輯</a>|<a>刪除(只刪此卷上的題目)</a>|<a>刪除(從題庫一起刪除)</a>   
-		  </div> 
-		</div>
-	</div>
+<div class="row">
+  <div class="col-sm-8 area_dropdown" id="pool_form_dropdown">
+  	<span class="area_dropdown_title">題庫出題</span><span class="area_dropdown_icon glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+  </div>	
 </div>
-
-
-
-<div class="row" role="tabpanel">
-  <!-- Nav tabs -->
-  <div class="col-sm-8">
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#self_made" aria-controls="self_made" role="tab" data-toggle="tab">自行出題</a></li>
-    <li role="presentation"><a href="#from_pool" aria-controls="from_pool" role="tab" data-toggle="tab">題庫出題</a></li>
-  </ul>
-  <!-- Tab panes -->
-  </div>
-  <div class="col-sm-8">
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane fade in active" id="self_made">
-    	<br>
+<br>
+<br>
+<div class="row">
+  <div class="col-sm-8 area_dropdown" id="self_form_dropdown">
+  	<span class="area_dropdown_title">自行出題</span><span id="self_form_dropdown_icon" class="area_dropdown_icon glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+  </div>	
+</div>
+<div class="row">
+  <br>	
+  <div class="col-sm-8" id="self_form_dropdown_content">
 		<form action="/quiz_tea/updatePool" method="post" id="quiz_pool_form" class="form-horizontal" role="form">	
  			<input type="hidden" name="pool_id" id="pool_id" value=""> 			
 			<div class="form-group">
-				<div class="col-sm-offset-1 col-sm-10">
+				<div class="col-sm-10">
 				<textarea class="form-control" rows="3" placeholder="題目" id="pool_subject"></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="col-sm-offset-1 col-sm-10">
+				<div class="col-sm-10">
 					<select class="form-control" id="pool_category">
 						<option value="0">簡答題</option>
 						<option value="1">單選題</option>
@@ -53,40 +31,35 @@
 				</div>					
 			</div>
 			<div class="form-group">	
-				<div class="col-sm-offset-1 col-sm-10" id="option_field">	
+				<div class="col-sm-10" id="option_field">	
 				</div>					
 			</div>					
 			<div class="form-group">	
-				<div class="col-sm-offset-1 col-sm-10">	
+				<div class="col-sm-10">	
 					<textarea class="form-control" rows="3" placeholder="回饋" id="pool_comment"></textarea>
 				</div>					
 			</div>	
 			<div class="form-group">
-				<div class="col-sm-offset-1 col-sm-10">
+				<div class="col-sm-10">
 					<button type="submit" class="btn btn-default" id="submitBasic">
 						儲存
 					</button>
 				</div>
 			</div>				
-		</form>	    		
-    </div>
-    <div role="tabpanel" class="tab-pane fade" id="from_pool">
-    	<br>    	
-    	妳看不到 看不到 看不到 因為我還沒做 還沒做 還沒做
-    </div>
-  </div>
+		</form>	
   </div>
 </div>
-
+<br>
+<div class="row">
+  <div class="col-sm-8 area_dropdown" id="self_question_list_dropdown">
+  	<span class="area_dropdown_title">題目預覽</span><span id="self_question_list_dropdown_icon" class="area_dropdown_icon glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+  </div>	
+</div>
+<br>
+<div class="row" id="question_list">
+</div>
 
 <script>
-	
-	function editQuestion(course_id, pool_id, question_id, category, subject, option, comment)
-	{		
-		pool_id
-		
-		pool_subject
-	}
 	// add Question
 	function addQuestion(course_id, pool_id, question_id, category, subject, options, comment) {
 		var $div_question_container = $("<div>", {id: "question_container_"+question_id, class: "col-sm-8"});	    
@@ -175,8 +148,6 @@
 		$div_question_container.append($div_panel_container);		
 		$('#question_list').append($div_question_container);
 	}
-	//addQuestion('abc', 'def', '1', "盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?", [ {option_id: 7, content: "Saab", isAnswer: false}, {option_id: 6, content: "Volvo", isAnswer: true}, {option_id: 81, content: "BMW", isAnswer: false}, {option_id: 65, content: "Giant", isAnswer: false}], "這題更簡單，你也是不應該不會喔！");
-	//addQuestion('abc', 'def', '0', "盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?", [ {option_id: 99, content: "Toyota", isAnswer: true}], "這題更簡單，你也是不應該不會喔！");
 	// list Question
 	function questionList()
 	{
@@ -201,7 +172,43 @@
 
 
 $(function() {
-	
+	// dropdown
+	$('#self_form_dropdown_content').hide();
+	$('#self_form_dropdown').data( "folded", true );
+	$("#self_form_dropdown" ).click(function() {
+		if( $("#self_form_dropdown").data("folded") )
+		{
+			$('#self_form_dropdown_content').slideDown({duration: 400, easing: 'swing'});	
+			$('#self_form_dropdown_icon' ).removeClass( "glyphicon-chevron-down" );
+			$('#self_form_dropdown_icon' ).addClass( "glyphicon-chevron-up" );	
+			$('#self_form_dropdown').data( "folded", false );
+		}	
+		else
+		{
+			$('#self_form_dropdown_content').slideUp({duration: 400, easing: 'swing'});	
+			$('#self_form_dropdown_icon' ).removeClass( "glyphicon-chevron-up" );
+			$('#self_form_dropdown_icon' ).addClass( "glyphicon-chevron-down" );
+			$('#self_form_dropdown').data( "folded", true );				
+		}		
+	});		
+	$('#self_question_list_dropdown').data( "folded", false );
+	$("#self_question_list_dropdown" ).click(function() {
+		if( $("#self_question_list_dropdown").data("folded") )
+		{
+			$('#question_list').slideDown({duration: 400, easing: 'swing'});	
+			$('#self_question_list_dropdown_icon' ).removeClass( "glyphicon-chevron-down" );
+			$('#self_question_list_dropdown_icon' ).addClass( "glyphicon-chevron-up" );	
+			$('#self_question_list_dropdown').data( "folded", false );
+		}	
+		else
+		{
+			$('#question_list').slideUp({duration: 400, easing: 'swing'});	
+			$('#self_question_list_dropdown_icon' ).removeClass( "glyphicon-chevron-up" );
+			$('#self_question_list_dropdown_icon' ).addClass( "glyphicon-chevron-down" );
+			$('#self_question_list_dropdown').data( "folded", true );				
+		}		
+	});		
+
 	questionList();
 	$( "#pool_category" ).change(function() {
 		$("#option_field").empty();

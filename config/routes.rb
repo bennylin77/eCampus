@@ -14,7 +14,8 @@ Rails.application.routes.draw do
   get  'quiz/index'
   get  'quiz/show' 
   get  'quiz/take'     
-  post 'quiz/submitAnswers'
+  get  'quiz/listQuestions'
+  post 'quiz/submitAnswers'  
      
   get  'quiz_tea/index'
   get  'quiz_tea/new' 

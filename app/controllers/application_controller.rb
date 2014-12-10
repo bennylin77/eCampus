@@ -4,8 +4,13 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
   def postRequest(url, hash={})
+    logger.info hash
     result = RestClient.post( url, hash)    
-    #logger.info result 
+    logger.info result.code
+    logger.info result.cookies
+    logger.info result.headers   
+    logger.info result.to_str
+     
     #logger.info result.cookies 
     result = result.force_encoding('utf-8').encode
     JSON.parse(result)        

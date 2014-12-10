@@ -54,6 +54,15 @@
 		</div>
 	</div>
 	<div class="form-group">
+		<label class="col-sm-1 control-label">成績公佈方式</label>
+		<div class="col-sm-9">
+			<%=select_tag("IsDisorder", options_for_select([["公開","0"],["個別","1"]], @result['DisplayScoreType']), class: "form-control", id: "DisplayScoreType")%>	
+		</div>
+	</div>	
+	
+	
+	
+	<div class="form-group">
 		<div class="col-sm-offset-1 col-sm-10">
 			<button type="submit" class="btn btn-default" id="submitBasic">
 				儲存

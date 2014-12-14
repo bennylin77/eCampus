@@ -17,11 +17,6 @@
  			<input type="hidden" name="pool_id" id="pool_id" value=""> 			
 			<div class="form-group">
 				<div class="col-sm-10">
-				<textarea class="form-control" rows="3" placeholder="題目" id="pool_subject"></textarea>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-10">
 					<select class="form-control" id="pool_category">
 						<option value="0">簡答題</option>
 						<option value="1">單選題</option>
@@ -29,6 +24,11 @@
 						<option value="3">是非題</option>
 					</select>
 				</div>					
+			</div>			
+			<div class="form-group">
+				<div class="col-sm-10">
+				<textarea class="form-control" rows="3" placeholder="題目" id="pool_subject"></textarea>
+				</div>
 			</div>
 			<div class="form-group">	
 				<div class="col-sm-10" id="option_field">	
@@ -51,12 +51,57 @@
 </div>
 <br>
 <div class="row">
-  <div class="col-sm-8 area_dropdown" id="self_question_list_dropdown">
-  	<span class="area_dropdown_title">題目預覽</span><span id="self_question_list_dropdown_icon" class="area_dropdown_icon glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
-  </div>	
+  <div class="col-sm-2">題目總覽</div>
+  <div class="col-sm-8">題目</div>
+  <div class="col-sm-1">備註</div>
+  <div class="col-sm-1">操作</div>	  	  	  	
 </div>
 <br>
 <div class="row" id="question_list">
+</div>
+
+
+<div class="question_eg">
+	<div class="row question_eg_question_outter">
+	  <div class="col-sm-2"></div>
+	  <div class="col-sm-8">盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?</div>
+	  <div class="col-sm-1">題庫/單選</div>
+	  <div class="col-sm-1">
+	  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+	  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>	
+	  </div>		
+	</div>
+	<div class="row question_eg_comment_outter">
+	  <div class="col-sm-2"></div>
+	  <div class="col-sm-8 question_eg_options_comment">回饋:</div>		
+	</div>	
+	<div class="row question_eg_options_title_outter">
+	  <div class="col-sm-2"></div>
+	  <div class="col-sm-10 question_eg_options_title">參考答案</div>		
+	</div>
+	<div class="row question_eg_options_outter">
+	  <div class="col-sm-2"></div>
+	  <div class="col-sm-10 question_eg_options_container">
+		<div class="checkbox disabled">
+		  <label>
+		    <input type="checkbox" checked="true" disabled>
+		          終南捷徑
+		  </label>
+		</div> 	
+		<div class="checkbox disabled">
+		  <label>
+		    <input type="checkbox" checked="true" disabled>
+		          終南捷徑
+		  </label>
+		</div> 
+		<div class="checkbox disabled">
+		  <label>
+		    <input type="checkbox" checked="true" disabled>
+		          終南捷徑
+		  </label>
+		</div>   	
+	  </div>		
+	</div>
 </div>
 
 <script>
@@ -190,24 +235,7 @@ $(function() {
 			$('#self_form_dropdown_icon' ).addClass( "glyphicon-chevron-down" );
 			$('#self_form_dropdown').data( "folded", true );				
 		}		
-	});		
-	$('#self_question_list_dropdown').data( "folded", false );
-	$("#self_question_list_dropdown" ).click(function() {
-		if( $("#self_question_list_dropdown").data("folded") )
-		{
-			$('#question_list').slideDown({duration: 400, easing: 'swing'});	
-			$('#self_question_list_dropdown_icon' ).removeClass( "glyphicon-chevron-down" );
-			$('#self_question_list_dropdown_icon' ).addClass( "glyphicon-chevron-up" );	
-			$('#self_question_list_dropdown').data( "folded", false );
-		}	
-		else
-		{
-			$('#question_list').slideUp({duration: 400, easing: 'swing'});	
-			$('#self_question_list_dropdown_icon' ).removeClass( "glyphicon-chevron-up" );
-			$('#self_question_list_dropdown_icon' ).addClass( "glyphicon-chevron-down" );
-			$('#self_question_list_dropdown').data( "folded", true );				
-		}		
-	});		
+	});			
 
 	questionList();
 	$( "#pool_category" ).change(function() {

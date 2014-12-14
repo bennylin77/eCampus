@@ -6,15 +6,29 @@ class ApplicationController < ActionController::Base
   def postRequest(url, hash={})
     logger.info hash
     result = RestClient.post( url, hash)    
+=begin    
     logger.info result.code
     logger.info result.cookies
     logger.info result.headers   
     logger.info result.to_str
-     
-    #logger.info result.cookies 
+=end
     result = result.force_encoding('utf-8').encode
     JSON.parse(result)        
   end
+  
+  def postRequestWithNestedJason(url, jason_data, params={})
+    result = RestClient.post( url, jason_data, params)    
+=begin    
+    logger.info result.code
+    logger.info result.cookies
+    logger.info result.headers   
+    logger.info result.to_str
+=end
+    logger.info result
+    result = result.force_encoding('utf-8').encode
+    JSON.parse(result)        
+  end
+  
   
   def getRequest
     

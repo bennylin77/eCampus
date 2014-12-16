@@ -6,9 +6,4 @@ class CoursesTeaController < ApplicationController
   end
   
   
-  private
-    def set_course
-      @course_id = params[:course_id]
-    end  
-
 end

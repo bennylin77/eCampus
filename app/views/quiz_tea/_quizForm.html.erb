@@ -1,12 +1,12 @@
 <div role="tabpanel">
 	<ul class="nav nav-tabs course-tabs" id="quiz_tabs">
 		<li role="presentation" class="active">
-			<a href="#quizFormBasic" aria-controls="quizFormBasic" role="tab" data-toggle="tab">
+			<a href="#quizFormBasic" aria-controls="quizFormBasic" role="tab" id="quiz_form_basic_button" >
 				<%=image_tag 'hexagonal-582B32.svg', class: ""%><span>基本設定</span>
 			</a>
 		</li>
 		<li role="presentation">
-			<a href="#quizFormPool" aria-controls="quizFormPool" role="tab" data-toggle="tab" >
+			<a href="#quizFormPool" aria-controls="quizFormPool" role="tab"  id="quiz_form_pool_button" >
 				<%=image_tag 'hexagonal-827D2B.svg', class: ""%><span>編輯題目</span>
 			</a>
 		</li>		
@@ -22,6 +22,6 @@
 </div>
 <script>
   $(function () {
-    $('#quiz_tabs a:nth-child(0)').tab('show')
+    //$('#quiz_tabs a:nth-child(0)').tab('show')
   })
 </script>

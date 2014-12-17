@@ -1,6 +1,5 @@
 <div class="row crud_container">
 	<div class="col-sm-offset-10 col-sm-2">
-		<%=session[:usertest].uid%>
 	</div>
 </div>	
 <div class="row data_list_title">
@@ -10,26 +9,27 @@
   <div class="col-sm-2">截止時間</div>
   <div class="col-sm-2">繳交情況</div>
 </div>	
-<%@quiz.each do |q| %>
-	<%unless q['BeginDate'].blank? %>
-		<%if Time.now < toFrontEndTimeFormat(q['BeginDate'])%>	
-		<div class="row data_list_content">
-		  <div class="col-sm-4"></div>	
-		  <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
-		  	<%=link_to '/quiz/show?quiz_id='+q['QuizId'] do%>	  
-			  <div class="row">
-				  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
-				  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
-				  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['EndDate'])%></div>
-				  <div class="col-sm-3">20個已繳 2個未繳</div>
-			  </div>
-			<%end%>
-		  </div>	
-		</div>
+<%unless @quiz.blank?%>
+	<%@quiz.each do |q| %>
+		<%unless q['BeginDate'].blank? %>
+			<%if Time.now < toFrontEndTimeFormat(q['BeginDate'])%>	
+			<div class="row data_list_content">
+			  <div class="col-sm-4"></div>	
+			  <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
+			  	<%=link_to '/quiz/show?quiz_id='+q['QuizId'] do%>	  
+				  <div class="row">
+					  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
+					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
+					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['EndDate'])%></div>
+					  <div class="col-sm-3">20個已繳 2個未繳</div>
+				  </div>
+				<%end%>
+			  </div>	
+			</div>
+			<%end%>	
 		<%end%>	
-	<%end%>	
-<%end%>		
-
+	<%end%>		
+<%end%>
 <div class="row data_list_title">
   <div class="col-sm-4">進行中</div>	
   <div class="col-sm-2">測驗名稱</div>
@@ -37,26 +37,27 @@
   <div class="col-sm-2">截止時間</div>
   <div class="col-sm-2">繳交情況</div>
 </div>	
-<%@quiz.each do |q| %>
-	<%unless q['BeginDate'].blank? or q['EndDate'].blank?%>
-		<%if Time.now > toFrontEndTimeFormat(q['BeginDate']) and Time.now < toFrontEndTimeFormat(q['EndDate'])%>	
-		<div class="row data_list_content">
-		  <div class="col-sm-4"></div>	
-		  <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
-		  	<%=link_to '/quiz/show?quiz_id='+q['QuizId'] do%>	  
-			  <div class="row">
-				  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
-				  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
-				  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['EndDate'])%></div>
-				  <div class="col-sm-3">20個已繳 2個未繳</div>
-			  </div>
-			<%end%>
-		  </div>	
-		</div>
+<%unless @quiz.blank?%>
+	<%@quiz.each do |q| %>
+		<%unless q['BeginDate'].blank? or q['EndDate'].blank?%>
+			<%if Time.now > toFrontEndTimeFormat(q['BeginDate']) and Time.now < toFrontEndTimeFormat(q['EndDate'])%>	
+			<div class="row data_list_content">
+			  <div class="col-sm-4"></div>	
+			  <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
+			  	<%=link_to '/quiz/show?quiz_id='+q['QuizId'] do%>	  
+				  <div class="row">
+					  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
+					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
+					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['EndDate'])%></div>
+					  <div class="col-sm-3">20個已繳 2個未繳</div>
+				  </div>
+				<%end%>
+			  </div>	
+			</div>
+			<%end%>	
 		<%end%>	
-	<%end%>	
+	<%end%>
 <%end%>
-
 	
 <div class="row data_list_title">
   <div class="col-sm-4">已結束</div>	
@@ -65,22 +66,24 @@
   <div class="col-sm-2">截止時間</div>
   <div class="col-sm-2">繳交情況</div>
 </div>	
-<%@quiz.each do |q| %>
-	<%unless q['EndDate'].blank? %>
-		<%if Time.now > toFrontEndTimeFormat(q['EndDate'])%>	
-		<div class="row data_list_content">
-		  <div class="col-sm-4"></div>	
-		  <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
-		  	<%=link_to '/quiz/show?quiz_id='+q['QuizId'] do%>	  
-			  <div class="row">
-				  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
-				  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
-				  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['EndDate'])%></div>
-				  <div class="col-sm-3">20個已繳 2個未繳</div>
-			  </div>
-			<%end%>
-		  </div>	
-		</div>
+<%unless @quiz.blank?%>
+	<%@quiz.each do |q| %>
+		<%unless q['EndDate'].blank? %>
+			<%if Time.now > toFrontEndTimeFormat(q['EndDate'])%>	
+			<div class="row data_list_content">
+			  <div class="col-sm-4"></div>	
+			  <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
+			  	<%=link_to '/quiz/show?quiz_id='+q['QuizId'] do%>	  
+				  <div class="row">
+					  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
+					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
+					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['EndDate'])%></div>
+					  <div class="col-sm-3">20個已繳 2個未繳</div>
+				  </div>
+				<%end%>
+			  </div>	
+			</div>
+			<%end%>	
 		<%end%>	
-	<%end%>	
+	<%end%>
 <%end%>

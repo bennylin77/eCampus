@@ -38,14 +38,31 @@ class ApplicationController < ActionController::Base
   end
   
   def successHandler(hash={})
-    unless hash[:success]
-      flash[:error]=hash[:error_message]   
+    unless hash[:success]  
+      flash[:error]=hash[:error_message]         
       redirect_to hash[:redirect_to]
     end
   end
   
   def set_course
-    @course_id = params[:course_id]
+    unless params[:course_id].blank?
+      @course_id = params[:course_id]
+    else
+      flash[:error]='沒有指定課程'        
+      redirect_to root_url   
+    end
   end   
   
+  def validations(hash={})
+    validation_message=""
+    case hash[:type]
+    when 'presence'
+      if hash[:data].blank?
+        validation_message='請填寫 '+hash[:title]+'<br>'
+      end         
+    when 'length'
+    end    
+    validation_message   
+  end
+
 end

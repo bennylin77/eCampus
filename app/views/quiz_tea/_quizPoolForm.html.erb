@@ -227,6 +227,12 @@ $(function() {
 		}		
 	});			
 	*/
+	//tabs
+	$('#quiz_form_basic_button').click(function(ev) {
+		ev.preventDefault();
+    	$('#quiz_tabs a:nth-child(0)').tab('show');
+	});
+	//pools
 	$('#pool_subject').hide();	
 	$('#pool_comment').hide();	
 	$('#submitPool').hide();		

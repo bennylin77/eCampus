@@ -16,7 +16,7 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-1 control-label">截止時間</label>
+		<label class="col-sm-1 control-label">最後入場時間</label>
 		<div class="col-sm-9">
 			<input type="text" class="form-control" id='datetimepickerEndDate' name="EndDate" value="<%=toFrontEndTimeFormat @result['EndDate'] %>">
 		</div>
@@ -24,13 +24,13 @@
 	<div class="form-group">
 		<label class="col-sm-1 control-label">種類</label>
 		<div class="col-sm-9">			
-			<%=select_tag("QuizType", options_for_select([["隨堂考","1"],["期中考","2"],["期末考","3"],["其它","0"]], @result['QuizType']), class: "form-control", id: "QuizType")%>	
+			<%=select_tag("QuizType", options_for_select(quizTypeOptions, @result['QuizType']), class: "form-control", id: "QuizType")%>	
 		</div>
 	</div>
 	<div class="form-group">
 		<label class="col-sm-1 control-label">參與方式</label>
 		<div class="col-sm-9">
-			<%=select_tag("QuizType", options_for_select([["所有修課生","0"],["指定組別","1"],["分組(一組交一份)","2"]], @result['Invited']), class: "form-control", id: "Invited")%>	
+			<%=select_tag("Invited", options_for_select(invitedOptions, @result['Invited']), class: "form-control", id: "Invited")%>	
 		</div>
 	</div>
 	<div class="form-group">
@@ -50,44 +50,38 @@
 	<div class="form-group">
 		<label class="col-sm-1 control-label">題目排列</label>
 		<div class="col-sm-9">
-			<%=select_tag("IsDisorder", options_for_select([["依序","0"],["隨機排序","1"]], @result['IsDisorder']), class: "form-control", id: "IsDisorder")%>	
+			<%=select_tag("IsDisorder", options_for_select(isDisorderOptions, @result['IsDisorder']), class: "form-control", id: "IsDisorder")%>	
 		</div>
 	</div>
 	<div class="form-group">
 		<label class="col-sm-1 control-label">題目呈現方式</label>
 		<div class="col-sm-9">
-			<%=select_tag("DisplayType", options_for_select([["全部顯示","0"],["逐題作答","1"]], @result['DisplayType']), class: "form-control", id: "DisplayType")%>	
+			<%=select_tag("DisplayType", options_for_select(displayTypeOptions, @result['DisplayType']), class: "form-control", id: "DisplayType")%>	
 		</div>
 	</div>	
 	<div class="form-group">
 		<label class="col-sm-1 control-label">成績公佈方式</label>
 		<div class="col-sm-9">
-			<%=select_tag("IsDisorder", options_for_select([["公開","0"],["個別","1"]], @result['DisplayScoreType']), class: "form-control", id: "DisplayScoreType")%>	
+			<%=select_tag("DisplayScoreType", options_for_select(displayScoreTypeOptions, @result['DisplayScoreType']), class: "form-control", id: "DisplayScoreType")%>	
 		</div>
 	</div>	
 	
-	
-
-	
-	<div class="form-group">
-		<div class="col-sm-offset-1 col-sm-10">
-			<button type="submit" class="btn btn-default" id="submitBasic">
-				儲存
-			</button>
-		</div>
-	</div>
 </form>
 
-<%= link_to '/quiz_tea/publish?course_id='+@result['CourseId']+'&quiz_id='+@result['QuizId'] do %>發佈<% end %>
-
-
+<div class="row operation_container">
+  <div class="col-sm-1"><%=link_to '儲存', '', id: 'basic_form_submit', class: 'operation_edit_but'%></div>
+  <div class="col-sm-1"><%=link_to '正式發佈', '/quiz_tea/publish?course_id='+@result['CourseId']+'&quiz_id='+@result['QuizId'], class: 'operation_edit_but'%></div>	    		  
+  <div class="col-sm-1"><%=link_to '刪除測驗', '/quiz_tea/deleteDraft?quiz_id='+@result['QuizId']+'&course_id='+@result['CourseId'], class: 'operation_del_but'%></div>	
+</div>
 <script type="text/javascript">
 	$('#datetimepickerBeginDate, #datetimepickerEndDate').datetimepicker({
 		use24hours : true,
 		format : 'YYYY/MM/DD HH:mm'
 	});
 	var quiz_basic_form = $('#quiz_basic_form');
-	quiz_basic_form.submit(function(ev) {
+	
+	$('#basic_form_submit, #quiz_form_pool_button').click(function(ev) {
+		ev.preventDefault();
 		$("#Caption").prop('disabled', true);
 		$("#Content").prop('disabled', true);
 		$("#datetimepickerBeginDate").prop('disabled', true);
@@ -104,8 +98,8 @@
 			type : quiz_basic_form.attr('method'),
 			url : quiz_basic_form.attr('action'),
 			data : {
-				QuizId: '<%= @result['QuizId']%>',
-				CourseId: '<%= @result['CourseId']%>', 
+				quiz_id: '<%= @result['QuizId']%>',
+				course_id: '<%= @result['CourseId']%>', 
 				Caption : $('#Caption').val(),
 				Content : $('#Content').val(),
 				BeginDate : $('#datetimepickerBeginDate').val(),
@@ -119,9 +113,10 @@
 			datatype : 'json',
 			success : function(data) {
 				if (data.success) {
-					courseAlertShow('alert-success', data.msg)
+					courseAlertShow('alert-success', data.message)
+					$('#quiz_tabs a:nth-child(1)').tab('show')					
 				} else {
-					courseAlertShow('alert-danger', data.msg)
+					courseAlertShow('alert-danger', data.message)
 				}
 				$("#Caption").prop('disabled', false);
 				$("#Content").prop('disabled', false);
@@ -138,7 +133,6 @@
 
 			}
 		});
-		ev.preventDefault();
 
 	});
 </script>

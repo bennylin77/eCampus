@@ -61,6 +61,11 @@ class ApplicationController < ActionController::Base
         validation_message='請填寫 '+hash[:title]+'<br>'
       end         
     when 'length'
+      
+    when 'latter_than'  
+       if hash[:data][:first] > hash[:data][:second]
+        validation_message=hash[:title][:first]+' 比 '+hash[:title][:second]+'晚<br>'
+      end     
     end    
     validation_message   
   end

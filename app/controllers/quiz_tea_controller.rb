@@ -13,11 +13,11 @@ class QuizTeaController < ApplicationController
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuiz', {CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })    
     if result['Success']
       @quiz=result['DataCollection']
-      @quiz.each do |q|  
-        logger.info q['QuizId']
-        r=postRequest('http://140.113.8.134/Quiz/QuizV2/StatisticExaminee', { QuizId: q['QuizId'], UserId: currentUser.id, IP: request.remote_ip})              
-        logger.info r
-      end 
+      unless @quiz.blank?
+        @quiz.each do |q|  
+          r=postRequest('http://140.113.8.134/Quiz/QuizV2/StatisticExaminee', { QuizId: q['QuizId'], UserId: currentUser.id, IP: request.remote_ip})              
+        end
+      end   
     else
       flash[:error]=result['ErrorMessage']   
       redirect_to controller: 'users', action: 'courses'
@@ -81,6 +81,7 @@ class QuizTeaController < ApplicationController
     validation_message=validation_message+validations(type: 'presence', title: '內容說明', data: params[:Content])
     validation_message=validation_message+validations(type: 'presence', title: '開始時間', data: params[:BeginDate])
     validation_message=validation_message+validations(type: 'presence', title: '最後入場時間', data: params[:EndDate])  
+    validation_message=validation_message+validations(type: 'latter_than', title: { first: '開始時間', second: '最後入場時間' }, data: { first: params[:BeginDate], second: params[:EndDate] })      
     unless validation_message.blank?
       render( json: {success: false, message: validation_message }) and return         
     end 

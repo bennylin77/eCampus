@@ -34,7 +34,9 @@ class UsersController < ApplicationController
   end
   
   def signIn
-    result = postRequest('http://140.113.8.134/E35/AccountInfo/Authentication', {account: params[:account], password: params[:password]})    
+    result = RestClient.post('http://140.113.8.134/E35/AccountInfo/Authentication', {account: params[:account], password: params[:password]})    
+    result = result.force_encoding('utf-8').encode
+    result = JSON.parse(result)    
     if result['ErrMsg'].blank? 
       session[:result]=result            
       result.store("success", true)

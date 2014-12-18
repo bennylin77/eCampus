@@ -53,15 +53,12 @@ class QuizTeaController < ApplicationController
   
   def updateBasic       
     # validate begin
-    validation_message=''
-    validation_message=validation_message+validations(type: 'presence', title: '測驗名稱', data: params[:Caption])
-    validation_message=validation_message+validations(type: 'presence', title: '內容說明', data: params[:Content])
-    validation_message=validation_message+validations(type: 'presence', title: '開始時間', data: params[:BeginDate])
-    validation_message=validation_message+validations(type: 'presence', title: '最後入場時間', data: params[:EndDate])  
-    validation_message=validation_message+validations(type: 'latter_than', title: { first: '開始時間', second: '最後入場時間' }, data: { first: params[:BeginDate], second: params[:EndDate] })      
-    unless validation_message.blank?
-      render( json: {success: false, message: validation_message }) and return         
-    end 
+    validation_message=validations([{type: 'presence', title: '測驗名稱', data: params[:Caption]},
+                                    {type: 'presence', title: '內容說明', data: params[:Content]},
+                                    {type: 'presence', title: '開始時間', data: params[:BeginDate]},
+                                    {type: 'presence', title: '最後入場時間', data: params[:EndDate]},
+                                    {type: 'latter_than', title: { first: '開始時間', second: '最後入場時間' }, data: { first: params[:BeginDate], second: params[:EndDate] }}])
+    checkValidations(validation_message: validation_message ) 
     # validate end  
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/UpdateDraft', {Caption: params[:Caption], Content: params[:Content], BeginDate: params[:BeginDate], EndDate: params[:EndDate], QuizType: params[:QuizType],  
                                                                           Invited: params[:Invited], Notify: params[:Notify], IsDisorder: params[:IsDisorder], DisplayType: params[:DisplayType],

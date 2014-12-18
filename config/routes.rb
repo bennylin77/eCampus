@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   get  'quiz_tea/listQuestions'
   get  'quiz_tea/deleteQuestion'
   get  'quiz_tea/deleteDraft'
+  get  'quiz_tea/deleteQuiz'
   post 'quiz_tea/updateBasic'
   post 'quiz_tea/updatePool'
    

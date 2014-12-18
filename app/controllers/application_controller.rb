@@ -1,8 +1,9 @@
+require "eCampusAPI/not_success"
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
+  rescue_from ECampusAPI::NotSuccess, with: :APINotSuccess
   protect_from_forgery with: :exception
   helper_method :currentUser  
+  
   def currentUser
     @current_user||=User.new(session[:result]) if session[:result]
   end
@@ -37,10 +38,10 @@ class ApplicationController < ActionController::Base
   def getRequest    
   end
   
-  def successHandler(hash={})
+  def checkAPISuccess(hash={})
     unless hash[:success]  
       flash[:error]=hash[:error_message]         
-      redirect_to hash[:redirect_to]
+      raise ECampusAPI::NotSuccess
     end
   end
   
@@ -69,5 +70,9 @@ class ApplicationController < ActionController::Base
     end    
     validation_message   
   end
-
+ 
+private
+    def APINotSuccess        
+      redirect_to root_url
+    end
 end

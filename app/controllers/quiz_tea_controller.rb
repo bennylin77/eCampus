@@ -2,38 +2,28 @@ class QuizTeaController < ApplicationController
   before_action :set_course, only: [:index, :new, :edit, :updateBasic, :publish, :show, :deleteDraft, :deleteQuiz ]
   before_action :set_quiz, only: [:edit, :updateBasic, :publish, :show, :deleteDraft, :deleteQuiz ]      
 
-  def index
+  def index         
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListDraft', {CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })   
-    if result['Success']
-      @draft=result['DataCollection']
-    else
-      flash[:error]=result['ErrorMessage']   
-      redirect_to controller: 'users', action: 'courses'
-    end    
-    result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuiz', {CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })    
-    if result['Success']
-      @quiz=result['DataCollection']
-      unless @quiz.blank?
-        @quiz.each do |q|  
-          r=postRequest('http://140.113.8.134/Quiz/QuizV2/StatisticExaminee', { QuizId: q['QuizId'], UserId: currentUser.id, IP: request.remote_ip})              
-          #q['DataCollection'][]
-        end
-      end   
-    else
-      flash[:error]=result['ErrorMessage']   
-      redirect_to controller: 'users', action: 'courses'
+    @draft=result['DataCollection']
+  
+    result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuiz', {CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })        
+    @quiz=result['DataCollection']
+    unless @quiz.blank?
+      @quiz.each do |q|  
+        r=postRequest('http://140.113.8.134/Quiz/QuizV2/StatisticExaminee', { QuizId: q['QuizId'], UserId: currentUser.id, IP: request.remote_ip})              
+        logger.info r       
+        #q['DataCollection'][]
+      end
     end        
   end
 
   def show
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewQuiz', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip })    
-    checkAPISuccess(success: result['Success'], error_message: result['ErrorMessage'])  
     unless result['DataCollection'].blank?
       @quiz=result['DataCollection']
       @quiz.store("draft", false)        
     else
       result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewDraft', {QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })    
-      checkAPISuccess(success: result['Success'], error_message: result['ErrorMessage'])     
       @quiz=result['DataCollection'] 
       @quiz.store("draft", true)             
     end      
@@ -41,41 +31,28 @@ class QuizTeaController < ApplicationController
   
   def new
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/CreateDraft', {CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })   
-    if result['Success']
-      @result=result['DataCollection']
-      redirect_to controller: 'quiz_tea', action: 'edit', quiz_id: @result['QuizId'], course_id: @result['CourseId']          
-    else
-      flash[:error]=result['ErrorMessage']   
-      redirect_to controller: 'quiz_tea', action: 'index', course_id: @course_id
-    end    
+    @result=result['DataCollection']
+    redirect_to controller: 'quiz_tea', action: 'edit', quiz_id: @result['QuizId'], course_id: @result['CourseId']            
   end
   
-  def edit           
+  def edit          
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewDraft', {QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip})   
-    if result['Success']
-      @result=result['DataCollection']       
-    else
-      flash[:error]=result['ErrorMessage']   
-    end     
+    @result=result['DataCollection']       
+   
   end  
   
   def publish    
-    result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})       
+    result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})         
     unless result['DataCollection'].blank?
       result['DataCollection'].each do |q|  
-        r=postRequest('http://140.113.8.134/Quiz/QuestionPool/CreatePool', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})              
+        postRequest('http://140.113.8.134/Quiz/QuestionPool/CreatePool', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})              
       end
     end       
     result_quiz = postRequest('http://140.113.8.134/Quiz/QuizV2/CreateQuiz', {QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })   
-    logger.info result_quiz
-    if result_quiz['Success']          
-    else
-      flash[:error]=result_quiz['ErrorMessage']   
-    end  
     redirect_to controller: 'quiz_tea', action: 'index', course_id: @course_id  
   end
   
-  def updateBasic 
+  def updateBasic       
     # validate begin
     validation_message=''
     validation_message=validation_message+validations(type: 'presence', title: '測驗名稱', data: params[:Caption])
@@ -90,7 +67,6 @@ class QuizTeaController < ApplicationController
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/UpdateDraft', {Caption: params[:Caption], Content: params[:Content], BeginDate: params[:BeginDate], EndDate: params[:EndDate], QuizType: params[:QuizType],  
                                                                           Invited: params[:Invited], Notify: params[:Notify], IsDisorder: params[:IsDisorder], DisplayType: params[:DisplayType],
                                                                           QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip})   
-    checkAPISuccess(success: result['Success'], error_message: result['ErrorMessage'])  
     render json: {success: true, message: '成功更新基本設定' }    
   end  
   
@@ -159,14 +135,12 @@ class QuizTeaController < ApplicationController
   
   def deleteDraft    
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/DeleteDraft', {QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip})           
-    checkAPISuccess(success: result['Success'], error_message: result['ErrorMessage'])  
     flash[:success]='成功刪除草稿'     
     redirect_to '/quiz_tea/index?course_id='+@course_id 
   end
 
   def deleteQuiz  
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/UpdateQuiz', {IsDeleted: true, QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip})           
-    checkAPISuccess(success: result['Success'], error_message: result['ErrorMessage'])    
     flash[:success]='成功刪除測驗'     
     redirect_to '/quiz_tea/index?course_id='+@course_id 
   end 

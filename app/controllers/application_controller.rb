@@ -1,6 +1,9 @@
 require "eCampusAPI/not_success"
+require "eCampusAPI/not_success_remote"
 class ApplicationController < ActionController::Base
   rescue_from ECampusAPI::NotSuccess, with: :APINotSuccess
+  rescue_from ECampusAPI::NotSuccessRemote, with: :APINotSuccessRemote
+    
   protect_from_forgery with: :exception
   helper_method :currentUser  
   
@@ -8,9 +11,9 @@ class ApplicationController < ActionController::Base
     @current_user||=User.new(session[:result]) if session[:result]
   end
   
-  def postRequest(url, hash={})
-    logger.info hash
-    result = RestClient.post( url, hash)    
+  def postRequest( url, hash_data={})
+    logger.info hash_data
+    result = RestClient.post( url, hash_data)    
 =begin    
     logger.info result.code
     logger.info result.cookies
@@ -18,11 +21,13 @@ class ApplicationController < ActionController::Base
     logger.info result.to_str
 =end
     result = result.force_encoding('utf-8').encode
-    JSON.parse(result)        
+    result = JSON.parse(result)
+    checkAPISuccess(success: result['Success'], error_message: result['ErrorMessage'])    
+    result       
   end
   
-  def postRequestWithNestedJason(url, jason_data, params={})
-    result = RestClient.post( url, jason_data, params)    
+  def postRequestWithNestedJason(url, json_data, headers={})
+    result = RestClient.post( url, json_data, headers)    
 =begin    
     logger.info result.code
     logger.info result.cookies
@@ -30,19 +35,14 @@ class ApplicationController < ActionController::Base
     logger.info result.to_str
 =end
     result = result.force_encoding('utf-8').encode
-    JSON.parse(result)        
+    result = JSON.parse(result)
+    checkAPISuccess(success: result['Success'], error_message: result['ErrorMessage'])  
+    result    
   end
   
   def
   
   def getRequest    
-  end
-  
-  def checkAPISuccess(hash={})
-    unless hash[:success]  
-      flash[:error]=hash[:error_message]         
-      raise ECampusAPI::NotSuccess
-    end
   end
   
   def set_course
@@ -72,7 +72,23 @@ class ApplicationController < ActionController::Base
   end
  
 private
-    def APINotSuccess        
-      redirect_to root_url
+
+  def checkAPISuccess(hash={})
+    unless hash[:success]  
+      if request.xhr? 
+        raise ECampusAPI::NotSuccessRemote, hash[:error_message]
+      else
+        flash[:error]=hash[:error_message]         
+        raise ECampusAPI::NotSuccess 
+      end   
     end
+  end
+  
+  def APINotSuccess        
+    redirect_to root_url
+  end
+
+  def APINotSuccessRemote(exception)        
+    render json: {success: false, message: exception.message }  
+  end  
 end

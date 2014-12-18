@@ -37,8 +37,7 @@ class QuizTeaController < ApplicationController
   
   def edit          
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewDraft', {QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip})   
-    @result=result['DataCollection']       
-   
+    @result=result['DataCollection']         
   end  
   
   def publish    
@@ -96,41 +95,36 @@ class QuizTeaController < ApplicationController
   end
   
   def listQuestions
-    result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})       
-    if result['Success']     
-      pools=Array.new  
-      unless result['DataCollection'].blank?
-        result['DataCollection'].each do |q|  
-          result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPoolDraft', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
-          result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
-          options=Array.new      
-          unless result_ops['DataCollection'].blank?          
-            result_ops['DataCollection'].each do |o|
-              options <<
-              {                
-                option_id: o['OptionId'],
-                content: o['Content'],
-                isAnswer: o['IsAnswer'],               
-              }  
-            end
-          end  
-          logger.info options
-          pools <<
-          {
-            course_id: q['CourseId'],
-            pool_id: q['PoolId'],
-            question_id: q['QuestionId'],
-            category: result_pool['DataCollection']['Category'],
-            subject: result_pool['DataCollection']['Subject'],
-            comment: result_pool['DataCollection']['Comment'],
-            options: options
-          }            
-        end
+    result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})        
+    pools=Array.new  
+    unless result['DataCollection'].blank?
+      result['DataCollection'].each do |q|  
+        result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPoolDraft', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
+        result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
+        options=Array.new      
+        unless result_ops['DataCollection'].blank?          
+          result_ops['DataCollection'].each do |o|
+            options <<
+            {                
+              option_id: o['OptionId'],
+              content: o['Content'],
+              isAnswer: o['IsAnswer'],               
+            }  
+          end
+        end  
+        pools <<
+        {
+          course_id: q['CourseId'],
+          pool_id: q['PoolId'],
+          question_id: q['QuestionId'],
+          category: result_pool['DataCollection']['Category'],
+          subject: result_pool['DataCollection']['Subject'],
+          comment: result_pool['DataCollection']['Comment'],
+          options: options
+        }            
       end
-      render json: {success: true, msg: '成功更新基本設定', pools: pools }  
-    else
-      render json: {success: false, msg: result['ErrorMessage'] }     
-    end          
+    end
+    render json: {success: true, pools: pools }          
   end
   
   def deleteDraft    
@@ -147,11 +141,7 @@ class QuizTeaController < ApplicationController
     
   def deleteQuestion    
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/DelQuestion', {QuestionId: params[:QuestionId], CourseId: params[:CourseId], UserId: currentUser.id, IP: request.remote_ip})           
-    if result['Success']
-      render json: {success: true, msg: '成功刪除' }  
-    else
-      render json: {success: false, msg: result['ErrorMessage'] }     
-    end      
+    render json: {success: true, msg: '成功刪除' }    
   end
   
   

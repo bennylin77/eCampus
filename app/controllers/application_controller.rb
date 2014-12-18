@@ -3,7 +3,6 @@ require "eCampusAPI/not_success_remote"
 class ApplicationController < ActionController::Base
   rescue_from ECampusAPI::NotSuccess, with: :APINotSuccess
   rescue_from ECampusAPI::NotSuccessRemote, with: :APINotSuccessRemote
-    
   protect_from_forgery with: :exception
   helper_method :currentUser  
   
@@ -72,7 +71,6 @@ class ApplicationController < ActionController::Base
   end
  
 private
-
   def checkAPISuccess(hash={})
     unless hash[:success]  
       if request.xhr? 

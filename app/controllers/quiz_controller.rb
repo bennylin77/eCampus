@@ -6,25 +6,14 @@ class QuizController < ApplicationController
 # quiz for stu
   def index
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuiz', {CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })    
-    if result['Success']
-      @quiz=result['DataCollection']
-    else
-      flash[:error]=result['ErrorMessage']   
-      redirect_to controller: 'users', action: 'courses'
-    end            
+    @quiz=result['DataCollection']          
   end
 
   def show
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewQuiz', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip })    
-
-    if result['Success']
-      @quiz=result['DataCollection']
-      result_sheets = postRequest('http://140.113.8.134/Quiz/QuizV2/ListSheets', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip })    
-      @sheets=result_sheets['DataCollection']
-    else
-      flash[:error]=result['ErrorMessage']   
-      redirect_to controller: 'users', action: 'courses'
-    end      
+    @quiz=result['DataCollection']
+    result_sheets = postRequest('http://140.113.8.134/Quiz/QuizV2/ListSheets', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip })    
+    @sheets=result_sheets['DataCollection']    
   end
 
   def take 
@@ -59,54 +48,45 @@ class QuizController < ApplicationController
       }     
     end 
     result = postRequestWithNestedJason('http://140.113.8.134/Quiz/QuizV2/SubmitSheet', { Material: material, QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip }.to_json, {:content_type => :json, :accept => :json}) 
-     
-    if result['Success']
-      unless result['DataCollection'].blank?
-        result['DataCollection'].each do |q| 
-          session[:submit_id]=q['SubmitId']
-          session[:skip_Amount]=session[:skip_Amount]+session[:get_Amount]           
-        end 
-      end     
-      render json: {success: true, left_count: session[:total_Amount].to_i-session[:skip_Amount].to_i}  
-    else
-      render json: {success: false, msg: result['ErrorMessage'] }     
-    end      
+    unless result['DataCollection'].blank?
+      result['DataCollection'].each do |q| 
+        session[:submit_id]=q['SubmitId']
+        session[:skip_Amount]=session[:skip_Amount]+session[:get_Amount]           
+      end 
+    end     
+    render json: {success: true, left_count: session[:total_Amount].to_i-session[:skip_Amount].to_i}     
   end
   
   def listQuestions
-    result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {getAmount: session[:get_Amount], skipAmount: session[:skip_Amount], QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})       
-    if result['Success']     
-      pools=Array.new  
-      unless result['DataCollection'].blank?
-        result['DataCollection'].each do |q|  
-          result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPoolDraft', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
-          result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
-          options=Array.new      
-          unless result_ops['DataCollection'].blank?          
-            result_ops['DataCollection'].each do |o|
-              options <<
-              {                
-                option_id: o['OptionId'],
-                content: o['Content']              
-              }  
-            end
-          end      
-          pools <<
-          {
-            course_id: q['CourseId'],
-            pool_id: q['PoolId'],
-            question_id: q['QuestionId'],
-            category: result_pool['DataCollection']['Category'],
-            subject: result_pool['DataCollection']['Subject'],
-            comment: result_pool['DataCollection']['Comment'],
-            options: options
-          }            
-        end
+    result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {getAmount: session[:get_Amount], skipAmount: session[:skip_Amount], QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})         
+    pools=Array.new  
+    unless result['DataCollection'].blank?
+      result['DataCollection'].each do |q|  
+        result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPoolDraft', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
+        result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
+        options=Array.new      
+        unless result_ops['DataCollection'].blank?          
+          result_ops['DataCollection'].each do |o|
+            options <<
+            {                
+              option_id: o['OptionId'],
+              content: o['Content']              
+            }  
+          end
+        end      
+        pools <<
+        {
+          course_id: q['CourseId'],
+          pool_id: q['PoolId'],
+          question_id: q['QuestionId'],
+          category: result_pool['DataCollection']['Category'],
+          subject: result_pool['DataCollection']['Subject'],
+          comment: result_pool['DataCollection']['Comment'],
+          options: options
+        }            
       end
-      render json: {success: true, msg: '成功更新基本設定', pools: pools, left_count: session[:total_Amount].to_i-session[:skip_Amount].to_i-session[:get_Amount].to_i}  
-    else
-      render json: {success: false, msg: result['ErrorMessage'] }     
-    end          
+    end
+    render json: {success: true, pools: pools, left_count: session[:total_Amount].to_i-session[:skip_Amount].to_i-session[:get_Amount].to_i}         
   end
   
   

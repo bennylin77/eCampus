@@ -1,19 +1,10 @@
 class UsersController < ApplicationController
   
-  
   def courses
     result = postRequest('http://140.113.8.134/E35/autRCrsStu/OpenSetListStu', {accountid: currentUser.id})   
-    if result['Success']
-      @st_courses=result['DataCollection']
-    else
-      flash[:error]=result['ErrorMessage']   
-    end
+    @st_courses=result['DataCollection']
     result = postRequest('http://140.113.8.134/E35/autRCrsTea/OpenSetListTea', {accountid: currentUser.id})   
-    if result['Success']
-      @tea_courses=result['DataCollection']
-    else
-      flash[:error]=result['ErrorMessage']   
-    end
+    @tea_courses=result['DataCollection']
   end
   
   def listCourses
@@ -45,8 +36,6 @@ class UsersController < ApplicationController
   def signIn
     result = postRequest('http://140.113.8.134/E35/AccountInfo/Authentication', {account: params[:account], password: params[:password]})    
     if result['ErrMsg'].blank? 
-      #put_in_session(User.new(result))     
-      #session[:user]=User.new(result)
       session[:result]=result            
       result.store("success", true)
       render json: result

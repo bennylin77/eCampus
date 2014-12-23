@@ -15,7 +15,7 @@
 		<div class="row operation_tabs_container">
 			<div class="col-sm-3">
 				<ol class="breadcrumb">
-				  <li><a href="#">--</a></li>
+				  <li><%=link_to '/quiz_tea/show?quiz_id='+@quiz_id+'&course_id='+@course_id do%><%=showBlank @result['Caption'] %><%end%></li>
 				  <li class="active">編輯測驗</li>
 				</ol>
 			</div>	

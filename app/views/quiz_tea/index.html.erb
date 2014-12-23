@@ -53,7 +53,7 @@
 					  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
 					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
 					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['EndDate'])%></div>
-					  <div class="col-sm-3"></div>
+					  <div class="col-sm-3"><%= q['RequisiteDoneCount']%>個已繳<br><%= q['RequisiteUndoneCount']%>個未繳</div>
 				  </div>
 				<%end%>
 			  </div>	
@@ -81,7 +81,7 @@
 					  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
 					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
 					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['EndDate'])%></div>
-					  <div class="col-sm-3"></div>
+					  <div class="col-sm-3"><%= q['RequisiteDoneCount']%>個已完成<br><%= q['AbsenteeCount']%>個未完成</div>
 				  </div>
 				<%end%>
 			  </div>	
@@ -109,7 +109,7 @@
 					  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
 					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
 					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['EndDate'])%></div>
-					  <div class="col-sm-3"></div>
+					  <div class="col-sm-3"><%= q['RequisiteDoneCount']%>個已完成<br><%= q['AbsenteeCount']%>個未完成</div>
 				  </div>
 				<%end%>
 			  </div>	

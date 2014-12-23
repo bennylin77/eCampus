@@ -1,44 +1,46 @@
 <div class="show-content">
-<div class="row show_title_container">
-  <div class="col-sm-5 show_title"><%=showBlank @quiz['Caption']%></div>		
-</div>	
-<div class="row show_description_container">
-  <div class="col-sm-6">
-	<div class="row show_description_sub_container">
-	<div class="col-sm-5 show_description_title">測驗類型</div> 
-	<div class="col-sm-7"><%unless @quiz['QuizType'].blank?%><%=Hash[quizTypeOptions].rassoc(@quiz['QuizType'].to_s).first%><%else%>--<%end%></div>
+	<div class="row show_title_container">
+	  <div class="col-sm-5 show_title"><%=showBlank @quiz['Caption']%></div>		
 	</div>	
-	<div class="row show_description_sub_container">
-	<div class="col-sm-5 show_description_title">開始時間</div>
-	<div class="col-sm-7"><%=showBlank toFrontEndTimeFormat @quiz['BeginDate'] %></div>
+	<div class="row show_description_container">
+	  <div class="col-sm-6">
+		<div class="row show_description_sub_container">
+		<div class="col-sm-5 show_description_title">測驗類型</div> 
+		<div class="col-sm-7"><%unless @quiz['QuizType'].blank?%><%=Hash[quizTypeOptions].rassoc(@quiz['QuizType'].to_s).first%><%else%>--<%end%></div>
+		</div>	
+		<div class="row show_description_sub_container">
+		<div class="col-sm-5 show_description_title">開始時間</div>
+		<div class="col-sm-7"><%=showBlank toFrontEndTimeFormat @quiz['BeginDate'] %></div>
+		</div>	
+		<div class="row show_description_sub_container">
+		<div class="col-sm-5 show_description_title">最後入場時間</div>
+		<div class="col-sm-7"><%=showBlank toFrontEndTimeFormat @quiz['EndDate'] %></div>
+		</div>	
+		<div class="row show_description_sub_container">
+		<div class="col-sm-5 show_description_title">作答時間</div>
+		<div class="col-sm-7">120分鐘</div>
+		</div>	
+		<div class="row show_description_sub_container">
+		<div class="col-sm-5 show_description_title">題目呈現方式</div>
+		<div class="col-sm-7"><%unless @quiz['DisplayType'].blank?%><%=Hash[displayTypeOptions].rassoc(@quiz['DisplayType'].to_s).first%><%else%>--<%end%></div>
+		</div>				  	
+	  </div>	
+	  <div class="col-sm-5 show_description_right">
+		<%=@quiz['Content'] %>
+	  </div>		
 	</div>	
-	<div class="row show_description_sub_container">
-	<div class="col-sm-5 show_description_title">最後入場時間</div>
-	<div class="col-sm-7"><%=showBlank toFrontEndTimeFormat @quiz['EndDate'] %></div>
-	</div>	
-	<div class="row show_description_sub_container">
-	<div class="col-sm-5 show_description_title">作答時間</div>
-	<div class="col-sm-7">120分鐘</div>
-	</div>	
-	<div class="row show_description_sub_container">
-	<div class="col-sm-5 show_description_title">題目呈現方式</div>
-	<div class="col-sm-7"><%unless @quiz['DisplayType'].blank?%><%=Hash[displayTypeOptions].rassoc(@quiz['DisplayType'].to_s).first%><%else%>--<%end%></div>
-	</div>				  	
-  </div>	
-  <div class="col-sm-5 show_description_right">
-	<%=@quiz['Content'] %>
-  </div>		
-</div>	
-<div class="row operation_container">
-  <%if @quiz['draft']%>
-  <div class="col-sm-1"><%=link_to '編輯草稿', '/quiz_tea/edit?quiz_id='+@quiz['QuizId']+'&course_id='+@quiz['CourseId'], class: 'operation_edit_but'%></div>
-  <div class="col-sm-1"><%=link_to '發佈測驗', '/quiz_tea/publish?course_id='+@quiz['CourseId']+'&quiz_id='+@quiz['QuizId'], class: 'operation_edit_but'%></div>	    		  
-  <div class="col-sm-1"><%=link_to '刪除草稿', '/quiz_tea/deleteDraft?quiz_id='+@quiz['QuizId']+'&course_id='+@quiz['CourseId'], class: 'operation_del_but'%></div>	
-  <%else%>
-  <div class="col-sm-1"><%=link_to '刪除測驗', '/quiz_tea/deleteQuiz?quiz_id='+@quiz['QuizId']+'&course_id='+@quiz['CourseId'], class: 'operation_del_but'%></div>
-  <%end%>
+	<div class="row operation_container">
+	  <%if @quiz['draft']%>
+	  <div class="col-sm-1"><%=link_to '編輯草稿', '/quiz_tea/edit?quiz_id='+@quiz['QuizId']+'&course_id='+@quiz['CourseId'], class: 'operation_edit_but'%></div>
+	  <div class="col-sm-1"><%=link_to '正式發佈', '/quiz_tea/publish?course_id='+@quiz['CourseId']+'&quiz_id='+@quiz['QuizId'], class: 'operation_edit_but'%></div>	    		  
+	  <div class="col-sm-1"><%=link_to '刪除草稿', '/quiz_tea/deleteDraft?quiz_id='+@quiz['QuizId']+'&course_id='+@quiz['CourseId'], class: 'operation_del_but'%></div>	
+	  <%else%>
+	  <div class="col-sm-1"><%=link_to '刪除測驗', '/quiz_tea/deleteQuiz?quiz_id='+@quiz['QuizId']+'&course_id='+@quiz['CourseId'], class: 'operation_del_but'%></div>
+	  <%end%>
+	</div>
 </div>
-</div>
-
+<div class="row">
+	<div class="col-sm-5"></div>		
+</div>	
 
 

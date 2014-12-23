@@ -16,12 +16,12 @@
 			<div class="row data_list_content">
 			  <div class="col-sm-4"></div>	
 			  <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
-			  	<%=link_to '/quiz/show?quiz_id='+q['QuizId'] do%>	  
+			  	<%=link_to '/quiz/show?quiz_id='+q['QuizId']+'&course_id='+q['CourseId'] do%>	  
 				  <div class="row">
 					  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
 					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
 					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['EndDate'])%></div>
-					  <div class="col-sm-3">20個已繳 2個未繳</div>
+					  <div class="col-sm-3"><%= q['RequisiteDoneCount']%>個已繳<br><%= q['RequisiteUndone']%>個未繳</div>
 				  </div>
 				<%end%>
 			  </div>	
@@ -44,12 +44,12 @@
 			<div class="row data_list_content">
 			  <div class="col-sm-4"></div>	
 			  <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
-			  	<%=link_to '/quiz/show?quiz_id='+q['QuizId'] do%>	  
+			  	<%=link_to '/quiz/show?quiz_id='+q['QuizId']+'&course_id='+q['CourseId'] do%>	  
 				  <div class="row">
 					  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
 					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
 					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['EndDate'])%></div>
-					  <div class="col-sm-3">20個已繳 2個未繳</div>
+					  <div class="col-sm-3"><%= q['RequisiteDoneCount']%>個已繳<br><%= q['AbsenteeCount']%>個未繳</div>
 				  </div>
 				<%end%>
 			  </div>	
@@ -73,12 +73,12 @@
 			<div class="row data_list_content">
 			  <div class="col-sm-4"></div>	
 			  <div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
-			  	<%=link_to '/quiz/show?quiz_id='+q['QuizId'] do%>	  
+			  	<%=link_to '/quiz/show?quiz_id='+q['QuizId']+'&course_id='+q['CourseId'] do%>	  
 				  <div class="row">
 					  <div class="col-sm-3"><%=showBlank q['Caption']%></div>	
 					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['BeginDate'])%></div>
 					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(q['EndDate'])%></div>
-					  <div class="col-sm-3">20個已繳 2個未繳</div>
+					  <div class="col-sm-3"><%= q['RequisiteDoneCount']%>個已繳<br><%= q['AbsenteeCount']%>個未繳</div>
 				  </div>
 				<%end%>
 			  </div>	

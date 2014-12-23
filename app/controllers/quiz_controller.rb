@@ -1,12 +1,19 @@
 class QuizController < ApplicationController
     
-  before_action :set_course, only: [:index]
+  before_action :set_course, only: [:show, :take, :index]
   before_action :set_quiz, only: [:show, :take, :submitAnswers]    
   
 # quiz for stu
   def index
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuiz', {CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })    
-    @quiz=result['DataCollection']          
+    @quiz=result['DataCollection'] 
+    unless @quiz.blank?
+      @quiz.each do |q|  
+        r=postRequest('http://140.113.8.134/Quiz/QuizV2/StatisticExaminee', { QuizId: q['QuizId'], UserId: currentUser.id, IP: request.remote_ip})                
+        q.store('AbsenteeCount', r['DataCollection']['AbsenteeCount'] )
+        q.store('RequisiteDoneCount', r['DataCollection']['RequisiteDoneCount'] )        
+      end
+    end              
   end
 
   def show
@@ -17,6 +24,7 @@ class QuizController < ApplicationController
   end
 
   def take 
+    # init
     session[:submit_id]=nil  
     session[:get_Amount]=nil  
     session[:skip_Amount]=nil 
@@ -24,10 +32,12 @@ class QuizController < ApplicationController
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewQuiz', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip })    
     session[:skip_Amount]=0
     if result['DataCollection']['DisplayType']==0
+      # display all
       session[:get_Amount]=''
       session[:skip_Amount]=''
       session[:total_Amount]=''      
     else
+      # display one by one
       session[:get_Amount] = 1
       session[:skip_Amount] = 0
       result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})       
@@ -47,12 +57,14 @@ class QuizController < ApplicationController
         Serial: "" 
       }     
     end 
-    result = postRequestWithNestedJason('http://140.113.8.134/Quiz/QuizV2/SubmitSheet', { Material: material, QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip }.to_json, {:content_type => :json, :accept => :json}) 
+    is_done = session[:total_Amount].to_i-session[:skip_Amount].to_i-session[:get_Amount].to_i == 0 ? true:false
+    result = postRequestWithNestedJson('http://140.113.8.134/Quiz/QuizV2/SubmitSheet', {IsDone: is_done, Material: material, QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip }.to_json, {:content_type => :json, :accept => :json}) 
+    
     unless result['DataCollection'].blank?
       result['DataCollection'].each do |q| 
         session[:submit_id]=q['SubmitId']
-        session[:skip_Amount]=session[:skip_Amount]+session[:get_Amount]           
       end 
+      session[:skip_Amount]=session[:skip_Amount]+session[:get_Amount]                
     end     
     render json: {success: true, left_count: session[:total_Amount].to_i-session[:skip_Amount].to_i}     
   end
@@ -62,7 +74,7 @@ class QuizController < ApplicationController
     pools=Array.new  
     unless result['DataCollection'].blank?
       result['DataCollection'].each do |q|  
-        result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPoolDraft', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
+        result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPool', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
         result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
         options=Array.new      
         unless result_ops['DataCollection'].blank?          

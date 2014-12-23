@@ -115,6 +115,7 @@
 }
 .operation_edit_but{
     text-decoration: none !important;
+    display: inline-block;
     padding: 5px 10px;
     background: #ffffff;
     cursor: pointer;
@@ -129,6 +130,7 @@
 
 .operation_del_but{
     text-decoration: none !important;
+    display: inline-block;    
     padding: 5px 10px;
     background: #8A2E2E;
     cursor: pointer;

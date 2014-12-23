@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::Base
-  rescue_from ECampusAPI::NotSuccess, with: :NormalHandler
-  rescue_from ECampusAPI::NotSuccessRemote, with: :RemoteHandler
-  rescue_from ECampusData::ValidationsFailed, with: :NormalHandler
-  rescue_from ECampusData::ValidationsFailedRemote, with: :RemoteHandler 
+  rescue_from ECampusAPI::NotSuccess, with: :normalHandler
+  rescue_from ECampusAPI::NotSuccessRemote, with: :remoteHandler
+  rescue_from ECampusData::ValidationsFailed, with: :validationsHandler
+  rescue_from ECampusData::ValidationsFailedRemote, with: :validationsRemoteHandler 
   protect_from_forgery with: :exception
   helper_method :currentUser  
   #API user
@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   end
   #API request
   def postRequest( url, hash_data={})
+    logger.info url
     logger.info hash_data
     result = RestClient.post( url, hash_data)    
     result = result.force_encoding('utf-8').encode
@@ -20,10 +21,13 @@ class ApplicationController < ActionController::Base
     result       
   end
   
-  def postRequestWithNestedJason(url, json_data, headers={})
+  def postRequestWithNestedJson(url, json_data, headers={})
+    logger.info url
+    logger.info json_data   
     result = RestClient.post( url, json_data, headers)    
     result = result.force_encoding('utf-8').encode
     result = JSON.parse(result)
+    logger.info result    
     checkAPISuccess(success: result['Success'], error_message: result['ErrorMessage'])  
     result    
   end
@@ -41,22 +45,22 @@ class ApplicationController < ActionController::Base
   end   
   
   def validations(data)
-    validation_message=""    
+    validation_result = [] 
     data.each do |d|
       case d[:type]
       when 'presence'
         if d[:data].blank?
-          validation_message = validation_message+'請填寫 '+d[:title]+'<br>'
+          validation_result.push({type: 'presence', message: '請填寫 '+d[:title]})
         end         
       when 'length'       
       when 'latter_than'  
          if d[:data][:first] > d[:data][:second]
-          validation_message = validation_message+d[:title][:first]+' 比 '+d[:title][:second]+'晚<br>'
+          validation_result.push({type: 'latter_than', message: d[:title][:first]+' 比 '+d[:title][:second]+'晚'})                
         end     
       end
     end      
-    validation_message   
-  end
+    validation_result  
+  end    
  
 private
   def checkAPISuccess(hash={})
@@ -68,23 +72,40 @@ private
       end   
     end
   end
-  
+ 
   def checkValidations(hash={})
-    unless hash[:validation_message].blank?  
+    unless hash[:validations].count==0  
       if request.xhr? 
-        raise ECampusData::ValidationsFailedRemote, hash[:validation_message]
+        raise ECampusData::ValidationsFailedRemote.new(errors: hash[:validations])
       else        
-        raise ECampusData::ValidationsFailed, hash[:validation_message] 
+        raise ECampusData::ValidationsFailed.new(errors: hash[:validations], redirect_path: hash[:redirect_path])
       end   
     end
-  end  
-  
-  def NormalHandler(exception)  
+  end 
+    
+  def normalHandler(exception)  
     flash[:error]=exception.message           
     redirect_to root_url
   end
 
-  def RemoteHandler (exception)        
+  def remoteHandler (exception)            
     render json: {success: false, message: exception.message }  
   end  
+  
+  def validationsHandler(exception)
+    exception.args[:errors].each do |e|  
+      flash[:error]=flash[:error]+e.message+'<br>'
+    end 
+    redirect_to exception.args['redirect_path']         
+  end
+  def validationsRemoteHandler(exception)
+    message=""
+    exception.args[:errors].each do |e|  
+      logger.info e
+      message=message+e[:message]+'<br>'
+    end        
+    render json: {success: false, message: message }      
+  end  
+
+  
 end

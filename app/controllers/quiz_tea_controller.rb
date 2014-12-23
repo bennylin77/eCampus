@@ -10,8 +10,9 @@ class QuizTeaController < ApplicationController
     @quiz=result['DataCollection']
     unless @quiz.blank?
       @quiz.each do |q|  
-        r=postRequest('http://140.113.8.134/Quiz/QuizV2/StatisticExaminee', { QuizId: q['QuizId'], UserId: currentUser.id, IP: request.remote_ip})              
-        logger.info r       
+        r=postRequest('http://140.113.8.134/Quiz/QuizV2/StatisticExaminee', { QuizId: q['QuizId'], UserId: currentUser.id, IP: request.remote_ip})                
+        q.store('AbsenteeCount', r['DataCollection']['AbsenteeCount'] )
+        q.store('RequisiteDoneCount', r['DataCollection']['RequisiteDoneCount'] )        
         #q['DataCollection'][]
       end
     end        
@@ -20,6 +21,7 @@ class QuizTeaController < ApplicationController
   def show
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewQuiz', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip })    
     unless result['DataCollection'].blank?
+      r=postRequest('http://140.113.8.134/Quiz/QuizV2/StatisticExaminee', { QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})                 
       @quiz=result['DataCollection']
       @quiz.store("draft", false)        
     else
@@ -53,12 +55,12 @@ class QuizTeaController < ApplicationController
   
   def updateBasic       
     # validate begin
-    validation_message=validations([{type: 'presence', title: '測驗名稱', data: params[:Caption]},
+    validations_result=validations([{type: 'presence', title: '測驗名稱', data: params[:Caption]},
                                     {type: 'presence', title: '內容說明', data: params[:Content]},
                                     {type: 'presence', title: '開始時間', data: params[:BeginDate]},
                                     {type: 'presence', title: '最後入場時間', data: params[:EndDate]},
                                     {type: 'latter_than', title: { first: '開始時間', second: '最後入場時間' }, data: { first: params[:BeginDate], second: params[:EndDate] }}])
-    checkValidations(validation_message: validation_message ) 
+    checkValidations(validations: validations_result ) 
     # validate end  
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/UpdateDraft', {Caption: params[:Caption], Content: params[:Content], BeginDate: params[:BeginDate], EndDate: params[:EndDate], QuizType: params[:QuizType],  
                                                                           Invited: params[:Invited], Notify: params[:Notify], IsDisorder: params[:IsDisorder], DisplayType: params[:DisplayType],

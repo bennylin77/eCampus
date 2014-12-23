@@ -70,8 +70,6 @@
 
 <div class="row operation_container">
   <div class="col-sm-1"><%=link_to '儲存', '', id: 'basic_form_submit', class: 'operation_edit_but'%></div>
-  <div class="col-sm-1"><%=link_to '正式發佈', '/quiz_tea/publish?course_id='+@result['CourseId']+'&quiz_id='+@result['QuizId'], class: 'operation_edit_but'%></div>	    		  
-  <div class="col-sm-1"><%=link_to '刪除測驗', '/quiz_tea/deleteDraft?quiz_id='+@result['QuizId']+'&course_id='+@result['CourseId'], class: 'operation_del_but'%></div>	
 </div>
 <script type="text/javascript">
 	$('#datetimepickerBeginDate, #datetimepickerEndDate').datetimepicker({

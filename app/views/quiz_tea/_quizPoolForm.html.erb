@@ -360,10 +360,10 @@ $(function() {
 					courseAlertShow('alert-success', '成功新增題目');			 					
 					questionList();	
 					$('#pool_id').val('');
-					$('#pool_subject').val('');	
-					$("#pool_category").val('0').change();							
-				 	$('#pool_comment').val('');
-					$("#option_field").empty();										
+					$('#pool_subject').val('');
+				 	$('#pool_comment').val('');	
+					$("#option_field").empty();					 						
+					$("#pool_category").val('-1').change();																
 				} else {
 					courseAlertShow('alert-danger', data.msg)
 				}

@@ -38,6 +38,13 @@ class ApplicationController < ActionController::Base
       flash[:error]='沒有指定課程'        
       redirect_to root_url   
     end
+	
+	if currentUser
+		currentUser.setPermission(params[:controller],getCourseList,@course_id)
+	else
+		
+	end
+	
   end   
   
   def validations(data)
@@ -58,7 +65,29 @@ class ApplicationController < ActionController::Base
     validation_message   
   end
  
+
+
+  def getCourseList
+	result_stu = postRequest('http://140.113.8.134/E35/autRCrsStu/OpenSetListStu', {accountid: currentUser.id})   
+    #course_stu=Array.new 
+    unless result_stu['DataCollection'].blank?
+      stuCourseList=result_stu['DataCollection'].map{|res|res['CourseId']}#{
+		#:name=> res['zhTWName'],           
+        #:course_id=>res['CourseId']
+	 # }}
+    end   
+    result_tea = postRequest('http://140.113.8.134/E35/autRCrsTea/OpenSetListTea', {accountid: currentUser.id})   
+    unless result_tea['DataCollection'].blank?
+      teaCourseList=result_tea['DataCollection'].map{|res|res['CourseId']}#.each.map{|res|{
+#		:name=> res['zhTWName'],           
+#        :course_id=>res['CourseId']
+#	  }}
+    end
+	return {:stuCourseList=>stuCourseList, :teaCourseList=>teaCourseList}
+  end
+
 private
+
   def checkAPISuccess(hash={})
     unless hash[:success]  
       if request.xhr? 

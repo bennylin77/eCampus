@@ -1,9 +1,9 @@
 <div class="col-sm-2 col-md-2 sidebar">
 	<h5 style="text-align:center">使用者經驗專題</h5>
 	<ul class="nav nav-sidebar">
-		<%if params[:controller]=='courses' or params[:controller]=='quiz'%>
-		<li <%if params[:controller]=='courses'%>class="active"<%end%>>
-			<%=link_to '課程資訊', { controller: 'courses', action: 'info', course_id: @course_id }%>
+
+		<li id="courses">
+			<%=link_to '課程資訊', { controller: currentUser&&currentUser.role=="TA" ? 'courses_tea' : 'courses' , action: 'info', course_id: @course_id }%>
 		</li>
 		<li>
 			<a href="#">線上課程</a>
@@ -17,8 +17,11 @@
 		<li>
 			<a href="#">作業區</a>
 		</li>
-		<li <%if params[:controller]=='quiz'%>class="active"<%end%>>
-			<%=link_to '測驗區', { controller: 'quiz', action: 'index', course_id: @course_id }%>			
+		<li id="forum">
+			<%=link_to '討論區', { controller: 'forum', action: 'index', course_id: @course_id }%>
+		</li>
+		<li id="quiz">
+			<%=link_to '測驗區', { controller: currentUser&&currentUser.role=="TA" ? 'quiz_tea' : 'quiz', action: 'index', course_id: @course_id }%>			
 		</li>	
 		<li>
 			<a href="#">通訊錄</a>
@@ -26,28 +29,12 @@
 		<li>
 			<a href="#">學期總成績</a>
 		</li>	
-		<%else%>
-		<li <%if params[:controller]=='courses_tea'%>class="active"<%end%>>
-			<%=link_to '課程資訊', { controller: 'courses_tea', action: 'info', course_id: @course_id }%>
-		</li>
-		<li>
-			<a href="#">線上課程</a>
-		</li>
-		<li>
-			<a href="#">消息公告</a>
-		</li>
-		<li>
-			<a href="#">作業區</a>
-		</li>
-		<li <%if params[:controller]=='quiz_tea'%>class="active"<%end%>>
-			<%=link_to '測驗區', { controller: 'quiz_tea', action: 'index', course_id: @course_id }%>			
-		</li>	
-		<li>
-			<a href="#">通訊錄</a>
-		</li>
-		<li>
-			<a href="#">學期總成績</a>
-		</li>		
-		<%end%>						
+					
 	</ul>
 </div>
+<script>
+	$(document).ready(function(){
+		$("li").removeClass("active");
+		$("#<%=params[:controller].split("_")[0]%>").addClass("active");
+	});
+</script>

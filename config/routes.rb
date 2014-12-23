@@ -1,14 +1,22 @@
 Rails.application.routes.draw do
 
-#Created by ADO, Forum
-  get "forum/index"
-	
+
+  
+  
   get  'main/index'
   get  'main/courseSearch'
-
+  
   get  'courses/info'
   get  'courses_tea/info'  
 
+  
+#Created by ADO, Forum
+  resources :courses do
+	get "forum/index"
+	get "forum/new"
+  end
+  
+  
   get  'users/courses'
   get  'users/listCourses'
   get  'users/logOut'

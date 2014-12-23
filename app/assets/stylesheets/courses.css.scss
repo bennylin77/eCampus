@@ -183,8 +183,13 @@
 }
 /*================== Tabs ====================*/
 .course-tabs{
+  width: 100%;
+  z-index: 1000;  
+  position: fixed;
+  top: 90px;
   font-size: 17px;
   background: #ffffff;  
+  border-bottom: none !important;  
 }
 .course-tabs > li> a{
   border: none;    
@@ -219,7 +224,7 @@
 }
 .course-tab-content{
   min-height: 1000px;
-  background: #E8E2D4;
+  background: #E8E2D4;   
   padding-top: 20px;  
   padding-left: 20px;
 }

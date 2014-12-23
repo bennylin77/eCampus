@@ -1,23 +1,14 @@
 class UsersController < ApplicationController
   
-  
   def courses
-    result = postRequest('http://140.113.8.134/E35/autRCrsStu/OpenSetListStu', {accountid: session[:user]})   
-    if result['Success']
-      @st_courses=result['DataCollection']
-    else
-      flash[:error]=result['ErrorMessage']   
-    end
-    result = postRequest('http://140.113.8.134/E35/autRCrsTea/OpenSetListTea', {accountid: session[:user]})   
-    if result['Success']
-      @tea_courses=result['DataCollection']
-    else
-      flash[:error]=result['ErrorMessage']   
-    end
+    result = postRequest('http://140.113.8.134/E35/autRCrsStu/OpenSetListStu', {accountid: currentUser.id})   
+    @st_courses=result['DataCollection']
+    result = postRequest('http://140.113.8.134/E35/autRCrsTea/OpenSetListTea', {accountid: currentUser.id})   
+    @tea_courses=result['DataCollection']
   end
   
   def listCourses
-    result_stu = postRequest('http://140.113.8.134/E35/autRCrsStu/OpenSetListStu', {accountid: session[:user]})   
+    result_stu = postRequest('http://140.113.8.134/E35/autRCrsStu/OpenSetListStu', {accountid: currentUser.id})   
     course_stu=Array.new 
     unless result_stu['DataCollection'].blank?
       result_stu['DataCollection'].each do |s|
@@ -28,7 +19,7 @@ class UsersController < ApplicationController
         }        
       end      
     end   
-    result_tea = postRequest('http://140.113.8.134/E35/autRCrsTea/OpenSetListTea', {accountid: session[:user]})   
+    result_tea = postRequest('http://140.113.8.134/E35/autRCrsTea/OpenSetListTea', {accountid: currentUser.id})   
     course_tea=Array.new 
     unless result_tea['DataCollection'].blank?
       result_tea['DataCollection'].each do |t|
@@ -43,12 +34,11 @@ class UsersController < ApplicationController
   end
   
   def signIn
-    result = postRequest('http://140.113.8.134/E35/AccountInfo/Authentication', {account: params[:account], password: params[:password]})    
-  
-    if result['ErrMsg'].blank?   
-      session[:user]=result['AccountId']      
-      session[:name]=result['Name']  
-      session[:token_id]=result['TokenId']        
+    result = RestClient.post('http://140.113.8.134/E35/AccountInfo/Authentication', {account: params[:account], password: params[:password]})    
+    result = result.force_encoding('utf-8').encode
+    result = JSON.parse(result)    
+    if result['ErrMsg'].blank? 
+      session[:result]=result            
       result.store("success", true)
       render json: result
     else
@@ -59,8 +49,7 @@ class UsersController < ApplicationController
   
   def logOut
     #result = postRequest('http://140.113.8.134/E35/AccountInfo/Logout', {TokenId: session[:token_id]})       
-    session[:user]=nil
-    session[:name]=nil
+    session[:result]=nil
     redirect_to root_url  
   end
 end

@@ -24,8 +24,8 @@
 				</li>		
 				<li class="dropdown home_ul" style="display: none;">
 					<%=link_to '/users/courses' do%>	
-					<%=image_tag 'male.ico', class: "img-circle"%>
-					<span class="user_name"><%=session[:name]%></span>
+					<%=image_tag 'male.ico', class: "img-circle"%>					
+					<span class="user_name"><%if currentUser%><%=currentUser.name%><%end%></span>
 					<%end%>					
 				</li>		
 				<li class="dropdown course_ul" style="display: none;">
@@ -81,7 +81,7 @@
 	}
 
 $(function() {
-	<%if session[:user]%>
+	<%if currentUser%>
 		courseList();
 		$('.course_ul').show();
 		$('.settings_ul').show();	

@@ -23,9 +23,12 @@ Rails.application.routes.draw do
   get  'quiz_tea/index'
   get  'quiz_tea/new' 
   get  'quiz_tea/edit'
+  get  'quiz_tea/show'
   get  'quiz_tea/publish'     
   get  'quiz_tea/listQuestions'
   get  'quiz_tea/deleteQuestion'
+  get  'quiz_tea/deleteDraft'
+  get  'quiz_tea/deleteQuiz'
   post 'quiz_tea/updateBasic'
   post 'quiz_tea/updatePool'
    

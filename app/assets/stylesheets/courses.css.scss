@@ -78,6 +78,68 @@
 .data_list_content > div > a:hover{
   opacity: 0.7; 
 }
+/*================== Shows ====================*/
+.show-content{
+  min-height: 1000px;
+  background: #E8E2D4;
+  padding-top: 20px;  
+  padding-left: 20px;
+}
+.show_title_container{
+  border-bottom: 1.8px solid #582B32; 
+  padding-top: 20px;     
+  padding-bottom: 5px; 
+}
+.show_title{
+  font-size: 22px;  
+}
+.show_description_container{
+  padding-top: 20px;     
+  padding-bottom: 20px;      
+  font-size: 18px;  
+  line-height: 30px;   
+}
+.show_description_sub_container{
+  margin-bottom: 8px;
+}
+
+.show_description_title{
+  border-right: 1.8px solid #582B32; 
+}
+.show_description_right{
+  background: #ffffff;
+}
+.operation_container{
+  padding-bottom: 15px;  
+  border-bottom: 1.8px dashed #582B32;   
+}
+.operation_edit_but{
+    text-decoration: none !important;
+    padding: 5px 10px;
+    background: #ffffff;
+    cursor: pointer;
+    color: #5C5C5D;
+    font-size: 15px;
+}
+.operation_edit_but:hover{
+    background: #ffffff;  
+    color: #5C5C5D;    
+    opacity: 0.7;  
+}
+
+.operation_del_but{
+    text-decoration: none !important;
+    padding: 5px 10px;
+    background: #8A2E2E;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 15px;
+}
+.operation_del_but:hover{
+    background: #8A2E2E;  
+    color: #ffffff;    
+    opacity: 0.7;  
+}
 /*================== Tabs ====================*/
 .course-tabs{
   font-size: 17px;

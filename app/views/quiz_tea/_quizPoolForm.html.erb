@@ -1,3 +1,4 @@
+<!--
 <div class="row">
   <div class="col-sm-8 area_dropdown" id="pool_form_dropdown">
   	<span class="area_dropdown_title">題庫出題</span><span class="area_dropdown_icon glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
@@ -5,6 +6,7 @@
 </div>
 <br>
 <br>
+-->
 <div class="row">
   <div class="col-sm-8 area_dropdown" id="self_form_dropdown">
   	<span class="area_dropdown_title">自行出題</span><span id="self_form_dropdown_icon" class="area_dropdown_icon glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
@@ -18,6 +20,7 @@
 			<div class="form-group">
 				<div class="col-sm-10">
 					<select class="form-control" id="pool_category">
+						<option value="-1">請選擇</option>
 						<option value="0">簡答題</option>
 						<option value="1">單選題</option>
 						<option value="2">複選題</option>
@@ -41,7 +44,7 @@
 			</div>	
 			<div class="form-group">
 				<div class="col-sm-10">
-					<button type="submit" class="btn btn-default" id="submitBasic">
+					<button type="submit" class="btn btn-default" id="submitPool">
 						儲存
 					</button>
 				</div>
@@ -106,7 +109,10 @@ function addQuestion(index, course_id, pool_id, question_id, category, subject, 
 			for(firstKey in options);
 			if(typeof firstKey != 'undefined') 
 				$question_eg_options_container.html(options[firstKey].content);	
-			$span_edit.click(function(){  				
+			$span_edit.click(function(){  	
+		    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
+		    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	    	
+		    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});								
 				$('#pool_id').val(pool_id);				
 				$("#pool_subject").val(subject);
 				$("#pool_category").val(category).change();	
@@ -129,6 +135,9 @@ function addQuestion(index, course_id, pool_id, question_id, category, subject, 
 				$question_eg_options_container.append($div_radio_container);
 			});	    
 			$span_edit.click(function(){  
+		    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
+		    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	    	
+		    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});					
 				$('#pool_id').val(pool_id);					
 				$("#pool_subject").val(subject);
 				$("#pool_category").val(category).change();		
@@ -198,6 +207,7 @@ function addQuestion(index, course_id, pool_id, question_id, category, subject, 
 
 $(function() {
 	// dropdown
+	/*
 	$('#self_form_dropdown_content').hide();
 	$('#self_form_dropdown').data( "folded", true );
 	$("#self_form_dropdown" ).click(function() {
@@ -216,26 +226,52 @@ $(function() {
 			$('#self_form_dropdown').data( "folded", true );				
 		}		
 	});			
-
+	*/
+	//tabs
+	$('#quiz_form_basic_button').click(function(ev) {
+		ev.preventDefault();
+    	$('#quiz_form_basic_button').tab('show');
+	});
+	//pools
+	$('#pool_subject').hide();	
+	$('#pool_comment').hide();	
+	$('#submitPool').hide();		
 	questionList();
 	$( "#pool_category" ).change(function() {
 		$("#option_field").empty();
 		switch($(this).val()) {
-	    case '0':
+	    case '-1':	    	
+	    	$('#pool_subject').slideUp({duration: 400, easing: 'swing'});	
+	    	$('#pool_comment').slideUp({duration: 400, easing: 'swing'});	
+	    	$('#submitPool').slideUp({duration: 400, easing: 'swing'});		    	    		    
+	        break;			
+	    case '0':	    	
+	    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
+	    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	    	
+	    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});			        
 	        $("#option_field").append('<textarea class="form-control" rows="3" placeholder="答案" name="options[]"></textarea>');
 	        break;
 	    case '1':
+	    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
+	    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});
+	    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});		    			    
 	   		$("#option_field").append('<ol type="A" class="option_list_field"></ol><a class="btn btn-default add_option_button_single">新增選項</a>');
 	        break;
 	    case '2':
+	    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
+	    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	
+	    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});		    		    
 	   		$("#option_field").append('<ol type="A" class="option_list_field"></ol><a class="btn btn-default add_option_button_multi">新增選項</a>');	    
 	        break;
 	    case '3':
+	    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
+	    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	
+	    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});		    		    
 	        $("#option_field").append('');	    
 	        break;                
 		} 
 	});	
-	$("#pool_category").val('0').change();
+	//$("#pool_category").val('0').change();
     //var option_index = 1; //initlal text box count
      
     //single

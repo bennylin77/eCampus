@@ -1,11 +1,4 @@
 <form action="/quiz/submitAnswers" method="post" id="quiz_take_form" class="form-horizontal" role="form">
-	<div class="form-group">
-		<div class="col-sm-offset-7 col-sm-1">
-			<button type="submit" class="btn btn-default" id="submitBasic">
-				下一頁
-			</button>
-		</div>
-	</div>	
 </form>
 
 <script>
@@ -71,18 +64,27 @@
 	function questionList()
 	{
 		question_index=0;
-		$('#question_list').empty();
+		$('#quiz_take_form').empty();
 		$.ajax({
 			type: "GET",
 			url: "/quiz/listQuestions",
 			data: { QuizId: '<%= @quiz_id%>'},
 			datatype : 'json',
 			success : function(data) {
-				if (data.success) {
+				if (data.success) 
+				{
 					$.each( data.pools, function( k, v ){
 						addFormalQuestion( v.pool_id, v.question_id, v.category, v.subject, v.options, v.comment);	
-					});											
-				} else {
+					});	
+					
+					if(data.left_count==0)
+						$('#quiz_take_form').append('<button type="submit" class="btn btn-default" id="submitBasic">確認繳卷</button>');					
+					else
+						$('#quiz_take_form').append('<button type="submit" class="btn btn-default" id="submitBasic">下一頁</button>');					
+																			
+				} 
+				else 
+				{
 					courseAlertShow('alert-danger', data.msg)
 				}
 			}			
@@ -147,8 +149,12 @@ $(function() {
 			datatype : 'json',
 			success : function(data) {
 				if (data.success) {
-					courseAlertShow('alert-success', '成功繳卷')
-				} else {
+					if(data.left_count!=0)
+						questionList();
+					else
+						document.location.href = '/quiz/show?quiz_id=<%=@quiz_id%>';	
+				} else 
+				{
 					courseAlertShow('alert-danger', data.msg)
 				}
 			}

@@ -1,38 +1,27 @@
 <div role="tabpanel">
-	<ul class="nav nav-tabs course-tabs">
+	<ul class="nav nav-tabs course-tabs" id="quiz_tabs">
 		<li role="presentation" class="active">
-			<a href="#quizFormBasic" aria-controls="quizFormBasic" role="tab" data-toggle="tab">
+			<a href="#quizFormBasic" aria-controls="quizFormBasic" role="tab" id="quiz_form_basic_button" >
 				<%=image_tag 'hexagonal-582B32.svg', class: ""%><span>基本設定</span>
 			</a>
 		</li>
 		<li role="presentation">
-			<a href="#quizFormPool" aria-controls="quizFormPool" role="tab" data-toggle="tab" >
+			<a href="#quizFormPool" aria-controls="quizFormPool" role="tab"  id="quiz_form_pool_button" >
 				<%=image_tag 'hexagonal-827D2B.svg', class: ""%><span>編輯題目</span>
-			</a>
-		</li>
-		<li role="presentation">
-			<a href="#quizFormExtra" aria-controls="quizFormExtra" role="tab" data-toggle="tab" >
-				<%=image_tag 'hexagonal-6E7182.svg', class: ""%><span>答案/成績設定</span>
-			</a>
-		</li>
-		<li role="presentation">
-			<a href="#quizFormPublish" aria-controls="quizFormPublish" role="tab" data-toggle="tab" >
-				<%=image_tag 'hexagonal-7D7872.svg', class: ""%><span>發佈設定</span>
 			</a>
 		</li>		
 	</ul>
 	<div class="tab-content course-tab-content">
-		<div role="tabpanel" class="tab-pane fade" id="quizFormBasic">
+		<div role="tabpanel" class="tab-pane fade in active" id="quizFormBasic">
 			<%= render 'quizBasicForm'%>
 		</div>
-		<div role="tabpanel" class="tab-pane fade in active" id="quizFormPool">
+		<div role="tabpanel" class="tab-pane fade" id="quizFormPool">
 			<%= render 'quizPoolForm'%>
-		</div>
-		<div role="tabpanel" class="tab-pane fade" id="quizFormExtra">
-			<%= render 'quizExtraForm'%>
-		</div>
-		<div role="tabpanel" class="tab-pane fade" id="quizFormPublish">
-			<%= render 'quizPublishForm'%>
-		</div>		
+		</div>	
 	</div>
 </div>
+<script>
+  $(function () {
+    $('#quiz_form_basic_button').tab('show')
+  })
+</script>

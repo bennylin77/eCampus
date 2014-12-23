@@ -27,18 +27,20 @@
 	</ul>
 	<div class="tab-content course-tab-content">
 		<div class="alert alert-success alert-dismissible fade in" id="course_alert"></div>	 	
-		<div class="row operation_tabs_container">
-			<div class="col-sm-3">
-				<ol class="breadcrumb">
-				  <li><%=link_to '/quiz_tea/show?quiz_id='+@quiz_id+'&course_id='+@course_id do%><%=showBlank @result['Caption'] %><%end%></li>
-				  <li class="active">編輯測驗</li>
-				</ol>
+		<div class="container-fluid operation_tabs_container">
+			<div class="row">
+				<div class="col-sm-3">
+					<ol class="breadcrumb" style="margin-bottom: 5px;">
+					  <li><%=link_to '/quiz_tea/show?quiz_id='+@quiz_id+'&course_id='+@course_id do%><%=showBlank @result['Caption'] %><%end%></li>
+					  <li class="active">編輯測驗</li>
+					</ol>
+				</div>	
+				<div class="col-sm-3 pull-right">
+					<%=link_to '正式發佈', '/quiz_tea/publish?course_id='+@result['CourseId']+'&quiz_id='+@result['QuizId'], class: 'operation_tabs_edit_but'%>    		  
+	  				<%=link_to '刪除草稿', '/quiz_tea/deleteDraft?quiz_id='+@result['QuizId']+'&course_id='+@result['CourseId'], class: 'operation_tabs_del_but'%>
+				</div>		
 			</div>	
-			<div class="col-sm-3 pull-right">
-				<%=link_to '正式發佈', '/quiz_tea/publish?course_id='+@result['CourseId']+'&quiz_id='+@result['QuizId'], class: 'operation_tabs_edit_but'%>    		  
-  				<%=link_to '刪除草稿', '/quiz_tea/deleteDraft?quiz_id='+@result['QuizId']+'&course_id='+@result['CourseId'], class: 'operation_tabs_del_but'%>
-			</div>		
-		</div>	
+		</div>
 		<div role="tabpanel" class="tab-pane fade in active" id="quizFormBasic">
 			<%= render 'quizBasicForm'%>
 		</div>

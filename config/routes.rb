@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+#Created by ADO, Forum
+  get "forum/index"
+	
   get  'main/index'
   get  'main/courseSearch'
 

@@ -54,6 +54,78 @@
   padding: 5px 9px;
   font-size: 20px;
 }
+/*================== Operation ====================*/
+
+.operation_show_container{
+  padding-bottom: 15px;  
+  border-bottom: 1.8px dashed #582B32;   
+}
+.operation_tabs_container{
+  padding-bottom: 15px;   
+}
+.operation_edit_but{
+    text-decoration: none !important;
+    display: inline-block;
+    padding: 5px 10px;
+    background: #ffffff;
+    cursor: pointer;
+    color: #5C5C5D;
+    font-size: 15px;
+}
+.operation_edit_but:hover{
+    background: #ffffff;  
+    color: #5C5C5D;    
+    opacity: 0.7;  
+}
+.operation_del_but{
+    text-decoration: none !important;
+    display: inline-block;    
+    padding: 5px 10px;
+    background: #8A2E2E;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 15px;
+}
+.operation_del_but:hover{
+    background: #8A2E2E;  
+    color: #ffffff;    
+    opacity: 0.7;  
+}
+
+.operation_tabs_edit_but{
+    margin-right: 10px;
+    text-decoration: none !important;
+    display: inline-block;
+    padding: 5px 10px;
+    background: none;
+    cursor: pointer;
+    color: #5C5C5D;
+    font-size: 15px;
+    border: 1.9px solid #5C5C5D;      
+}
+.operation_tabs_edit_but:hover{
+    background: none;  
+    color: #5C5C5D;    
+    opacity: 0.7;  
+}
+
+.operation_tabs_del_but{
+    margin-right: 10px;  
+    text-decoration: none !important;
+    display: inline-block;    
+    padding: 5px 10px;
+    background: none;
+    cursor: pointer;
+    color: #5C5C5D;
+    font-size: 15px;
+    border: 1.9px solid #5C5C5D;     
+}
+.operation_tabs_del_but:hover{
+    background: none;  
+    color: #5C5C5D;   
+    opacity: 0.7;  
+}
+
 /*================== List ====================*/
 .data_list_title{
   line-height: 40px;
@@ -108,39 +180,6 @@
 }
 .show_description_right{
   background: #ffffff;
-}
-.operation_container{
-  padding-bottom: 15px;  
-  border-bottom: 1.8px dashed #582B32;   
-}
-.operation_edit_but{
-    text-decoration: none !important;
-    display: inline-block;
-    padding: 5px 10px;
-    background: #ffffff;
-    cursor: pointer;
-    color: #5C5C5D;
-    font-size: 15px;
-}
-.operation_edit_but:hover{
-    background: #ffffff;  
-    color: #5C5C5D;    
-    opacity: 0.7;  
-}
-
-.operation_del_but{
-    text-decoration: none !important;
-    display: inline-block;    
-    padding: 5px 10px;
-    background: #8A2E2E;
-    cursor: pointer;
-    color: #ffffff;
-    font-size: 15px;
-}
-.operation_del_but:hover{
-    background: #8A2E2E;  
-    color: #ffffff;    
-    opacity: 0.7;  
 }
 /*================== Tabs ====================*/
 .course-tabs{

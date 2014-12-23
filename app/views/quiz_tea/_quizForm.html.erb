@@ -12,12 +12,16 @@
 		</li>		
 	</ul>
 	<div class="tab-content course-tab-content">
-		<div class="row">
-			<div class=" col-sm-offset-9 col-sm-1">
-				<%=link_to '正式發佈', '/quiz_tea/publish?course_id='+@result['CourseId']+'&quiz_id='+@result['QuizId'], class: 'operation_edit_but'%>    		  
-  			</div>
-  			<div class="col-sm-1">	
-  				<%=link_to '刪除草稿', '/quiz_tea/deleteDraft?quiz_id='+@result['QuizId']+'&course_id='+@result['CourseId'], class: 'operation_del_but'%>
+		<div class="row operation_tabs_container">
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+				  <li><a href="#">--</a></li>
+				  <li class="active">編輯測驗</li>
+				</ol>
+			</div>	
+			<div class="col-sm-3 pull-right">
+				<%=link_to '正式發佈', '/quiz_tea/publish?course_id='+@result['CourseId']+'&quiz_id='+@result['QuizId'], class: 'operation_tabs_edit_but'%>    		  
+  				<%=link_to '刪除草稿', '/quiz_tea/deleteDraft?quiz_id='+@result['QuizId']+'&course_id='+@result['CourseId'], class: 'operation_tabs_del_but'%>
 			</div>		
 		</div>	
 		<div role="tabpanel" class="tab-pane fade in active" id="quizFormBasic">

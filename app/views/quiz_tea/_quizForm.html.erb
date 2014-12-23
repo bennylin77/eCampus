@@ -1,3 +1,17 @@
+<script>
+  function courseAlertShow(type, msg) {
+		$("#course_alert").addClass( type );
+		$("#course_alert").html("<button type='button' class='close' onclick='$(\"#course_alert\").hide()'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>"+msg)
+		$("#course_alert").show(600).delay(2000).slideUp(600, function(){
+	    	$("#course_alert").removeClass( type );
+		    $("#course_alert").html("");
+	    }); 			
+  }    
+  $(function () {
+    $('#quiz_form_basic_button').tab('show');
+	$("#course_alert").hide();
+  })
+</script>
 <div role="tabpanel" style="margin-top: 80px;">
 	<ul class="nav nav-tabs course-tabs" id="quiz_tabs">
 		<li role="presentation" class="active">
@@ -12,6 +26,7 @@
 		</li>		
 	</ul>
 	<div class="tab-content course-tab-content">
+		<div class="alert alert-success alert-dismissible fade in" id="course_alert"></div>	 	
 		<div class="row operation_tabs_container">
 			<div class="col-sm-3">
 				<ol class="breadcrumb">
@@ -32,8 +47,3 @@
 		</div>	
 	</div>
 </div>
-<script>
-  $(function () {
-    $('#quiz_form_basic_button').tab('show')
-  })
-</script>

@@ -159,8 +159,78 @@ function addQuestion(index, course_id, pool_id, question_id, category, subject, 
 			});		
 	        break;
 	    case '2':
+	    	$question_eg_options_title.html('選項與答案');
+			$question_eg_question_note.html('複選');	 	    		    
+			$.each( options, function( k, v ){				
+				var $div_radio_container = $("<div>", {id: "question_container_"+question_id, class: "radio disabled"});	
+				var $div_label_container = $("<label>", {});	
+				if(v.isAnswer) 
+					$div_label_container.append('<input type="checkbox" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" checked="checked" disabled>'+v.content);
+				else
+					$div_label_container.append('<input type="checkbox" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" disabled>'+v.content);					
+				$div_radio_container.append($div_label_container);
+				$question_eg_options_container.append($div_radio_container);
+			});	    
+			$span_edit.click(function(){  
+		    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
+		    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	    	
+		    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});					
+				$('#pool_id').val(pool_id);					
+				$("#pool_subject").val(subject);
+				$("#pool_category").val(category).change();		
+				$.each( options, function( k, v ){
+					var li_html='<li>'+
+		            '<div class="row">'+
+		            '<div class="col-sm-5"><textarea class="form-control" rows="2" placeholder="選項" name="options[]">'+v.content+'</textarea></div>'+
+		            '<div class="col-sm-2">';
+		            if(v.isAnswer)
+		            	li_html=li_html+'<label class="checkbox-inline"><input type="checkbox" name="answers[]" checked="checked">此為解答</label></div>';
+		            else
+		            	li_html=li_html+'<label class="checkbox-inline"><input type="checkbox" name="answers[]">此為解答</label></div>';		            		
+					li_html=li_html+'<div class="col-sm-1"><a href="#" class="remove_option btn btn-danger">刪除</a></div>'+
+		            		'</div>'+
+		            		'</li>'					
+		            $('.option_list_field').append(li_html);						
+				});	 						
+				$("#pool_comment").val(comment);					
+			});		    
 	        break;
 	    case '3':
+	    	$question_eg_options_title.html('選項與答案');
+			$question_eg_question_note.html('是非');	 	    		    
+			$.each( options, function( k, v ){				
+				var $div_radio_container = $("<div>", {id: "question_container_"+question_id, class: "radio disabled"});	
+				var $div_label_container = $("<label>", {});	
+				if(v.isAnswer) 
+					$div_label_container.append('<input type="radio" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" checked="checked" disabled>'+v.content);
+				else
+					$div_label_container.append('<input type="radio" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" disabled>'+v.content);					
+				$div_radio_container.append($div_label_container);
+				$question_eg_options_container.append($div_radio_container);
+			});	    
+			$span_edit.click(function(){  
+		    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
+		    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	    	
+		    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});					
+				$('#pool_id').val(pool_id);					
+				$("#pool_subject").val(subject);
+				$("#pool_category").val(category).change();		
+				$.each( options, function( k, v ){
+					var li_html='<li>'+
+		            '<div class="row">'+
+		            '<div class="col-sm-5"><textarea class="form-control" rows="2" placeholder="選項" name="options[]">'+v.content+'</textarea></div>'+
+		            '<div class="col-sm-2">';
+		            if(v.isAnswer)
+		            	li_html=li_html+'<label class="checkbox-inline"><input type="radio" name="answers[]" checked="checked">此為解答</label></div>';
+		            else
+		            	li_html=li_html+'<label class="checkbox-inline"><input type="radio" name="answers[]">此為解答</label></div>';		            		
+					li_html=li_html+'<div class="col-sm-1"><a href="#" class="remove_option btn btn-danger">刪除</a></div>'+
+		            		'</div>'+
+		            		'</li>'					
+		            $('.option_list_field').append(li_html);						
+				});	 						
+				$("#pool_comment").val(comment);					
+			});		    
 	        break;		
 		} 	
 		$span_del.click(function(){  
@@ -267,7 +337,15 @@ $(function() {
 	    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
 	    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	
 	    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});		    		    
-	        $("#option_field").append('');	    
+	   		$("#option_field").append('<div class="row">'+
+            '<div class="col-sm-5"><input class="form-control" type="text" name="options[]" value="是" disabled></div>'+
+            '<div class="col-sm-2"><label class="radio-inline"><input type="radio" name="answers[]">此為解答</label></div>'+             
+            '</div>'+
+			'<div class="row">'+
+            '<div class="col-sm-5"><input class="form-control" type="text" name="options[]" value="否" disabled></div>'+
+            '<div class="col-sm-2"><label class="radio-inline"><input type="radio" name="answers[]">此為解答</label></div>'+             
+            '</div>'            
+            );   
 	        break;                
 		} 
 	});	
@@ -308,17 +386,20 @@ $(function() {
 	var quiz_pool_form = $('#quiz_pool_form');
 	quiz_pool_form.submit(function(ev) {		
 		//handle options
-		var options = []; 
-		$('#quiz_pool_form textarea[name="options[]"]').each(function() {
-		    options.push($(this).val()); 
-		});		
+		var options = []; 	
 		//handle answers		
 		var answers = []; 	
 		switch($('#pool_category').val()) {
 	    case '0':
-	    	answers.push(true);
+			$('#quiz_pool_form textarea[name="options[]"]').each(function() {
+			    options.push($(this).val()); 
+			});		    
+	    	answers.push(true);	    	
 	        break;
 	    case '1':
+			$('#quiz_pool_form textarea[name="options[]"]').each(function() {
+			    options.push($(this).val()); 
+			});		    
 			$('#quiz_pool_form input[name="answers[]"]').each(function() {
 				if($(this).prop('checked'))
 				{
@@ -329,6 +410,9 @@ $(function() {
 			});		       
 	        break;
 	    case '2':
+			$('#quiz_pool_form textarea[name="options[]"]').each(function() {
+			    options.push($(this).val()); 
+			});		    
 			$('#quiz_pool_form input[name="answers[]"]').each(function() {
 				if($(this).prop('checked'))
 				{
@@ -338,7 +422,18 @@ $(function() {
 			    	answers.push(false); 				
 			});		 	    
 	        break;     
-	    case '3':   
+	    case '3':  
+			$('#quiz_pool_form input[name="options[]"]').each(function() {
+			    options.push($(this).val()); 
+			});		    
+			$('#quiz_pool_form input[name="answers[]"]').each(function() {
+				if($(this).prop('checked'))
+				{
+			    	answers.push(true); 				
+				}
+				else
+			    	answers.push(false); 				
+			});		     
 	        break;	                   
 		} 
 		$.ajax({

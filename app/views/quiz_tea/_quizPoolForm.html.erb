@@ -150,9 +150,8 @@ function addQuestion(index, course_id, pool_id, question_id, category, subject, 
 		            	li_html=li_html+'<label class="checkbox-inline"><input type="radio" name="answers[]" checked="checked">此為解答</label></div>';
 		            else
 		            	li_html=li_html+'<label class="checkbox-inline"><input type="radio" name="answers[]">此為解答</label></div>';		            		
-					li_html=li_html+'<div class="col-sm-1"><a href="#" class="remove_option btn btn-danger">刪除</a></div>'+
-		            		'</div>'+
-		            		'</li>'					
+					li_html=li_html+'<div class="col-sm-1"><span href="#" class="form_options_mani remove_option question_eg_question_mani glyphicon glyphicon-trash" aria-hidden="true"></span></div>'+
+		            		'</div></li>'					
 		            $('.option_list_field').append(li_html);						
 				});	 						
 				$("#pool_comment").val(comment);					
@@ -187,9 +186,9 @@ function addQuestion(index, course_id, pool_id, question_id, category, subject, 
 		            	li_html=li_html+'<label class="checkbox-inline"><input type="checkbox" name="answers[]" checked="checked">此為解答</label></div>';
 		            else
 		            	li_html=li_html+'<label class="checkbox-inline"><input type="checkbox" name="answers[]">此為解答</label></div>';		            		
-					li_html=li_html+'<div class="col-sm-1"><a href="#" class="remove_option btn btn-danger">刪除</a></div>'+
-		            		'</div>'+
-		            		'</li>'					
+						li_html=li_html+'<div class="col-sm-1"><span href="#" class="form_options_mani remove_option question_eg_question_mani glyphicon glyphicon-trash" aria-hidden="true"></span></div>'+
+		            			'</div>'+
+		            			'</li>'					
 		            $('.option_list_field').append(li_html);						
 				});	 						
 				$("#pool_comment").val(comment);					
@@ -360,7 +359,7 @@ $(function() {
             '<div class="row">'+
             '<div class="col-sm-5"><textarea class="form-control" rows="2" placeholder="選項" name="options[]"></textarea></div>'+
             '<div class="col-sm-2"><label class="checkbox-inline"><input type="radio" name="answers[]">此為解答</label></div>'+             
-            '<div class="col-sm-1"><a href="#" class="remove_option btn btn-danger">刪除</a></div>'+
+            '<div class="col-sm-1"><span href="#" class="form_options_mani remove_option question_eg_question_mani glyphicon glyphicon-trash" aria-hidden="true"></span></div>'+
             '</div>'+
             '</li>');
     });
@@ -375,7 +374,7 @@ $(function() {
             '<div class="row">'+
             '<div class="col-sm-5"><textarea class="form-control" rows="2" placeholder="選項" name="options[]"></textarea></div>'+
             '<div class="col-sm-2"><label class="checkbox-inline"><input type="checkbox" name="answers[]">此為解答</label></div>'+             
-            '<div class="col-sm-1"><a href="#" class="remove_option btn btn-danger">刪除</a></div>'+
+            '<div class="col-sm-1"><span href="#" class="form_options_mani remove_option question_eg_question_mani glyphicon glyphicon-trash" aria-hidden="true"></span></div>'+
             '</div>'+
             '</li>');
     });

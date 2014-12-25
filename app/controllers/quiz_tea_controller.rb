@@ -1,6 +1,6 @@
 class QuizTeaController < ApplicationController  
-  before_action :set_course, only: [:index, :new, :edit, :updateBasic, :publish, :show, :deleteDraft, :deleteQuiz ]
-  before_action :set_quiz, only: [:edit, :updateBasic, :publish, :show, :deleteDraft, :deleteQuiz ]      
+  before_action :set_course, only: [:index, :new, :edit, :updateBasic, :publish, :show, :deleteDraft, :deleteQuiz, :rank ]
+  before_action :set_quiz, only: [:edit, :updateBasic, :publish, :show, :deleteDraft, :deleteQuiz, :rank ]      
 
   def index         
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListDraft', {CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })   
@@ -21,8 +21,71 @@ class QuizTeaController < ApplicationController
   def show
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewQuiz', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip })    
     unless result['DataCollection'].blank?
-      r=postRequest('http://140.113.8.134/Quiz/QuizV2/StatisticExaminee', { QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})                 
       @quiz=result['DataCollection']
+=begin    
+      statistic=postRequest('http://140.113.8.134/Quiz/QuizV2/StatisticExaminee', { QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})                 
+      unless statistic['DataCollection'].blank?
+        requisiteDoneList=statistic['DataCollection']['RequisiteDoneList']  
+      end
+      requisiteDoneList.each do |r|
+        z=postRequest('http://140.113.8.134/Quiz/QuizV2/ListSheets', { StudentId: r, QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})                         
+      end
+=end     
+      @sheet_lists =Array.new 
+ 
+      sheets=postRequest('http://140.113.8.134/Quiz/QuizV2/ListSheets', { QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})                             
+      sheets.fetch('DataCollection', []).each do |s|
+        s.fetch('ExtraData', []).each do |e|
+          unless e['EndDate'].blank?
+            @sheet_lists <<
+            {
+                QuizId: @quiz_id,
+                CourseId: @course_id,
+                AccountId: e['AccountId'],
+                EndDate: e['EndDate'],
+                MatchRate: e['MatchRate']
+            }   
+            break 
+          end  
+        end       
+      end
+      logger.info @sheet_lists
+      
+      
+      #logger.info z['DataCollection'][0]['ExtraData'].count 
+=begin            
+      requisiteDoneList.each do |r|
+        z=postRequest('http://140.113.8.134/Quiz/QuizV2/ListSheets', { StudentId: r, QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})                 
+        #logger.info z['DataCollection'] 
+        #logger.info z['DataCollection'][0]
+        z['DataCollection'][0]['ExtraData'].each do |e|
+          logger.info e['MatchRate']
+          g=postRequest('http://140.113.8.134/Quiz/QuizV2/GetSheetContents', { SubmitId: e['SubmitId'], UserId: currentUser.id, IP: request.remote_ip})                 
+          
+          material =Array.new 
+          g['DataCollection'].each do |gg|
+            logger.info gg['PoolId']
+            logger.info gg['MatchRate']
+            logger.info '--------------'
+            gg['Answer'].split("|").each do |an|
+              #logger.info 991
+              #logger.info an
+            end
+            material <<
+            {
+              SubmitId: e['SubmitId'],
+              PoolId: gg['PoolId'],
+              Score: 66
+            }                      
+          end  
+          ss = postRequestWithNestedJson('http://140.113.8.134/Quiz/QuizV2/ScoreSheet', {Material: material, CourseId: @course_id, QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip }.to_json, {:content_type => :json, :accept => :json}) 
+        end     
+      end
+     
+      tt=postRequest('http://140.113.8.134/Quiz/QuizV2/Transcript', { QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})                 
+=end
+
+
       @quiz.store("draft", false)        
     else
       result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewDraft', {QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })    
@@ -51,6 +114,13 @@ class QuizTeaController < ApplicationController
     end       
     result_quiz = postRequest('http://140.113.8.134/Quiz/QuizV2/CreateQuiz', {QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })   
     redirect_to controller: 'quiz_tea', action: 'index', course_id: @course_id  
+  end
+  
+  def rank
+  end
+  
+  def submitScore
+    
   end
   
   def updateBasic       
@@ -98,7 +168,14 @@ class QuizTeaController < ApplicationController
     pools=Array.new  
     unless result['DataCollection'].blank?
       result['DataCollection'].each do |q|  
-        result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPoolDraft', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
+        logger.info params[:Draft].to_b
+        if params[:Draft].to_b
+          logger.info 111
+          result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPoolDraft', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
+        else
+          logger.info 111222
+          result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPool', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})           
+        end  
         result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
         options=Array.new      
         unless result_ops['DataCollection'].blank?          

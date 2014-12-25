@@ -15,13 +15,13 @@
 		var $div_panel_title_container = $("<h3>", {class: "panel-title"});
 		var $div_panel_body_container = $("<div>", {class: "panel-body"});
 		switch(category.toString()) {
-	    case '0':
+	    case '5':
 			var $div_options_container = $("<textarea>", {class: "form-control", rows: "3", name: "answers"+question_index.toString()+"[]"});		
 	        break;
-	    case '1':
+	    case '2':
 			var $div_options_container = $("<div>", {});	    
 			$.each( options, function( k, v ){			
-				var $div_option = $("<div>", {class: "checkbox"});
+				var $div_option = $("<div>", {class: "radio"});
 				var $div_option_label = $("<label>", {});			
 				var $div_option_input = $("<input>", {type: "radio", name: "answers"+question_index.toString()+"[]"});		
 				$div_option_input.data( "option_id", v.option_id );		
@@ -31,7 +31,7 @@
 				$div_options_container.append($div_option);		
 			});	   
 	        break;
-	    case '2':
+	    case '3':
 			var $div_options_container = $("<div>", {});	    
 			$.each( options, function( k, v ){			
 				var $div_option = $("<div>", {class: "checkbox"});
@@ -44,9 +44,18 @@
 				$div_options_container.append($div_option);		
 			});	
 	        break;
-	    case '3':
-	    
-	    
+	    case '1':
+			var $div_options_container = $("<div>", {});	    
+			$.each( options, function( k, v ){			
+				var $div_option = $("<div>", {class: "radio"});
+				var $div_option_label = $("<label>", {});			
+				var $div_option_input = $("<input>", {type: "radio", name: "answers"+question_index.toString()+"[]"});		
+				$div_option_input.data( "option_id", v.option_id );		
+				$div_option_label.append($div_option_input);			
+				$div_option_label.append(v.content);		
+				$div_option.append($div_option_label); 			
+				$div_options_container.append($div_option);		
+			});	   
 	        break;		
 		} 		
 		$div_panel_title_container.html(subject);					
@@ -100,12 +109,12 @@ $(function() {
 		var answers = []; 		
 		$.each(Categories, function( index, value ) {		
 			switch(value.toString()) {
-				case '0':	
+				case '5':	
 					var a=[];	
 					a.push($('#quiz_take_form textarea[name="answers'+index.toString()+'[]"]').val());
 					answers[index]=a;								
 	       			break;						
-	    		case '1':
+	    		case '2':
 	    			var a=[];
 	    			var check_selected=false;	
 					$('#quiz_take_form input[name="answers'+index.toString()+'[]"]').each(function() {						
@@ -119,7 +128,7 @@ $(function() {
 						a.push("");	
 					answers[index]=a;												
 	        		break;
-	    		case '2':
+	    		case '3':
 	    			var a=[];	
 					$('#quiz_take_form input[name="answers'+index.toString()+'[]"]').each(function() {						
 						if($(this).prop('checked'))
@@ -132,7 +141,7 @@ $(function() {
 						a.push("");							
 					answers[index]=a;		    		
 	        		break;
-	    		case '3':
+	    		case '1':
 	    			break;	        									
 			}	
 			

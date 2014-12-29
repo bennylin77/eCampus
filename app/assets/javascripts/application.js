@@ -17,4 +17,6 @@
 //= require bootstrap-sprockets
 //= require moment
 //= require bootstrap-datetimepicker
+//= require ladda.min.js
+//= require spin.min.js
 //= require_tree .

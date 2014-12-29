@@ -42,7 +42,7 @@
 			  </div>
 			  <div class="form-group">
 			    <div class="col-sm-offset-3 col-sm-9">
-					<button type="submit" class="btn btn-default" id="submitPwAccount">送出</button>			    	
+					<button type="submit"  class="btn btn-primary ladda-button" data-style="zoom-in" id="submitPwAccount" <span class="ladda-label">送出</span></button>			    	
 			    </div>
 			  </div>
 			</form>  
@@ -112,14 +112,22 @@
   </div>  
 </div>
 <script>
+	//Ladda.bind( '#submitPwAccount' );
+$(function() {
+    var button;
+    $('#submitPwAccount').click(function(e){
+        button = this;
+    })
 	$('.pw_acc_error').hide();
     var sign_in_form = $('#sign_in_form');
     sign_in_form.submit(function (ev) {
     	$("#inputAccount").prop('disabled', true);
     	$("#inputPw").prop('disabled', true);
     	$("#submitPwAccount").prop('disabled', true);    	
-        $('.pw_acc_error').hide(500);    	
-        $.ajax({
+        $('.pw_acc_error').hide(500);  
+        var l = Ladda.create(button);//login button
+        l.start();  // Starts the spinner
+	 	$.ajax({
             type: sign_in_form.attr('method'),
             url: sign_in_form.attr('action'),
             data: {account: $('#inputAccount').val(), password: $('#inputPw').val()},
@@ -134,6 +142,7 @@
 					$('.home_ul').show();
 					$('.user_name').html(data.Name);			
 					$('.login_ul').hide();     
+					location.href=location.href+"/users/courses";
 				}          	       	
             	else
             	{
@@ -141,10 +150,12 @@
             		$('.pw_acc_error').show(500);
     				$("#inputAccount").prop('disabled', false);
     				$("#inputPw").prop('disabled', false);     
-    				$("#submitPwAccount").prop('disabled', false);       				       		
+    				$("#submitPwAccount").prop('disabled', false);       
+    				 l.stop(); // Stops the spinner				       		
             	}	
             }
         });
         ev.preventDefault();
     });
+});
 </script>

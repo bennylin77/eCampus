@@ -50,7 +50,7 @@
 		<div class="row data_list_content">
 			<div class="col-sm-4"></div>	
 				<div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
-			  	<%=link_to '/quiz_tea/rank?quiz_id='+s[:QuizId]+'&course_id='+s[:CourseId] do%>	  
+			  	<%=link_to '/quiz_tea/rank?quiz_id='+s[:QuizId]+'&course_id='+s[:CourseId]+'&submit_id='+s[:SubmitId] do%>	  
 				  <div class="row">
 					  <div class="col-sm-3"><%=showBlank s[:AccountId]%></div>	
 					  <div class="col-sm-3"><%=showBlank s[:AccountId]%></div>

@@ -1,7 +1,30 @@
-<div id="question_list">
-</div>
 <script>
-function addQuestion(index, course_id, pool_id, question_id, category, subject, options, comment) {
+  function courseAlertShow(type, msg) {
+		$("#course_alert").addClass( type );
+		$("#course_alert").html("<button type='button' class='close' onclick='$(\"#course_alert\").hide()'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>"+msg)
+		$("#course_alert").show(600).delay(2000).slideUp(600, function(){
+	    	$("#course_alert").removeClass( type );
+		    $("#course_alert").html("");
+	    }); 			
+  }    
+  $(function () {
+	$("#course_alert").hide();
+  })  
+</script>
+<div class="alert alert-success alert-dismissible fade in" id="course_alert"></div>	 	
+<div id="question_list"></div>
+<script>
+	var sheet_contents;
+	function addQuestion(index, course_id, pool_id, question_id, category, subject, options, comment) {
+		var sheet;
+		$.each( sheet_contents, function( key, value ) {
+			if(value.PoolId==pool_id)
+			{
+				sheet = value;
+				return false
+			}
+		});
+				
 		var $div_question_container = $("<div>", {id: "question_container_"+question_id, class: "question_eg"});	
 			//question_eg_question_outter
 		var $question_eg_question_outter =$("<div>", {class: "row question_eg_question_outter"}); 
@@ -11,10 +34,10 @@ function addQuestion(index, course_id, pool_id, question_id, category, subject, 
 		var $question_eg_question_note= $("<div>", {class: "col-sm-1"}); 
 			$question_eg_question_outter.append($question_eg_question_note);			
 		var $question_eg_question_mani_container= $("<div>", {class: "col-sm-1"}); 	
-		var $span_edit = $("<span>", {id: "pool_edit_"+pool_id, class: "question_eg_question_mani glyphicon glyphicon-edit", 'aria-hidden': "true"});
-			$question_eg_question_mani_container.append($span_edit)
-		var $span_del = $("<span>", {id: "pool_del_"+pool_id, class: "question_eg_question_mani glyphicon glyphicon-trash", 'aria-hidden': "true"});
-			$question_eg_question_mani_container.append($span_del)
+		//var $span_edit = $("<span>", {id: "pool_edit_"+pool_id, class: "question_eg_question_mani glyphicon glyphicon-edit", 'aria-hidden': "true"});
+			//$question_eg_question_mani_container.append($span_edit)
+		var $score = $("<input>", {id: "pool_score_"+pool_id, type: 'text', val: sheet.MatchRate});
+			$question_eg_question_mani_container.append($score)
 			$question_eg_question_outter.append($question_eg_question_mani_container);		
 			$div_question_container.append($question_eg_question_outter);	
 			//question_eg_comment_outter
@@ -43,18 +66,7 @@ function addQuestion(index, course_id, pool_id, question_id, category, subject, 
 			$question_eg_question_note.html('填充');	    	
 			for(firstKey in options);
 			if(typeof firstKey != 'undefined') 
-				$question_eg_options_container.html(options[firstKey].content);	
-			$span_edit.click(function(){  	
-		    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
-		    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	    	
-		    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});								
-				$('#pool_id').val(pool_id);				
-				$("#pool_subject").val(subject);
-				$("#pool_category").val(category).change();	
-				if(typeof firstKey != 'undefined') 			
-					$('#quiz_pool_form textarea[name="options[]"]').val(options[firstKey].content); 		
-				$("#pool_comment").val(comment);									
-			});				
+				$question_eg_options_container.html(options[firstKey].content);					
 	        break;
 	    case '2':	    
 	    	$question_eg_options_title.html('選項與答案');
@@ -68,29 +80,7 @@ function addQuestion(index, course_id, pool_id, question_id, category, subject, 
 					$div_label_container.append('<input type="radio" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" disabled>'+v.content);					
 				$div_radio_container.append($div_label_container);
 				$question_eg_options_container.append($div_radio_container);
-			});	    
-			$span_edit.click(function(){  
-		    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
-		    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	    	
-		    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});					
-				$('#pool_id').val(pool_id);					
-				$("#pool_subject").val(subject);
-				$("#pool_category").val(category).change();		
-				$.each( options, function( k, v ){
-					var li_html='<li>'+
-		            '<div class="row">'+
-		            '<div class="col-sm-5"><textarea class="form-control" rows="2" placeholder="選項" name="options[]">'+v.content+'</textarea></div>'+
-		            '<div class="col-sm-2">';
-		            if(v.isAnswer)
-		            	li_html=li_html+'<label class="radio-inline"><input type="radio" name="answers[]" checked="checked">此為解答</label></div>';
-		            else
-		            	li_html=li_html+'<label class="radio-inline"><input type="radio" name="answers[]">此為解答</label></div>';		            		
-					li_html=li_html+'<div class="col-sm-1"><span href="#" class="form_options_mani remove_option question_eg_question_mani glyphicon glyphicon-trash" aria-hidden="true"></span></div>'+
-		            		'</div></li>'					
-		            $('.option_list_field').append(li_html);						
-				});	 						
-				$("#pool_comment").val(comment);					
-			});		
+			});	    	
 	        break;
 	    case '3':
 	    	$question_eg_options_title.html('選項與答案');
@@ -104,30 +94,7 @@ function addQuestion(index, course_id, pool_id, question_id, category, subject, 
 					$div_label_container.append('<input type="checkbox" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" disabled>'+v.content);					
 				$div_radio_container.append($div_label_container);
 				$question_eg_options_container.append($div_radio_container);
-			});	    
-			$span_edit.click(function(){  
-		    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
-		    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	    	
-		    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});					
-				$('#pool_id').val(pool_id);					
-				$("#pool_subject").val(subject);
-				$("#pool_category").val(category).change();		
-				$.each( options, function( k, v ){
-					var li_html='<li>'+
-		            '<div class="row">'+
-		            '<div class="col-sm-5"><textarea class="form-control" rows="2" placeholder="選項" name="options[]">'+v.content+'</textarea></div>'+
-		            '<div class="col-sm-2">';
-		            if(v.isAnswer)
-		            	li_html=li_html+'<label class="checkbox-inline"><input type="checkbox" name="answers[]" checked="checked">此為解答</label></div>';
-		            else
-		            	li_html=li_html+'<label class="checkbox-inline"><input type="checkbox" name="answers[]">此為解答</label></div>';		            		
-						li_html=li_html+'<div class="col-sm-1"><span href="#" class="form_options_mani remove_option question_eg_question_mani glyphicon glyphicon-trash" aria-hidden="true"></span></div>'+
-		            			'</div>'+
-		            			'</li>'					
-		            $('.option_list_field').append(li_html);						
-				});	 						
-				$("#pool_comment").val(comment);					
-			});		    
+			});	    	    
 	        break;
 	    case '1':
 	    	$question_eg_options_title.html('選項與答案');
@@ -141,47 +108,24 @@ function addQuestion(index, course_id, pool_id, question_id, category, subject, 
 					$div_label_container.append('<input type="radio" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" disabled>'+v.content);					
 				$div_radio_container.append($div_label_container);
 				$question_eg_options_container.append($div_radio_container);
-			});	    
-			$span_edit.click(function(){  
-		    	$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
-		    	$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	    	
-		    	$('#submitPool').slideDown({duration: 400, easing: 'swing'});					
-				$('#pool_id').val(pool_id);					
-				$("#pool_subject").val(subject);
-				$("#pool_category").val(category).change();		
-				$.each( options, function( k, v ){
-					var li_html='<li>'+
-		            '<div class="row">'+
-		            '<div class="col-sm-5"><textarea class="form-control" rows="2" placeholder="選項" name="options[]">'+v.content+'</textarea></div>'+
-		            '<div class="col-sm-2">';
-		            if(v.isAnswer)
-		            	li_html=li_html+'<label class="radio-inline"><input type="radio" name="answers[]" checked="checked">此為解答</label></div>';
-		            else
-		            	li_html=li_html+'<label class="radio-inline"><input type="radio" name="answers[]">此為解答</label></div>';		            		
-					li_html=li_html+'<div class="col-sm-1"><a href="#" class="remove_option btn btn-danger">刪除</a></div>'+
-		            		'</div>'+
-		            		'</li>'					
-		            $('.option_list_field').append(li_html);						
-				});	 						
-				$("#pool_comment").val(comment);					
-			});		    
+			});	    	    
 	        break;		
 		} 	
-		$span_del.click(function(){  
+		$score.change(function(){  
 			$.ajax({
 				type: "GET",
-				url: "/quiz_tea/deleteQuestion",
-				data: { QuestionId: question_id, CourseId: '<%=@course_id%>'},
+				url: "/quiz_tea/submitScore",
+				data: { PoolId: pool_id, SubmitId: '<%=@submit_id%>', Score: $("#pool_score_"+pool_id).val(), quiz_id: '<%=@quiz_id%>', course_id: '<%=@course_id%>'},
 				datatype : 'json',
 				success : function(data) {
 					if (data.success) {
-						questionList();											
+						courseAlertShow('alert-success', data.message)											
 					} else {
-						courseAlertShow('alert-danger', data.msg)
+						courseAlertShow('alert-danger', data.message)
 					}
 				}			
 			});						
-		});					
+		});			
 		$('#question_list').append($div_question_container);
 	}	
 	// list Question
@@ -202,16 +146,30 @@ function addQuestion(index, course_id, pool_id, question_id, category, subject, 
 						addQuestion(index, v.course_id, v.pool_id, v.question_id, v.category, v.subject, v.options, v.comment);	
 					});											
 				} else {
-					courseAlertShow('alert-danger', data.msg)
+					courseAlertShow('alert-danger', data.message)
 				}
 			}			
 		});	
 	}
 
 
-$(function() {
-	
-	questionList();
-            
+$(function() {	
+	$.ajax({
+				type: "GET",
+				async: false,
+				url: "/quiz_tea/getAnswerAndScore",
+				data: { SubmitId: '<%= @submit_id%>'},
+				datatype : 'json',
+				success : function(data) {
+					if (data.success) {
+						courseAlertShow('alert-success', data.sheet_contents)										
+						sheet_contents = data.sheet_contents
+					} else {
+						courseAlertShow('alert-danger', data.message)
+					}
+				}			
+			});		
+	questionList();  	
+	       
 });
 </script>

@@ -142,7 +142,19 @@ $(function() {
 					answers[index]=a;		    		
 	        		break;
 	    		case '1':
-	    			break;	        									
+	    			var a=[];
+	    			var check_selected=false;	
+					$('#quiz_take_form input[name="answers'+index.toString()+'[]"]').each(function() {						
+						if($(this).prop('checked'))
+						{
+					    	a.push($(this).data( "option_id" )); 
+					    	check_selected=true
+					    }						
+					});		
+					if(!check_selected)
+						a.push("");	
+					answers[index]=a;												
+	        		break;	    		        									
 			}	
 			
 		});			

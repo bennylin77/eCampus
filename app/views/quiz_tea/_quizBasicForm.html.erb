@@ -67,31 +67,13 @@
 	</div>	
 	
 </form>
-
-<div class="row operation_container">
-  <div class="col-sm-1"><%=link_to '儲存', '', id: 'basic_form_submit', class: 'operation_edit_but'%></div>
-</div>
 <script type="text/javascript">
 	$('#datetimepickerBeginDate, #datetimepickerEndDate').datetimepicker({
 		use24hours : true,
 		format : 'YYYY/MM/DD HH:mm'
-	});
-	var quiz_basic_form = $('#quiz_basic_form');
-	
-	$('#basic_form_submit, #quiz_form_pool_button').click(function(ev) {
-		ev.preventDefault();
-		$("#Caption").prop('disabled', true);
-		$("#Content").prop('disabled', true);
-		$("#datetimepickerBeginDate").prop('disabled', true);
-		$("#datetimepickerEndDate").prop('disabled', true);
-		$("#QuizType").prop('disabled', true);
-		$("#Invited").prop('disabled', true);
-		$("#NotifyCheckbox1").prop('disabled', true);
-		$("#NotifyCheckbox2").prop('disabled', true);
-		$("#NotifyCheckbox3").prop('disabled', true);
-		$("#IsDisorder").prop('disabled', true);
-		$("#DisplayType").prop('disabled', true);		
-		$("#submitBasic").prop('disabled', true);
+	});	
+	var quiz_basic_form = $('#quiz_basic_form');		
+	$("#Caption, #Content, #datetimepickerBeginDate, #datetimepickerEndDate, #QuizType, #Invited, #NotifyCheckbox1, #NotifyCheckbox2, #NotifyCheckbox3, #IsDisorder, #DisplayType" ).change(function() {			
 		$.ajax({
 			type : quiz_basic_form.attr('method'),
 			url : quiz_basic_form.attr('action'),
@@ -111,26 +93,11 @@
 			datatype : 'json',
 			success : function(data) {
 				if (data.success) {
-					courseAlertShow('alert-success', data.message)
-					$('#quiz_form_pool_button').tab('show')					
+					courseAlertShow('alert-success', data.message)			
 				} else {
 					courseAlertShow('alert-danger', data.message)
 				}
-				$("#Caption").prop('disabled', false);
-				$("#Content").prop('disabled', false);
-				$("#datetimepickerBeginDate").prop('disabled', false);
-				$("#datetimepickerEndDate").prop('disabled', false);
-				$("#QuizType").prop('disabled', false);
-				$("#Invited").prop('disabled', false);
-				$("#NotifyCheckbox1").prop('disabled', false);
-				$("#NotifyCheckbox2").prop('disabled', false);
-				$("#NotifyCheckbox3").prop('disabled', false);
-				$("#IsDisorder").prop('disabled', false);
-				$("#DisplayType").prop('disabled', false);					
-				$("#submitBasic").prop('disabled', false);
-
 			}
-		});
-
-	});
+		});			
+	});	
 </script>

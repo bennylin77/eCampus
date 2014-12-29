@@ -102,7 +102,15 @@ class QuizTeaController < ApplicationController
     @result=result['DataCollection']         
   end  
   
-  def publish    
+  def publish
+    # validate begin
+    validations_result=validations([{type: 'presence', title: '測驗名稱', data: params[:Caption]},
+                                    {type: 'presence', title: '內容說明', data: params[:Content]},
+                                    {type: 'presence', title: '開始時間', data: params[:BeginDate]},
+                                    {type: 'presence', title: '最後入場時間', data: params[:EndDate]},
+                                    {type: 'latter_than', title: { first: '開始時間', second: '最後入場時間' }, data: { first: params[:BeginDate], second: params[:EndDate] }}])
+    checkValidations(validations: validations_result ) 
+    # validate end         
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})         
     unless result['DataCollection'].blank?
       result['DataCollection'].each do |q|  
@@ -129,7 +137,8 @@ class QuizTeaController < ApplicationController
     render json: {success: true, message: '成功更改分數' }                
   end
   
-  def updateBasic       
+  def updateBasic    
+=begin       
     # validate begin
     validations_result=validations([{type: 'presence', title: '測驗名稱', data: params[:Caption]},
                                     {type: 'presence', title: '內容說明', data: params[:Content]},
@@ -137,7 +146,8 @@ class QuizTeaController < ApplicationController
                                     {type: 'presence', title: '最後入場時間', data: params[:EndDate]},
                                     {type: 'latter_than', title: { first: '開始時間', second: '最後入場時間' }, data: { first: params[:BeginDate], second: params[:EndDate] }}])
     checkValidations(validations: validations_result ) 
-    # validate end  
+    # validate end 
+=end     
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/UpdateDraft', {Caption: params[:Caption], Content: params[:Content], BeginDate: params[:BeginDate], EndDate: params[:EndDate], QuizType: params[:QuizType],  
                                                                           Invited: params[:Invited], Notify: params[:Notify], IsDisorder: params[:IsDisorder], DisplayType: params[:DisplayType],
                                                                           QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip})   

@@ -32,10 +32,9 @@ class QuizTeaController < ApplicationController
       end
   
       @sheet_lists =Array.new 
- 
       sheets=postRequest('http://140.113.8.134/Quiz/QuizV2/ListSheets', { QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})                             
-      sheets.fetch('DataCollection', []).each do |s|
-        s.fetch('ExtraData', []).each do |e|
+      (sheets['DataCollection'] || []).each do |s|
+        (s['ExtraData'] || []).each do |e|
           unless e['EndDate'].blank?
             @sheet_lists <<
             {
@@ -50,39 +49,6 @@ class QuizTeaController < ApplicationController
           end  
         end       
       end
-    
-=begin                
-      requisiteDoneList.each do |r|
-        z=postRequest('http://140.113.8.134/Quiz/QuizV2/ListSheets', { StudentId: r, QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})                 
-        #logger.info z['DataCollection'] 
-        #logger.info z['DataCollection'][0]
-        z['DataCollection'][0]['ExtraData'].each do |e|
-          logger.info e['MatchRate']
-          g=postRequest('http://140.113.8.134/Quiz/QuizV2/GetSheetContents', { SubmitId: e['SubmitId'], UserId: currentUser.id, IP: request.remote_ip})                 
-          
-          material =Array.new 
-          g['DataCollection'].each do |gg|
-            logger.info gg['PoolId']
-            logger.info gg['MatchRate']
-            logger.info '--------------'
-            gg['Answer'].split("|").each do |an|
-              #logger.info 991
-              #logger.info an
-            end
-            material <<
-            {
-              SubmitId: e['SubmitId'],
-              PoolId: gg['PoolId'],
-              Score: 66
-            }                      
-          end  
-          ss = postRequestWithNestedJson('http://140.113.8.134/Quiz/QuizV2/ScoreSheet', {Material: material, CourseId: @course_id, QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip }.to_json, {:content_type => :json, :accept => :json}) 
-        end     
-      end    
-      tt=postRequest('http://140.113.8.134/Quiz/QuizV2/Transcript', { QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})                 
-=end
-
-
       @quiz.store("draft", false)        
     else
       result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewDraft', {QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })    
@@ -118,7 +84,7 @@ class QuizTeaController < ApplicationController
       end
     end       
     result_quiz = postRequest('http://140.113.8.134/Quiz/QuizV2/CreateQuiz', {QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })   
-    redirect_to controller: 'quiz_tea', action: 'index', course_id: @course_id  
+    render json: {success: true, message: '成功發佈' }                
   end
   
   def rank
@@ -159,10 +125,14 @@ class QuizTeaController < ApplicationController
       result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/CreatePoolDraft', {CourseId: params[:CourseId], UserId: currentUser.id, IP: request.remote_ip})         
       pool_id=result_pool['DataCollection']['PoolId']
       postRequest('http://140.113.8.134/Quiz/QuizV2/CreateQuestion', {PoolId: pool_id, QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})        
+      question_id=result_pool['DataCollection']['QuestionId']
     else
       pool_id=params[:PoolId]
+      question_id=params[:QuestionId]
     end  
-    # del update pool
+    
+    postRequest('http://140.113.8.134/Quiz/QuizV2/SetQuestionScore', {ScorePlus: params[:Score], QuestionId: question_id, CourseId: params[:CourseId], QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})        
+    # update pool
     result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/UpdateDelPoolDraft', {Subject: params[:Subject], Comment: params[:Comment], Category: params[:Category], isDelete: false, PoolId: pool_id, CourseId: params[:CourseId], UserId: currentUser.id, IP: request.remote_ip})         
     # del options first
     result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: pool_id, UserId: currentUser.id, IP: request.remote_ip})   
@@ -181,29 +151,24 @@ class QuizTeaController < ApplicationController
   
   def listQuestions
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})        
-    pools=Array.new  
     unless result['DataCollection'].blank?
+      new_pools = { '1'=> [], '2'=> [], '3'=> [],'5'=> []}
       result['DataCollection'].each do |q|  
-        logger.info params[:Draft].to_b
         if params[:Draft].to_b
           result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPoolDraft', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
         else
           result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPool', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})           
         end  
-        result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
-        options=Array.new      
-        unless result_ops['DataCollection'].blank?          
-          result_ops['DataCollection'].each do |o|
-            options <<
-            {                
-              option_id: o['OptionId'],
-              content: o['Content'],
-              isAnswer: o['IsAnswer'],               
-            }  
-          end
-        end  
-        pools <<
-        {
+        result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})        
+        unless result_ops['DataCollection'].blank?  
+          options=result_ops['DataCollection'].map{|o|{                
+            option_id: o['OptionId'],
+            content: o['Content'],
+            isAnswer: o['IsAnswer'],               
+          }}
+        end
+        key=result_pool['DataCollection']['Category'].to_s     
+        new_pools[key].push({
           course_id: q['CourseId'],
           pool_id: q['PoolId'],
           question_id: q['QuestionId'],
@@ -211,10 +176,10 @@ class QuizTeaController < ApplicationController
           subject: result_pool['DataCollection']['Subject'],
           comment: result_pool['DataCollection']['Comment'],
           options: options
-        }            
+        })
       end
     end
-    render json: {success: true, pools: pools }          
+    render json: {success: true, all_pools: new_pools}                                                   
   end
   
   def getAnswerAndScore

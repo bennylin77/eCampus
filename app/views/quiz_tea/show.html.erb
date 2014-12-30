@@ -32,7 +32,6 @@
 	<div class="row operation_show_container">
 	  <%if @quiz['draft']%>
 	  <div class="col-sm-1"><%=link_to '編輯草稿', '/quiz_tea/edit?quiz_id='+@quiz['QuizId']+'&course_id='+@quiz['CourseId'], class: 'operation_edit_but'%></div>
-	  <div class="col-sm-1"><%=link_to '正式發佈', '/quiz_tea/publish?course_id='+@quiz['CourseId']+'&quiz_id='+@quiz['QuizId'], class: 'operation_edit_but'%></div>	    		  
 	  <div class="col-sm-1"><%=link_to '刪除草稿', '/quiz_tea/deleteDraft?quiz_id='+@quiz['QuizId']+'&course_id='+@quiz['CourseId'], class: 'operation_del_but'%></div>	
 	  <%else%>
 	  <div class="col-sm-1"><%=link_to '刪除測驗', '/quiz_tea/deleteQuiz?quiz_id='+@quiz['QuizId']+'&course_id='+@quiz['CourseId'], class: 'operation_del_but'%></div>

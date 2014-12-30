@@ -93,7 +93,11 @@
 			datatype : 'json',
 			success : function(data) {
 				if (data.success) {
-					courseAlertShow('alert-success', data.message)			
+					if($('#Caption').val()) 
+						$('#breadcrumb_caption').html($('#Caption').val())
+					else
+						$('#breadcrumb_caption').html('--')	
+					//courseAlertShow('alert-success', data.message)			
 				} else {
 					courseAlertShow('alert-danger', data.message)
 				}

@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
   
+  def privacy
+    
+  end
   def courses
     result = postRequest('http://140.113.8.134/E35/autRCrsStu/OpenSetListStu', {accountid: currentUser.id})   
     @st_courses=result['DataCollection']

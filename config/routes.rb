@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get  'users/courses'
   get  'users/listCourses'
   get  'users/logOut'
+  get  'users/privacy'
   post 'users/signIn'
   
   get  'quiz/index'

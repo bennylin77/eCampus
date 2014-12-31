@@ -49,6 +49,39 @@ class QuizTeaController < ApplicationController
           end  
         end       
       end
+    
+=begin            
+      requisiteDoneList.each do |r|
+        z=postRequest('http://140.113.8.134/Quiz/QuizV2/ListSheets', { StudentId: r, QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})                 
+        #logger.info z['DataCollection'] 
+        #logger.info z['DataCollection'][0]
+        z['DataCollection'][0]['ExtraData'].each do |e|
+          logger.info e['MatchRate']
+          g=postRequest('http://140.113.8.134/Quiz/QuizV2/GetSheetContents', { SubmitId: e['SubmitId'], UserId: currentUser.id, IP: request.remote_ip})                 
+          
+          material =Array.new 
+          g['DataCollection'].each do |gg|
+            logger.info gg['PoolId']
+            logger.info gg['MatchRate']
+            logger.info '--------------'
+            gg['Answer'].split("|").each do |an|
+              #logger.info 991
+              #logger.info an
+            end
+            material <<
+            {
+              SubmitId: e['SubmitId'],
+              PoolId: gg['PoolId'],
+              Score: 66
+            }                      
+          end  
+          ss = postRequestWithNestedJson('http://140.113.8.134/Quiz/QuizV2/ScoreSheet', {Material: material, CourseId: @course_id, QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip }.to_json, {:content_type => :json, :accept => :json}) 
+        end     
+      end    
+      tt=postRequest('http://140.113.8.134/Quiz/QuizV2/Transcript', { QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})                 
+=end
+
+
       @quiz.store("draft", false)        
     else
       result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewDraft', {QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip })    
@@ -124,13 +157,12 @@ class QuizTeaController < ApplicationController
     if params[:PoolId].blank?
       result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/CreatePoolDraft', {CourseId: params[:CourseId], UserId: currentUser.id, IP: request.remote_ip})         
       pool_id=result_pool['DataCollection']['PoolId']
-      postRequest('http://140.113.8.134/Quiz/QuizV2/CreateQuestion', {PoolId: pool_id, QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})        
-      question_id=result_pool['DataCollection']['QuestionId']
+      result_question= postRequest('http://140.113.8.134/Quiz/QuizV2/CreateQuestion', {PoolId: pool_id, QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})        
+      question_id=result_question['DataCollection']['QuestionId']
     else
       pool_id=params[:PoolId]
       question_id=params[:QuestionId]
     end  
-    
     postRequest('http://140.113.8.134/Quiz/QuizV2/SetQuestionScore', {ScorePlus: params[:Score], QuestionId: question_id, CourseId: params[:CourseId], QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})        
     # update pool
     result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/UpdateDelPoolDraft', {Subject: params[:Subject], Comment: params[:Comment], Category: params[:Category], isDelete: false, PoolId: pool_id, CourseId: params[:CourseId], UserId: currentUser.id, IP: request.remote_ip})         
@@ -172,7 +204,8 @@ class QuizTeaController < ApplicationController
           course_id: q['CourseId'],
           pool_id: q['PoolId'],
           question_id: q['QuestionId'],
-          category: result_pool['DataCollection']['Category'],
+          score: q['ScorePlus'],            
+          category: result_pool['DataCollection']['Category'],       
           subject: result_pool['DataCollection']['Subject'],
           comment: result_pool['DataCollection']['Comment'],
           options: options

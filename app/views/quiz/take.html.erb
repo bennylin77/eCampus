@@ -1,12 +1,64 @@
 <form action="/quiz/submitAnswers" method="post" id="quiz_take_form" class="form-horizontal" role="form">
 </form>
 
+<div class="container-fluid question_formal">
+	<div class="row">
+		<div class="col-sm-offset-2 col-sm-8">
+			<div class="row question_formal_subject_container">
+				<div class="col-sm-1">1.</div>
+				<div class="col-sm-11 question_formal_subject">
+				盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-offset-2 col-sm-8">
+			<div class="row question_formal_options_container">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-11">
+				<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>終南捷徑</label></div>  
+				<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>終南捷徑</label></div>  
+				<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>終南捷徑</label></div>  
+				<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>終南捷徑</label></div>  
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+
+<div class="container-fluid question_formal">
+	<div class="row">
+		<div class="col-sm-offset-2 col-sm-8">
+			<div class="row question_formal_subject_container">
+				<div class="col-sm-1">1.</div>
+				<div class="col-sm-11 question_formal_subject">
+				盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-offset-2 col-sm-8">
+			<div class="row question_formal_options_container">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-11">
+				<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>終南捷徑</label></div>  
+				<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>終南捷徑</label></div>  
+				<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>終南捷徑</label></div>  
+				<div class="radio"><label><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>終南捷徑</label></div>  
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+
 <script>
 	var question_index;
 	var PoolIds = []; 	
 	var Categories = [];
 
-	function addFormalQuestion( pool_id, question_id, category, subject, options, comment) {
+	function addFormalQuestion(index, course_id, pool_id, question_id, category, score, subject, options, comment) {
 		PoolIds.push(pool_id); 			
 		Categories.push(category);		
 		var $div_question_container = $("<div>", {id: "question_container_"+question_id, class: "col-sm-8"});	    
@@ -67,9 +119,7 @@
 		$('#quiz_take_form').append($div_question_container);
 		question_index++;
 	}	
-	//addFormalQuestion('abc', 'def', '1', "盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?", { 7: "Saab", 6: "Volvo", 81: "BMW", 65: "GIANT"}, "這題更簡單，你也是不應該不會喔！");
-	//addFormalQuestion('abc', 'def', '0', "盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?", {}, "這題更簡單，你也是不應該不會喔！");
-	//addFormalQuestion('abc', 'def', '2', "盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?", { 7: "Saab", 6: "Volvo", 81: "BMW", 65: "GIANT"}, "這題更簡單，你也是不應該不會喔！");
+	
 	function questionList()
 	{
 		question_index=0;
@@ -82,8 +132,13 @@
 			success : function(data) {
 				if (data.success) 
 				{
-					$.each( data.pools, function( k, v ){
-						addFormalQuestion( v.pool_id, v.question_id, v.category, v.subject, v.options, v.comment);	
+					var index = 0;
+					$.each( data.all_pools, function( k, v ){
+						$('#quiz_take_form').append('<div class="row" id=""><div class="col-sm-2">[單選題]</div><div class="col-sm-2">[單選總分/測驗總分: 30/100]</div></div>');
+						$.each( v, function( kk, vv ){
+							index++;
+							addFormalQuestion(index, vv.course_id, vv.pool_id, vv.question_id, vv.category, vv.score, vv.subject, vv.options, vv.comment);	
+						});
 					});	
 					
 					if(data.left_count==0)

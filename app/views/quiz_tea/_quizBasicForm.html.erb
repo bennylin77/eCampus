@@ -37,13 +37,13 @@
 		<label class="col-sm-1 control-label">郵件通知</label>
 		<div class="col-sm-9">
 			<label class="checkbox-inline">
-				<input type="checkbox" id="NotifyCheckbox1">
+				<input type="checkbox" id="NotifyCheckbox1" <%=booleanChecked(data: @result['Notify'].to_s, checked_status: '100' )%>>
 				試卷發布馬上通知 </label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="NotifyCheckbox2">
+				<input type="checkbox" id="NotifyCheckbox2" <%=booleanChecked(data: @result['Notify'].to_s, checked_status: '010' )%>>
 				測驗開始通知 </label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="NotifyCheckbox3">
+				<input type="checkbox" id="NotifyCheckbox3" <%=booleanChecked(data: @result['Notify'].to_s, checked_status: '001' )%>>
 				測驗結束前一天發提醒通知 </label>
 		</div>
 	</div>

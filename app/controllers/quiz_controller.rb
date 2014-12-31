@@ -71,36 +71,36 @@ class QuizController < ApplicationController
   
   def listQuestions
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {getAmount: session[:get_Amount], skipAmount: session[:skip_Amount], QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})         
-    pools=Array.new  
     unless result['DataCollection'].blank?
+      new_pools = { '1'=> [], '2'=> [], '3'=> [],'5'=> []}
       result['DataCollection'].each do |q|  
-        result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPool', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
-        result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
-        options=Array.new      
-        unless result_ops['DataCollection'].blank?          
-          result_ops['DataCollection'].each do |o|
-            options <<
-            {                
-              option_id: o['OptionId'],
-              content: o['Content']              
-            }  
-          end
-        end      
-        pools <<
-        {
+        if params[:Draft].to_b
+          result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPoolDraft', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
+        else
+          result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPool', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})           
+        end  
+        result_ops = postRequest('http://140.113.8.134/Quiz/QuestionPool/ListOption', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})        
+        unless result_ops['DataCollection'].blank?  
+          options=result_ops['DataCollection'].map{|o|{                
+            option_id: o['OptionId'],
+            content: o['Content']               
+          }}
+        end
+        key=result_pool['DataCollection']['Category'].to_s     
+        new_pools[key].push({
           course_id: q['CourseId'],
           pool_id: q['PoolId'],
           question_id: q['QuestionId'],
-          category: result_pool['DataCollection']['Category'],
+          score: q['ScorePlus'],            
+          category: result_pool['DataCollection']['Category'],       
           subject: result_pool['DataCollection']['Subject'],
           comment: result_pool['DataCollection']['Comment'],
           options: options
-        }            
+        })
       end
-    end
-    render json: {success: true, pools: pools, left_count: session[:total_Amount].to_i-session[:skip_Amount].to_i-session[:get_Amount].to_i}         
-  end
-  
+    end                                                 
+    render json: {success: true, all_pools: new_pools, left_count: session[:total_Amount].to_i-session[:skip_Amount].to_i-session[:get_Amount].to_i}  
+  end  
   
   private
     def set_quiz

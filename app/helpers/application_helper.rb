@@ -23,4 +23,10 @@ module ApplicationHelper
       end
     end  
   end
+  
+  def booleanChecked(hash={})
+    if (hash[:data].to_i & hash[:checked_status].to_i)!=0
+      'checked'
+    end
+  end  
 end

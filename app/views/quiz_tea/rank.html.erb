@@ -15,7 +15,7 @@
 <div id="question_list"></div>
 <script>
 	var sheet_contents;
-	function addQuestion(index, course_id, pool_id, question_id, category, subject, options, comment) {
+	function addQuestion(index, course_id, pool_id, question_id, category, score, subject, options, comment) {
 		var sheet;
 		$.each( sheet_contents, function( key, value ) {
 			if(value.PoolId==pool_id)
@@ -140,11 +140,14 @@
 			success : function(data) {
 				if (data.success) {
 					//courseAlertShow('alert-success', data.msg)
-					var index=0;
-					$.each( data.pools, function( k, v ){
-						index++;
-						addQuestion(index, v.course_id, v.pool_id, v.question_id, v.category, v.subject, v.options, v.comment);	
-					});											
+					var index=0;				
+					$.each( data.all_pools, function( k, v ){
+						$('#question_list').append('<div class="row" id=""><div class="col-sm-2">[單選題]</div><div class="col-sm-2">[單選總分/測驗總分: 30/100]</div></div>');
+						$.each( v, function( kk, vv ){
+							index++;
+							addQuestion(index, vv.course_id, vv.pool_id, vv.question_id, vv.category, vv.score, vv.subject, vv.options, vv.comment);	
+						});
+					});															
 				} else {
 					courseAlertShow('alert-danger', data.message)
 				}

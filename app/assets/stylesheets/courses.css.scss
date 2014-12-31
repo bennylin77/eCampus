@@ -255,7 +255,6 @@
 .question_eg{
   font-size: 16px;  
 }
-
 .question_eg_question_outter{
   min-height: 90px;
   padding-top:30px;  
@@ -300,8 +299,18 @@
   border-bottom: 1px solid #582B32;  
 }
 
-
-
+.question_formal{
+  
+}
+.question_formal_subject_container{
+  padding-top: 10px;  
+  padding-bottom: 10px;
+  border-bottom: 1.5px dashed #582B32;    
+}
+.question_formal_options_container{
+  
+  border-bottom: 1px solid #582B32;   
+}
 /*================== Quiz ====================*/
 .quiz{
   

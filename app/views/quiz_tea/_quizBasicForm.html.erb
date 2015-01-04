@@ -14,13 +14,19 @@
 		<div class="col-sm-9">
 			<input type="text" class="form-control" id='datetimepickerBeginDate' name="BeginDate" value="<%=toFrontEndTimeFormat @result['BeginDate'] %>">
 		</div>
-	</div>
+	</div>	
 	<div class="form-group">
 		<label class="col-sm-1 control-label">*最後入場時間</label>
 		<div class="col-sm-9">
 			<input type="text" class="form-control" id='datetimepickerEndDate' name="EndDate" value="<%=toFrontEndTimeFormat @result['EndDate'] %>">
 		</div>
 	</div>
+	<div class="form-group">
+		<label class="col-sm-1 control-label">*測驗時間</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" id='TimeLimit' value="<%=@result['TimeLimit'] %>">
+		</div>
+	</div>	
 	<div class="form-group">
 		<label class="col-sm-1 control-label">種類</label>
 		<div class="col-sm-9">			
@@ -73,7 +79,7 @@
 		format : 'YYYY/MM/DD HH:mm'
 	});	
 	var quiz_basic_form = $('#quiz_basic_form');		
-	$("#Caption, #Content, #datetimepickerBeginDate, #datetimepickerEndDate, #QuizType, #Invited, #NotifyCheckbox1, #NotifyCheckbox2, #NotifyCheckbox3, #IsDisorder, #DisplayType" ).change(function() {			
+	$("#Caption, #Content, #datetimepickerBeginDate, #datetimepickerEndDate, #QuizType, #Invited, #NotifyCheckbox1, #NotifyCheckbox2, #NotifyCheckbox3, #IsDisorder, #DisplayType, #TimeLimit").change(function() {			
 		$.ajax({
 			type : quiz_basic_form.attr('method'),
 			url : quiz_basic_form.attr('action'),
@@ -84,6 +90,7 @@
 				Content : $('#Content').val(),
 				BeginDate : $('#datetimepickerBeginDate').val(),
 				EndDate : $('#datetimepickerEndDate').val(),
+				TimeLimit : $('#TimeLimit').val(),
 				QuizType : $('#QuizType').val(),
 				Invited : $('#Invited').val(),
 				Notify : (+$("#NotifyCheckbox1").prop('checked')).toString() + (+$("#NotifyCheckbox2").prop('checked')).toString() + (+$("#NotifyCheckbox3").prop('checked')).toString(),

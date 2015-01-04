@@ -285,8 +285,7 @@
 .question_eg_options_title{
   padding-top: 5px;    
   padding-bottom: 5px;    
-  border-top: 1.5px dashed #582B32;     
-  border-bottom: 1.5px dashed #582B32;    
+  border-top: 1.5px dashed #582B32;        
 }
 .question_eg_options_comment{
   padding-top: 5px;    
@@ -298,7 +297,28 @@
   padding-bottom:20px;   
   border-bottom: 1px solid #582B32;  
 }
+.question_eg_answer_title_outter{
+  padding-top:20px;      
+}
 
+.question_eg_answer_outter{       
+}
+
+.question_eg_answer_title{
+  padding-top: 5px;    
+  padding-bottom: 5px;    
+  border-top: 1.5px dashed #582B32;        
+}
+.question_eg_answer_comment{
+  padding-top: 5px;    
+  padding-bottom: 5px;    
+  border: 1px solid #582B32;     
+}
+.question_eg_answer_container{
+  padding-top:20px;  
+  padding-bottom:20px;   
+  border-bottom: 1px solid #582B32;  
+}
 .question_formal{
   
 }

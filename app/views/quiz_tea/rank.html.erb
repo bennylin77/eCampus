@@ -23,95 +23,125 @@
 				sheet = value;
 				return false
 			}
-		});
-				
+		});				
 		var $div_question_container = $("<div>", {id: "question_container_"+question_id, class: "question_eg"});	
 			//question_eg_question_outter
 		var $question_eg_question_outter =$("<div>", {class: "row question_eg_question_outter"}); 
-			$question_eg_question_outter.append('<div class="col-sm-1"></div>');			
+		sheet.MatchRate = sheet.MatchRate || 0
+		var $question_eg_question_mani_container= $("<div>", {class: "col-sm-2"}); 	
+			$question_eg_question_mani_container.append(
+			  '<div class="form-group">'+
+			  '<label class="control-label col-sm-5" style="text-align: right">實際得分</label>'+
+			  '<div class="col-sm-5">'+
+			  '<input id="pool_score_'+pool_id+'" type="text" class="form-control" value="'+sheet.MatchRate+'">'+
+			  '</div>'+
+			  '</div>')	
+			$question_eg_question_mani_container.append(
+			  '<div class="form-group">'+
+			  '<label class="control-label col-sm-5" style="text-align: right">本題配分</label>'+
+			  '<div class="col-sm-5">'+
+			  '<input id="pool_score_'+pool_id+'" type="text" class="form-control" value="'+score+'" disabled>'+
+			  '</div>'+
+			  '</div>')				  
+			$question_eg_question_outter.append($question_eg_question_mani_container);			
 			$question_eg_question_outter.append('<div class="col-sm-1">'+index+'.</div>');		
-			$question_eg_question_outter.append('<div class="col-sm-7 question_eg_question_container">'+subject+'</div>');		
-		var $question_eg_question_note= $("<div>", {class: "col-sm-1"}); 
-			$question_eg_question_outter.append($question_eg_question_note);			
-		var $question_eg_question_mani_container= $("<div>", {class: "col-sm-1"}); 	
-		//var $span_edit = $("<span>", {id: "pool_edit_"+pool_id, class: "question_eg_question_mani glyphicon glyphicon-edit", 'aria-hidden': "true"});
-			//$question_eg_question_mani_container.append($span_edit)
-		var $score = $("<input>", {id: "pool_score_"+pool_id, type: 'text', val: sheet.MatchRate});
-			$question_eg_question_mani_container.append($score)
-			$question_eg_question_outter.append($question_eg_question_mani_container);		
+			$question_eg_question_outter.append('<div class="col-sm-8 question_eg_question_container">'+subject+'</div>');						
 			$div_question_container.append($question_eg_question_outter);	
 			//question_eg_comment_outter
 		if(comment){
 			var $question_eg_comment_outter =$("<div>", {class: "row question_eg_comment_outter"}); 
 				$question_eg_comment_outter.append('<div class="col-sm-2"></div>');	
-				$question_eg_comment_outter.append('<div class="col-sm-7 question_eg_options_comment">回饋：'+comment+'</div>');	
+				$question_eg_comment_outter.append('<div class="col-sm-9 question_eg_options_comment">回饋：'+comment+'</div>');	
 				$div_question_container.append($question_eg_comment_outter);	
 		}
+			//question_eg_answers_title_outter			
+		var $question_eg_answers_title_outter =$("<div>", {class: "row question_eg_options_title_outter"}); 
+			$question_eg_answers_title_outter.append('<div class="col-sm-2"></div>'+
+													 '<div class="col-sm-9 question_eg_options_title">學生答案</div>');	 		
+			$div_question_container.append($question_eg_answers_title_outter);	
+			//question_eg_answer_outter				
+		var $question_eg_answers_outter =$("<div>", {class: "row question_eg_options_outter"}); 
+			$question_eg_answers_outter.append('<div class="col-sm-2"></div>');	
+		var $question_eg_answers_container =$("<div>", {class: "col-sm-9 question_eg_options_container"}); 			
+			$question_eg_answers_outter.append($question_eg_answers_container);
+			$div_question_container.append($question_eg_answers_outter);			
 			//question_eg_options_title_outter			
 		var $question_eg_options_title_outter =$("<div>", {class: "row question_eg_options_title_outter"}); 
-			$question_eg_options_title_outter.append('<div class="col-sm-2"></div>');	
-		var $question_eg_options_title =$("<div>", {class: "col-sm-7 question_eg_options_title"}); 
-			$question_eg_options_title_outter.append($question_eg_options_title);
+			$question_eg_options_title_outter.append('<div class="col-sm-2"></div>'+
+													 '<div class="col-sm-9 question_eg_options_title">參考答案</div>');	 		
 			$div_question_container.append($question_eg_options_title_outter);	
 			//question_eg_options_outter				
 		var $question_eg_options_outter =$("<div>", {class: "row question_eg_options_outter"}); 
 			$question_eg_options_outter.append('<div class="col-sm-2"></div>');	
-		var $question_eg_options_container =$("<div>", {class: "col-sm-7 question_eg_options_container"}); 			
+		var $question_eg_options_container =$("<div>", {class: "col-sm-9 question_eg_options_container"}); 			
 			$question_eg_options_outter.append($question_eg_options_container);
 			$div_question_container.append($question_eg_options_outter);										  
 		//category process
 		switch(category.toString()) {
 	    case '5':
-	    	$question_eg_options_title.html('參考答案');
-			$question_eg_question_note.html('填充');	    	
+	    	$question_eg_answers_container.html(sheet.Answer[0]);
+	    	sheet.Answer[0]
 			for(firstKey in options);
 			if(typeof firstKey != 'undefined') 
 				$question_eg_options_container.html(options[firstKey].content);					
 	        break;
-	    case '2':	    
-	    	$question_eg_options_title.html('選項與答案');
-			$question_eg_question_note.html('單選');	 	    		    
-			$.each( options, function( k, v ){				
-				var $div_radio_container = $("<div>", {id: "question_container_"+question_id, class: "radio disabled"});	
-				var $div_label_container = $("<label>", {});	
-				if(v.isAnswer) 
-					$div_label_container.append('<input type="radio" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" checked="checked" disabled>'+v.content);
-				else
-					$div_label_container.append('<input type="radio" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" disabled>'+v.content);					
-				$div_radio_container.append($div_label_container);
-				$question_eg_options_container.append($div_radio_container);
+	    case '2':	    	 	    		    
+			$.each( options, function( k, v ){		
+				if(v.isAnswer) 	
+				{
+					var $div_radio_container = $("<div>", {id: "question_container_"+question_id, class: "radio disabled"});	
+					var $div_label_container = $("<label>", {});	
+					$div_label_container.append(v.content);
+					$div_radio_container.append($div_label_container);
+					$question_eg_options_container.append($div_radio_container);
+				}			
+				$.each( sheet.Answer, function( kk, vv ){
+					if(v.option_id==vv)
+					{
+						$question_eg_answers_container.html(v.content);
+					}
+				});				
 			});	    	
 	        break;
-	    case '3':
-	    	$question_eg_options_title.html('選項與答案');
-			$question_eg_question_note.html('複選');	 	    		    
-			$.each( options, function( k, v ){				
-				var $div_radio_container = $("<div>", {id: "question_container_"+question_id, class: "radio disabled"});	
-				var $div_label_container = $("<label>", {});	
-				if(v.isAnswer) 
-					$div_label_container.append('<input type="checkbox" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" checked="checked" disabled>'+v.content);
-				else
-					$div_label_container.append('<input type="checkbox" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" disabled>'+v.content);					
-				$div_radio_container.append($div_label_container);
-				$question_eg_options_container.append($div_radio_container);
+	    case '3':    		    
+			$.each( options, function( k, v ){	
+				if(v.isAnswer) 	
+				{							
+					var $div_radio_container = $("<div>", {id: "question_container_"+question_id, class: "radio disabled"});	
+					var $div_label_container = $("<label>", {});	
+					$div_label_container.append(v.content);				
+					$div_radio_container.append($div_label_container);
+					$question_eg_options_container.append($div_radio_container);
+				}
+				$.each( sheet.Answer, function( kk, vv ){
+					if(v.option_id==vv)
+					{
+						$question_eg_answers_container.html(v.content);
+					}
+				});					
 			});	    	    
 	        break;
-	    case '1':
-	    	$question_eg_options_title.html('選項與答案');
-			$question_eg_question_note.html('是非');	 	    		    
-			$.each( options, function( k, v ){				
-				var $div_radio_container = $("<div>", {id: "question_container_"+question_id, class: "radio disabled"});	
-				var $div_label_container = $("<label>", {});	
-				if(v.isAnswer) 
-					$div_label_container.append('<input type="radio" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" checked="checked" disabled>'+v.content);
-				else
-					$div_label_container.append('<input type="radio" name="optionsRadios_'+pool_id+'" id="optionsRadios'+v.option_id+'" disabled>'+v.content);					
-				$div_radio_container.append($div_label_container);
-				$question_eg_options_container.append($div_radio_container);
+	    case '1':    		    
+			$.each( options, function( k, v ){		
+				if(v.isAnswer) 	
+				{						
+					var $div_radio_container = $("<div>", {id: "question_container_"+question_id, class: "radio disabled"});	
+					var $div_label_container = $("<label>", {});	
+					$div_label_container.append(v.content);				
+					$div_radio_container.append($div_label_container);
+					$question_eg_options_container.append($div_radio_container);
+				}
+				$.each( sheet.Answer, function( kk, vv ){
+					if(v.option_id==vv)
+					{
+						$question_eg_answers_container.html(v.content);
+					}
+				});						
 			});	    	    
 	        break;		
 		} 	
-		$score.change(function(){  
+		$('#question_list').append($div_question_container);		
+		$("#pool_score_"+pool_id).change(function(){  
 			$.ajax({
 				type: "GET",
 				url: "/quiz_tea/submitScore",
@@ -126,7 +156,6 @@
 				}			
 			});						
 		});			
-		$('#question_list').append($div_question_container);
 	}	
 	// list Question
 	function questionList()
@@ -139,14 +168,41 @@
 			datatype : 'json',
 			success : function(data) {
 				if (data.success) {
-					//courseAlertShow('alert-success', data.msg)
 					var index=0;				
 					$.each( data.all_pools, function( k, v ){
-						$('#question_list').append('<div class="row" id=""><div class="col-sm-2">[單選題]</div><div class="col-sm-2">[單選總分/測驗總分: 30/100]</div></div>');
-						$.each( v, function( kk, vv ){
-							index++;
-							addQuestion(index, vv.course_id, vv.pool_id, vv.question_id, vv.category, vv.score, vv.subject, vv.options, vv.comment);	
-						});
+						if(v.length!=0)
+						{						
+							var category_title=''
+							var $question_eg_category_container = $("<div>", {class: "container-fluid question_eg_category_container"}); 	
+							var $question_eg_category_container_row = $("<div>", {class: "row question_eg_category_container_row"}); 
+							switch(k) {
+							    case '1':
+							    	category_title='是非題'
+							        break;
+							    case '2':
+							        category_title='單選題'
+							        break;
+							    case '3':
+							        category_title='複選題'
+							        break;
+							    case '5':
+							        category_title='簡答題'
+							        break;						        
+							} 						
+							$question_eg_category_container_row.append('<div class="col-sm-2">['+
+																			category_title+
+																			'][本大題配分'+
+																			data.pools_score[k]+
+																			'分]</div>'); 
+							$question_eg_category_container.append($question_eg_category_container_row); 
+							$('#question_list').append($question_eg_category_container);																					
+							$.each( v, function( kk, vv ){
+								index++;
+								addQuestion(index, vv.course_id, vv.pool_id, vv.question_id, vv.category, vv.score, vv.subject, vv.options, vv.comment);	
+							});
+						}						
+						
+						
 					});															
 				} else {
 					courseAlertShow('alert-danger', data.message)

@@ -107,7 +107,9 @@ class QuizTeaController < ApplicationController
                                     {type: 'presence', title: '內容說明', data: params[:Content]},
                                     {type: 'presence', title: '開始時間', data: params[:BeginDate]},
                                     {type: 'presence', title: '最後入場時間', data: params[:EndDate]},
-                                    {type: 'latter_than', title: { first: '開始時間', second: '最後入場時間' }, data: { first: params[:BeginDate], second: params[:EndDate] }}])
+                                    {type: 'latter_than', title: { first: '開始時間', second: '最後入場時間' }, data: { first: params[:BeginDate], second: params[:EndDate] }},
+                                    {type: 'presence', title: '測驗時間', data: params[:TimeLimit]},                                    
+                                    ])
     checkValidations(validations: validations_result ) 
     # validate end         
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})         
@@ -136,19 +138,9 @@ class QuizTeaController < ApplicationController
     render json: {success: true, message: '成功更改分數' }                
   end
   
-  def updateBasic    
-=begin       
-    # validate begin
-    validations_result=validations([{type: 'presence', title: '測驗名稱', data: params[:Caption]},
-                                    {type: 'presence', title: '內容說明', data: params[:Content]},
-                                    {type: 'presence', title: '開始時間', data: params[:BeginDate]},
-                                    {type: 'presence', title: '最後入場時間', data: params[:EndDate]},
-                                    {type: 'latter_than', title: { first: '開始時間', second: '最後入場時間' }, data: { first: params[:BeginDate], second: params[:EndDate] }}])
-    checkValidations(validations: validations_result ) 
-    # validate end 
-=end     
-    result = postRequest('http://140.113.8.134/Quiz/QuizV2/UpdateDraft', {Caption: params[:Caption], Content: params[:Content], BeginDate: params[:BeginDate], EndDate: params[:EndDate], QuizType: params[:QuizType],  
-                                                                          Invited: params[:Invited], Notify: params[:Notify], IsDisorder: params[:IsDisorder], DisplayType: params[:DisplayType],
+  def updateBasic      
+    result = postRequest('http://140.113.8.134/Quiz/QuizV2/UpdateDraft', {Caption: params[:Caption], Content: params[:Content], BeginDate: params[:BeginDate], EndDate: params[:EndDate], TimeLimit: params[:TimeLimit],
+                                                                          QuizType: params[:QuizType], Invited: params[:Invited], Notify: params[:Notify], IsDisorder: params[:IsDisorder], DisplayType: params[:DisplayType],
                                                                           QuizId: @quiz_id, CourseId: @course_id, UserId: currentUser.id, IP: request.remote_ip})   
     render json: {success: true, message: '成功更新基本設定' }    
   end  
@@ -185,6 +177,7 @@ class QuizTeaController < ApplicationController
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})        
     unless result['DataCollection'].blank?
       new_pools = { '1'=> [], '2'=> [], '3'=> [],'5'=> []}
+      pools_score={ '1'=> 0, '2'=> 0, '3'=> 0, '5'=> 0}      
       result['DataCollection'].each do |q|  
         if params[:Draft].to_b
           result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPoolDraft', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
@@ -210,9 +203,10 @@ class QuizTeaController < ApplicationController
           comment: result_pool['DataCollection']['Comment'],
           options: options
         })
+        pools_score[key]=pools_score[key]+q['ScorePlus']
       end
     end
-    render json: {success: true, all_pools: new_pools}                                                   
+    render json: {success: true, pools_score: pools_score, all_pools: new_pools}                                                   
   end
   
   def getAnswerAndScore

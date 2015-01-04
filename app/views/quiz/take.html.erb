@@ -1,6 +1,5 @@
 <form action="/quiz/submitAnswers" method="post" id="quiz_take_form" class="form-horizontal" role="form">
 </form>
-
 <script>
 	var question_index;
 	var PoolIds = []; 	
@@ -149,38 +148,46 @@
 			success : function(data) {
 				if (data.success) 
 				{
-					var index = 0;
+					var index = 0;					
+					$('#quiz_take_form').append('<div class="container-fluid" style="padding-top: 15px;"><div class="row"><div class="col-sm-offset-9 col-sm-3">測驗倒數時間: <span id="quiz_time_remain"></span></div></div></div>');																					
+					// countdown
+				   	$("#quiz_time_remain").countdown(data.time_out, function(event) {
+					    $(this).text(
+					      event.strftime('%H 小時 %M 分 %S 秒')
+					    );
+				 	});						
 					$.each( data.all_pools, function( k, v ){
-						
-						var category_title=''
-						var $question_formal_category_container = $("<div>", {class: "container-fluid question_formal_category_container"}); 	
-						var $question_formal_category_container_row = $("<div>", {class: "row question_formal_category_container_row"}); 
-						switch(k) {
-						    case '1':
-						    	category_title='是非題'
-						        break;
-						    case '2':
-						        category_title='單選題'
-						        break;
-						    case '3':
-						        category_title='複選題'
-						        break;
-						    case '5':
-						        category_title='簡答題'
-						        break;						        
-						} 						
-						$question_formal_category_container_row.append('<div class="col-sm-2">['+
-																		category_title+
-																		'][本大題配分'+
-																		data.pools_score[k]+
-																		'分]</div>'); 
-						$question_formal_category_container.append($question_formal_category_container_row); 
-						$('#quiz_take_form').append($question_formal_category_container);		
-																
-						$.each( v, function( kk, vv ){
-							index++;
-							addFormalQuestion(index, vv.course_id, vv.pool_id, vv.question_id, vv.category, vv.score, vv.subject, vv.options);	
-						});
+						if(v.length!=0)
+						{						
+							var category_title=''
+							var $question_formal_category_container = $("<div>", {class: "container-fluid question_formal_category_container"}); 	
+							var $question_formal_category_container_row = $("<div>", {class: "row question_formal_category_container_row"}); 
+							switch(k) {
+							    case '1':
+							    	category_title='是非題'
+							        break;
+							    case '2':
+							        category_title='單選題'
+							        break;
+							    case '3':
+							        category_title='複選題'
+							        break;
+							    case '5':
+							        category_title='簡答題'
+							        break;						        
+							} 						
+							$question_formal_category_container_row.append('<div class="col-sm-2">['+
+																			category_title+
+																			'][本大題配分'+
+																			data.pools_score[k]+
+																			'分]</div>'); 
+							$question_formal_category_container.append($question_formal_category_container_row); 
+							$('#quiz_take_form').append($question_formal_category_container);																					
+							$.each( v, function( kk, vv ){
+								index++;
+								addFormalQuestion(index, vv.course_id, vv.pool_id, vv.question_id, vv.category, vv.score, vv.subject, vv.options);	
+							});
+						}
 					});	
 					
 					if(data.left_count==0)

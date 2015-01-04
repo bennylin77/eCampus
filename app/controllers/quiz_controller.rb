@@ -29,8 +29,11 @@ class QuizController < ApplicationController
     session[:get_Amount]=nil  
     session[:skip_Amount]=nil 
     session[:total_Amount]=nil
+    session[:begin_date]=nil
+    session[:time_out]=nil
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ViewQuiz', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip })    
-    session[:skip_Amount]=0
+    session[:begin_date]=Time.now.strftime('%Y/%m/%d %H:%M:%S')
+    session[:time_out]=(Time.now+result['DataCollection']['TimeLimit']*60).strftime('%Y/%m/%d %H:%M:%S')
     if result['DataCollection']['DisplayType']==0
       # display all
       session[:get_Amount]=''
@@ -101,7 +104,7 @@ class QuizController < ApplicationController
         pools_score[key]=pools_score[key]+q['ScorePlus']
       end
     end                                                 
-    render json: {success: true, pools_score: pools_score, all_pools: new_pools, left_count: session[:total_Amount].to_i-session[:skip_Amount].to_i-session[:get_Amount].to_i}  
+    render json: {success: true, time_out: session[:time_out], pools_score: pools_score, all_pools: new_pools, left_count: session[:total_Amount].to_i-session[:skip_Amount].to_i-session[:get_Amount].to_i}  
   end  
   
   private

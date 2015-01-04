@@ -42,7 +42,8 @@ class QuizController < ApplicationController
       session[:skip_Amount] = 0
       result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {QuizId: @quiz_id, UserId: currentUser.id, IP: request.remote_ip})       
       session[:total_Amount] = result['DataCollection'].count    
-    end         
+    end   
+    @quiz=result['DataCollection']      
   end  
   
   def submitAnswers   
@@ -73,6 +74,7 @@ class QuizController < ApplicationController
     result = postRequest('http://140.113.8.134/Quiz/QuizV2/ListQuestion', {getAmount: session[:get_Amount], skipAmount: session[:skip_Amount], QuizId: params[:QuizId], UserId: currentUser.id, IP: request.remote_ip})         
     unless result['DataCollection'].blank?
       new_pools = { '1'=> [], '2'=> [], '3'=> [],'5'=> []}
+      pools_score={ '1'=> 0, '2'=> 0, '3'=> 0, '5'=> 0}
       result['DataCollection'].each do |q|  
         if params[:Draft].to_b
           result_pool = postRequest('http://140.113.8.134/Quiz/QuestionPool/ViewPoolDraft', { PoolId: q['PoolId'], UserId: currentUser.id, IP: request.remote_ip})   
@@ -94,12 +96,12 @@ class QuizController < ApplicationController
           score: q['ScorePlus'],            
           category: result_pool['DataCollection']['Category'],       
           subject: result_pool['DataCollection']['Subject'],
-          comment: result_pool['DataCollection']['Comment'],
           options: options
         })
+        pools_score[key]=pools_score[key]+q['ScorePlus']
       end
     end                                                 
-    render json: {success: true, all_pools: new_pools, left_count: session[:total_Amount].to_i-session[:skip_Amount].to_i-session[:get_Amount].to_i}  
+    render json: {success: true, pools_score: pools_score, all_pools: new_pools, left_count: session[:total_Amount].to_i-session[:skip_Amount].to_i-session[:get_Amount].to_i}  
   end  
   
   private

@@ -303,12 +303,18 @@
   
 }
 .question_formal_subject_container{
-  padding-top: 10px;  
-  padding-bottom: 10px;
+  padding-top: 15px;  
+  padding-bottom: 15px;
   border-bottom: 1.5px dashed #582B32;    
 }
 .question_formal_options_container{
-  
+  padding-top: 10px;   
+  padding-bottom: 10px; 
+  border-bottom: 1px solid #582B32;   
+}
+.question_formal_category_container{
+  font-size: 17px; 
+  padding-top: 40px;  
   border-bottom: 1px solid #582B32;   
 }
 /*================== Quiz ====================*/

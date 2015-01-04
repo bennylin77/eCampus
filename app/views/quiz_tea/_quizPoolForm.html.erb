@@ -74,27 +74,27 @@
 </div>
 <script>
 
-function poolSlide(type){
-	if(type=='up')
-	{
-	    $('#pool_score').slideUp({duration: 400, easing: 'swing'});	    	
-	    $('#pool_subject').slideUp({duration: 400, easing: 'swing'});	
-	    $('#pool_comment').slideUp({duration: 400, easing: 'swing'});	
-	    $('#submitPool').slideUp({duration: 400, easing: 'swing'});		
+	function poolSlide(type){
+		if(type=='up')
+		{
+		    $('#pool_score').slideUp({duration: 400, easing: 'swing'});	    	
+		    $('#pool_subject').slideUp({duration: 400, easing: 'swing'});	
+		    $('#pool_comment').slideUp({duration: 400, easing: 'swing'});	
+		    $('#submitPool').slideUp({duration: 400, easing: 'swing'});		
+		}
+		else if(type=='down')
+		{
+			$('#pool_score').slideDown({duration: 400, easing: 'swing'});				
+			$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
+			$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	    	
+			$('#submitPool').slideDown({duration: 400, easing: 'swing'});			
+		}
+		
 	}
-	else if(type=='down')
-	{
-		$('#pool_score').slideDown({duration: 400, easing: 'swing'});				
-		$('#pool_subject').slideDown({duration: 400, easing: 'swing'});
-		$('#pool_comment').slideDown({duration: 400, easing: 'swing'});	    	
-		$('#submitPool').slideDown({duration: 400, easing: 'swing'});			
-	}
-	
-}
 
 
 
-function addQuestion(index, course_id, pool_id, question_id, category, score, subject, options, comment) {
+	function addQuestion(index, course_id, pool_id, question_id, category, score, subject, options, comment) {
 		var $div_question_container = $("<div>", {id: "question_container_"+question_id, class: "question_eg"});	
 			//question_eg_question_outter
 		var $question_eg_question_outter =$("<div>", {class: "row question_eg_question_outter"}); 

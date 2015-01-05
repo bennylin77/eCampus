@@ -90,6 +90,8 @@ class QuizController < ApplicationController
             option_id: o['OptionId'],
             content: o['Content']               
           }}
+        else
+          options=[]  
         end
         key=result_pool['DataCollection']['Category'].to_s     
         new_pools[key].push({

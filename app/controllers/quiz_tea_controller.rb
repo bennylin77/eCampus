@@ -191,6 +191,8 @@ class QuizTeaController < ApplicationController
             content: o['Content'],
             isAnswer: o['IsAnswer'],               
           }}
+        else
+          options=[]  
         end
         key=result_pool['DataCollection']['Category'].to_s     
         new_pools[key].push({

@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
 
 
-  
-  
   get  'main/index'
   get  'main/courseSearch'
   
@@ -21,6 +19,7 @@ Rails.application.routes.draw do
   get  'users/courses'
   get  'users/listCourses'
   get  'users/logOut'
+  get  'users/privacy'
   post 'users/signIn'
   
   get  'quiz/index'
@@ -34,6 +33,9 @@ Rails.application.routes.draw do
   get  'quiz_tea/edit'
   get  'quiz_tea/show'
   get  'quiz_tea/publish'     
+  get  'quiz_tea/rank'
+  get  'quiz_tea/getAnswerAndScore'   
+  get  'quiz_tea/submitScore'
   get  'quiz_tea/listQuestions'
   get  'quiz_tea/deleteQuestion'
   get  'quiz_tea/deleteDraft'

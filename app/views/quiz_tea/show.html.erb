@@ -1,4 +1,4 @@
-<div class="show-content">
+<div class="show-content container-fluid">
 	<div class="row show_title_container">
 	  <div class="col-sm-5 show_title"><%=showBlank @quiz['Caption']%></div>		
 	</div>	
@@ -32,15 +32,36 @@
 	<div class="row operation_show_container">
 	  <%if @quiz['draft']%>
 	  <div class="col-sm-1"><%=link_to '編輯草稿', '/quiz_tea/edit?quiz_id='+@quiz['QuizId']+'&course_id='+@quiz['CourseId'], class: 'operation_edit_but'%></div>
-	  <div class="col-sm-1"><%=link_to '正式發佈', '/quiz_tea/publish?course_id='+@quiz['CourseId']+'&quiz_id='+@quiz['QuizId'], class: 'operation_edit_but'%></div>	    		  
 	  <div class="col-sm-1"><%=link_to '刪除草稿', '/quiz_tea/deleteDraft?quiz_id='+@quiz['QuizId']+'&course_id='+@quiz['CourseId'], class: 'operation_del_but'%></div>	
 	  <%else%>
 	  <div class="col-sm-1"><%=link_to '刪除測驗', '/quiz_tea/deleteQuiz?quiz_id='+@quiz['QuizId']+'&course_id='+@quiz['CourseId'], class: 'operation_del_but'%></div>
 	  <%end%>
 	</div>
-</div>
-<div class="row">
-	<div class="col-sm-5"></div>		
+<div class="row data_list_title">
+  <div class="col-sm-4">未批改學生</div>	
+  <div class="col-sm-2">學號</div>
+  <div class="col-sm-2">姓名</div>
+  <div class="col-sm-2">繳交時間</div>
+  <div class="col-sm-2">分數</div>
 </div>	
+<%unless @sheet_lists.blank?%>
+	<%@sheet_lists.each do |s| %>
+		<div class="row data_list_content">
+			<div class="col-sm-4"></div>	
+				<div class="col-sm-8" style="border-bottom: 1px solid #5C5C5D;">  
+			  	<%=link_to '/quiz_tea/rank?quiz_id='+s[:QuizId]+'&course_id='+s[:CourseId]+'&submit_id='+s[:SubmitId] do%>	  
+				  <div class="row">
+					  <div class="col-sm-3"><%=showBlank s[:AccountId]%></div>	
+					  <div class="col-sm-3"><%=showBlank s[:AccountId]%></div>
+					  <div class="col-sm-3"><%=showBlank toFrontEndTimeFormat(s[:EndDate])%></div>
+					  <div class="col-sm-3"><%=s[:MatchRate]%></div>
+				  </div>
+				<%end%>
+			</div>	
+		</div>
+	<%end%>
+<%end%>	
+</div>
+
 
 

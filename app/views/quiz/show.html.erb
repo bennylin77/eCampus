@@ -1,35 +1,37 @@
-<div class="row">
-  <div class="col-sm-2"><%= @quiz['Caption']%></div>		
-</div>	
-<div class="row">
-  <div class="col-sm-6">
-	<div class="row">
-	<div class="col-sm-5">測驗類型</div>
-	<div class="col-sm-7">平時測驗</div>
+<div class="show-content container-fluid">
+	<div class="row show_title_container">
+	  <div class="col-sm-5 show_title"><%=showBlank @quiz['Caption']%></div>		
 	</div>	
-	<div class="row">
-	<div class="col-sm-5">開始時間</div>
-	<div class="col-sm-7"><%=toFrontEndTimeFormat @quiz['BeginDate'] %></div>
+	<div class="row show_description_container">
+	  <div class="col-sm-6">
+		<div class="row show_description_sub_container">
+		<div class="col-sm-5 show_description_title">測驗類型</div> 
+		<div class="col-sm-7"><%unless @quiz['QuizType'].blank?%><%=Hash[quizTypeOptions].rassoc(@quiz['QuizType'].to_s).first%><%else%>--<%end%></div>
+		</div>	
+		<div class="row show_description_sub_container">
+		<div class="col-sm-5 show_description_title">開始時間</div>
+		<div class="col-sm-7"><%=showBlank toFrontEndTimeFormat @quiz['BeginDate'] %></div>
+		</div>	
+		<div class="row show_description_sub_container">
+		<div class="col-sm-5 show_description_title">最後入場時間</div>
+		<div class="col-sm-7"><%=showBlank toFrontEndTimeFormat @quiz['EndDate'] %></div>
+		</div>	
+		<div class="row show_description_sub_container">
+		<div class="col-sm-5 show_description_title">作答時間</div>
+		<div class="col-sm-7"><%=@quiz['TimeLimit'] %>分鐘</div>
+		</div>	
+		<div class="row show_description_sub_container">
+		<div class="col-sm-5 show_description_title">題目呈現方式</div>
+		<div class="col-sm-7"><%unless @quiz['DisplayType'].blank?%><%=Hash[displayTypeOptions].rassoc(@quiz['DisplayType'].to_s).first%><%else%>--<%end%></div>
+		</div>				  	
+	  </div>	
+	  <div class="col-sm-5 show_description_right">
+		<%=@quiz['Content'] %>
+	  </div>		
 	</div>	
-	<div class="row">
-	<div class="col-sm-5">最後入場時間</div>
-	<div class="col-sm-7"><%=toFrontEndTimeFormat @quiz['EndDate'] %></div>
+	<div class="row operation_show_container">
+	  <div class="col-sm-1">
+	  	<%=link_to "開始考試", {controller: 'quiz', action: 'take', quiz_id: @quiz['QuizId'], course_id: @quiz['CourseId']}, class: 'operation_edit_but'%>
+	  </div>
 	</div>	
-	<div class="row">
-	<div class="col-sm-5">作答時間</div>
-	<div class="col-sm-7">120分鐘</div>
-	</div>	
-	<div class="row">
-	<div class="col-sm-5">作答方式</div>
-	<div class="col-sm-7">一頁多題，可多次考試</div>
-	</div>				  	
-  </div>	
-  	<div class="col-sm-6">
-	<%=@quiz['Content'] %>
-	</div>		
-</div>	
-
-
-<div class="row">
-  <div class="col-sm-2"><%=link_to "開始考試", {controller: 'quiz', action: 'take', quiz_id: @quiz['QuizId'], course_id: @quiz['CourseId']}%></div>		
-</div>	
+</div>

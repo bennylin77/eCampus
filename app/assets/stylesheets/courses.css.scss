@@ -54,6 +54,12 @@
   padding: 5px 9px;
   font-size: 20px;
 }
+/*================== Form      ====================*/
+.form_options_mani{
+  
+  font-size: 25px;   
+  cursor: pointer;  
+}
 /*================== Operation ====================*/
 
 .operation_show_container{
@@ -61,7 +67,8 @@
   border-bottom: 1.8px dashed #582B32;   
 }
 .operation_tabs_container{
-  padding-bottom: 15px;   
+  margin-bottom: 15px;   
+  border-bottom: 1.8px solid #582B32;    
 }
 .operation_edit_but{
     text-decoration: none !important;
@@ -179,12 +186,18 @@
   border-right: 1.8px solid #582B32; 
 }
 .show_description_right{
+  height: 200px;
   background: #ffffff;
 }
 /*================== Tabs ====================*/
 .course-tabs{
+  width: 100%;
+  z-index: 1000;  
+  position: fixed;
+  top: 90px;
   font-size: 17px;
   background: #ffffff;  
+  border-bottom: none !important;  
 }
 .course-tabs > li> a{
   border: none;    
@@ -219,7 +232,7 @@
 }
 .course-tab-content{
   min-height: 1000px;
-  background: #E8E2D4;
+  background: #E8E2D4;   
   padding-top: 20px;  
   padding-left: 20px;
 }
@@ -242,7 +255,6 @@
 .question_eg{
   font-size: 16px;  
 }
-
 .question_eg_question_outter{
   min-height: 90px;
   padding-top:30px;  
@@ -273,8 +285,7 @@
 .question_eg_options_title{
   padding-top: 5px;    
   padding-bottom: 5px;    
-  border-top: 1.5px dashed #582B32;     
-  border-bottom: 1.5px dashed #582B32;    
+  border-top: 1.5px dashed #582B32;        
 }
 .question_eg_options_comment{
   padding-top: 5px;    
@@ -286,9 +297,46 @@
   padding-bottom:20px;   
   border-bottom: 1px solid #582B32;  
 }
+.question_eg_answer_title_outter{
+  padding-top:20px;      
+}
 
+.question_eg_answer_outter{       
+}
 
-
+.question_eg_answer_title{
+  padding-top: 5px;    
+  padding-bottom: 5px;    
+  border-top: 1.5px dashed #582B32;        
+}
+.question_eg_answer_comment{
+  padding-top: 5px;    
+  padding-bottom: 5px;    
+  border: 1px solid #582B32;     
+}
+.question_eg_answer_container{
+  padding-top:20px;  
+  padding-bottom:20px;   
+  border-bottom: 1px solid #582B32;  
+}
+.question_formal{
+  
+}
+.question_formal_subject_container{
+  padding-top: 15px;  
+  padding-bottom: 15px;
+  border-bottom: 1.5px dashed #582B32;    
+}
+.question_formal_options_container{
+  padding-top: 10px;   
+  padding-bottom: 10px; 
+  border-bottom: 1px solid #582B32;   
+}
+.question_formal_category_container{
+  font-size: 17px; 
+  padding-top: 40px;  
+  border-bottom: 1px solid #582B32;   
+}
 /*================== Quiz ====================*/
 .quiz{
   

@@ -1,26 +1,32 @@
 <form action="/quiz_tea/updateBasic" method="post"  id="quiz_basic_form" class="form-horizontal" role="form">
 	<div class="form-group">
 		<div class="col-sm-10">
-			<input type="text" class="form-control" name="Caption" id="Caption" placeholder="測驗名稱" value="<%=@result['Caption'] %>">
+			<input type="text" class="form-control" name="Caption" id="Caption" placeholder="*測驗名稱" value="<%=@result['Caption'] %>">
 		</div>
 	</div>
 	<div class="form-group">
 		<div class="col-sm-10">
-			<textarea class="form-control" rows="3" name="Content" id="Content" placeholder="內容說明"><%=@result['Content'] %></textarea>
+			<textarea class="form-control" rows="3" name="Content" id="Content" placeholder="*內容說明"><%=@result['Content'] %></textarea>
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-1 control-label">開始時間</label>
+		<label class="col-sm-1 control-label">*開始時間</label>
 		<div class="col-sm-9">
 			<input type="text" class="form-control" id='datetimepickerBeginDate' name="BeginDate" value="<%=toFrontEndTimeFormat @result['BeginDate'] %>">
 		</div>
-	</div>
+	</div>	
 	<div class="form-group">
-		<label class="col-sm-1 control-label">最後入場時間</label>
+		<label class="col-sm-1 control-label">*最後入場時間</label>
 		<div class="col-sm-9">
 			<input type="text" class="form-control" id='datetimepickerEndDate' name="EndDate" value="<%=toFrontEndTimeFormat @result['EndDate'] %>">
 		</div>
 	</div>
+	<div class="form-group">
+		<label class="col-sm-1 control-label">*測驗時間</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" id='TimeLimit' value="<%=@result['TimeLimit'] %>">
+		</div>
+	</div>	
 	<div class="form-group">
 		<label class="col-sm-1 control-label">種類</label>
 		<div class="col-sm-9">			
@@ -37,13 +43,13 @@
 		<label class="col-sm-1 control-label">郵件通知</label>
 		<div class="col-sm-9">
 			<label class="checkbox-inline">
-				<input type="checkbox" id="NotifyCheckbox1">
+				<input type="checkbox" id="NotifyCheckbox1" <%=booleanChecked(data: @result['Notify'].to_s, checked_status: '100' )%>>
 				試卷發布馬上通知 </label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="NotifyCheckbox2">
+				<input type="checkbox" id="NotifyCheckbox2" <%=booleanChecked(data: @result['Notify'].to_s, checked_status: '010' )%>>
 				測驗開始通知 </label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="NotifyCheckbox3">
+				<input type="checkbox" id="NotifyCheckbox3" <%=booleanChecked(data: @result['Notify'].to_s, checked_status: '001' )%>>
 				測驗結束前一天發提醒通知 </label>
 		</div>
 	</div>
@@ -67,31 +73,13 @@
 	</div>	
 	
 </form>
-
-<div class="row operation_container">
-  <div class="col-sm-1"><%=link_to '儲存', '', id: 'basic_form_submit', class: 'operation_edit_but'%></div>
-</div>
 <script type="text/javascript">
 	$('#datetimepickerBeginDate, #datetimepickerEndDate').datetimepicker({
 		use24hours : true,
 		format : 'YYYY/MM/DD HH:mm'
-	});
-	var quiz_basic_form = $('#quiz_basic_form');
-	
-	$('#basic_form_submit, #quiz_form_pool_button').click(function(ev) {
-		ev.preventDefault();
-		$("#Caption").prop('disabled', true);
-		$("#Content").prop('disabled', true);
-		$("#datetimepickerBeginDate").prop('disabled', true);
-		$("#datetimepickerEndDate").prop('disabled', true);
-		$("#QuizType").prop('disabled', true);
-		$("#Invited").prop('disabled', true);
-		$("#NotifyCheckbox1").prop('disabled', true);
-		$("#NotifyCheckbox2").prop('disabled', true);
-		$("#NotifyCheckbox3").prop('disabled', true);
-		$("#IsDisorder").prop('disabled', true);
-		$("#DisplayType").prop('disabled', true);		
-		$("#submitBasic").prop('disabled', true);
+	});	
+	var quiz_basic_form = $('#quiz_basic_form');		
+	$("#Caption, #Content, #datetimepickerBeginDate, #datetimepickerEndDate, #QuizType, #Invited, #NotifyCheckbox1, #NotifyCheckbox2, #NotifyCheckbox3, #IsDisorder, #DisplayType, #TimeLimit").change(function() {			
 		$.ajax({
 			type : quiz_basic_form.attr('method'),
 			url : quiz_basic_form.attr('action'),
@@ -102,6 +90,7 @@
 				Content : $('#Content').val(),
 				BeginDate : $('#datetimepickerBeginDate').val(),
 				EndDate : $('#datetimepickerEndDate').val(),
+				TimeLimit : $('#TimeLimit').val(),
 				QuizType : $('#QuizType').val(),
 				Invited : $('#Invited').val(),
 				Notify : (+$("#NotifyCheckbox1").prop('checked')).toString() + (+$("#NotifyCheckbox2").prop('checked')).toString() + (+$("#NotifyCheckbox3").prop('checked')).toString(),
@@ -111,26 +100,15 @@
 			datatype : 'json',
 			success : function(data) {
 				if (data.success) {
-					courseAlertShow('alert-success', data.message)
-					$('#quiz_form_pool_button').tab('show')					
+					if($('#Caption').val()) 
+						$('#breadcrumb_caption').html($('#Caption').val())
+					else
+						$('#breadcrumb_caption').html('--')	
+					//courseAlertShow('alert-success', data.message)			
 				} else {
 					courseAlertShow('alert-danger', data.message)
 				}
-				$("#Caption").prop('disabled', false);
-				$("#Content").prop('disabled', false);
-				$("#datetimepickerBeginDate").prop('disabled', false);
-				$("#datetimepickerEndDate").prop('disabled', false);
-				$("#QuizType").prop('disabled', false);
-				$("#Invited").prop('disabled', false);
-				$("#NotifyCheckbox1").prop('disabled', false);
-				$("#NotifyCheckbox2").prop('disabled', false);
-				$("#NotifyCheckbox3").prop('disabled', false);
-				$("#IsDisorder").prop('disabled', false);
-				$("#DisplayType").prop('disabled', false);					
-				$("#submitBasic").prop('disabled', false);
-
 			}
-		});
-
-	});
+		});			
+	});	
 </script>

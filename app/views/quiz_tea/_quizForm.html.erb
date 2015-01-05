@@ -1,4 +1,61 @@
-<div role="tabpanel">
+<script>
+  function courseAlertShow(type, msg) {
+  		var $alert =$("<div>", {class: "alert alert-success alert-dismissible fade in"}); 
+		$('#course_alert').append($alert);
+		$alert.hide();
+		$alert.addClass( type );
+		$alert.html("<button type='button' class='close' onclick='$(\"#course_alert\").hide()'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>"+msg)
+		$alert.show(600).delay(2000).slideUp(600, function(){
+	    	$alert.remove;
+	    }); 			
+  }    
+  $(function () {
+    $('#quiz_form_basic_button').tab('show');
+	//tabs
+	$('#quiz_form_basic_button').click(function(ev) {
+		ev.preventDefault();
+    	$('#quiz_form_basic_button').tab('show');
+	});    
+	$('#quiz_form_pool_button').click(function(ev) {
+		ev.preventDefault();
+    	$('#quiz_form_pool_button').tab('show');
+	});
+	// publish
+	$('#publish_but').click(function(ev) {
+		ev.preventDefault();
+		$.ajax({
+			type: "GET",
+			url: "/quiz_tea/publish",
+			data : {
+				quiz_id: '<%= @result['QuizId']%>',
+				course_id: '<%= @result['CourseId']%>', 
+				Caption : $('#Caption').val(),
+				Content : $('#Content').val(),
+				BeginDate : $('#datetimepickerBeginDate').val(),
+				EndDate : $('#datetimepickerEndDate').val(),
+				TimeLimit: $('#TimeLimit').val(),
+				QuizType : $('#QuizType').val(),
+				Invited : $('#Invited').val(),
+				Notify : (+$("#NotifyCheckbox1").prop('checked')).toString() + (+$("#NotifyCheckbox2").prop('checked')).toString() + (+$("#NotifyCheckbox3").prop('checked')).toString(),
+				IsDisorder : $('#IsDisorder').val(),
+				DisplayType : $('#DisplayType').val() 
+			},
+			datatype : 'json',
+			success : function(data) {
+				if (data.success) {
+					courseAlertShow('alert-success', data.message)		
+					window.location.assign("/quiz_tea/show?course_id=<%= @result['CourseId']%>&quiz_id=<%= @result['QuizId']%>")
+				} else {
+					courseAlertShow('alert-danger', data.message)
+				}
+			}
+		});			
+	});
+
+		    
+  })
+</script>
+<div role="tabpanel" style="margin-top: 80px;">
 	<ul class="nav nav-tabs course-tabs" id="quiz_tabs">
 		<li role="presentation" class="active">
 			<a href="#quizFormBasic" aria-controls="quizFormBasic" role="tab" id="quiz_form_basic_button" >
@@ -12,18 +69,21 @@
 		</li>		
 	</ul>
 	<div class="tab-content course-tab-content">
-		<div class="row operation_tabs_container">
-			<div class="col-sm-3">
-				<ol class="breadcrumb">
-				  <li><a href="#">--</a></li>
-				  <li class="active">編輯測驗</li>
-				</ol>
+		<div class="container-fluid" id="course_alert"></div>
+		<div class="container-fluid operation_tabs_container">
+			<div class="row">
+				<div class="col-sm-3">
+					<ol class="breadcrumb" style="margin-bottom: 5px;">
+					  <li><%=link_to '/quiz_tea/show?quiz_id='+@quiz_id+'&course_id='+@course_id, id: 'breadcrumb_caption' do%><%=showBlank @result['Caption'] %><%end%></li>
+					  <li class="active">編輯測驗</li>
+					</ol>
+				</div>	
+				<div class="col-sm-3 pull-right">
+					<%=link_to '正式發佈', '#', class: 'operation_tabs_edit_but', id: 'publish_but'%>    		  
+	  				<%=link_to '刪除草稿', '/quiz_tea/deleteDraft?quiz_id='+@result['QuizId']+'&course_id='+@result['CourseId'], class: 'operation_tabs_del_but'%>
+				</div>		
 			</div>	
-			<div class="col-sm-3 pull-right">
-				<%=link_to '正式發佈', '/quiz_tea/publish?course_id='+@result['CourseId']+'&quiz_id='+@result['QuizId'], class: 'operation_tabs_edit_but'%>    		  
-  				<%=link_to '刪除草稿', '/quiz_tea/deleteDraft?quiz_id='+@result['QuizId']+'&course_id='+@result['CourseId'], class: 'operation_tabs_del_but'%>
-			</div>		
-		</div>	
+		</div>
 		<div role="tabpanel" class="tab-pane fade in active" id="quizFormBasic">
 			<%= render 'quizBasicForm'%>
 		</div>
@@ -32,8 +92,3 @@
 		</div>	
 	</div>
 </div>
-<script>
-  $(function () {
-    $('#quiz_form_basic_button').tab('show')
-  })
-</script>

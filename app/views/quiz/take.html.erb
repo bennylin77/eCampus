@@ -1,12 +1,80 @@
 <form action="/quiz/submitAnswers" method="post" id="quiz_take_form" class="form-horizontal" role="form">
 </form>
-
 <script>
 	var question_index;
 	var PoolIds = []; 	
 	var Categories = [];
-
-	function addFormalQuestion( pool_id, question_id, category, subject, options, comment) {
+	function addFormalQuestion(index, course_id, pool_id, question_id, category, score, subject, options) {
+		PoolIds.push(pool_id); 			
+		Categories.push(category);				
+		var $div_question_container = $("<div>", {id: "question_container_"+question_id, class: "container-fluid question_formal"});	
+			//subjects
+		var $question_subject_row = $("<div>", {class: "row"}); 
+		var $question_subject_col = $("<div>", {class: "col-sm-offset-2 col-sm-10"}); 
+		var $question_subject_container = $("<div>", {class: "row question_formal_subject_container"}); 
+			$question_subject_container.append('<div class="col-sm-1">'+index+'.</div>')
+			$question_subject_container.append('<div class="col-sm-11 question_formal_subject">'+subject+'.</div>')
+			$question_subject_col.append($question_subject_container);
+			$question_subject_row.append($question_subject_col);	
+			$div_question_container.append($question_subject_row);	
+			//options
+		var $question_options_row = $("<div>", {class: "row"}); 
+		var $question_options_col = $("<div>", {class: "col-sm-offset-2 col-sm-10"}); 
+		var $question_options_container = $("<div>", {class: "row question_formal_options_container"});
+		var $question_options_options = $("<div>", {class: "col-sm-11"}); 
+			$question_options_container.append('<div class="col-sm-1"></div>')
+			$question_options_container.append($question_options_options)
+			$question_options_col.append($question_options_container);
+			$question_options_row.append($question_options_col);	
+			$div_question_container.append($question_options_row);																  
+		//category process
+		switch(category.toString()) {
+	    case '5':
+			var $div_options_container = $("<textarea>", {class: "form-control", rows: "3", name: "answers"+question_index.toString()+"[]"});		
+	        $question_options_options.append($div_options_container)
+	        break;
+	    case '2':    
+			$.each( options, function( k, v ){			
+				var $div_option = $("<div>", {class: "radio"});
+				var $div_option_label = $("<label>", {});			
+				var $div_option_input = $("<input>", {type: "radio", name: "answers"+question_index.toString()+"[]"});		
+				$div_option_input.data( "option_id", v.option_id );		
+				$div_option_label.append($div_option_input);			
+				$div_option_label.append(v.content);		
+				$div_option.append($div_option_label); 			
+				$question_options_options.append($div_option);		
+			});	   
+	        break;
+	    case '3':
+			$.each( options, function( k, v ){			
+				var $div_option = $("<div>", {class: "checkbox"});
+				var $div_option_label = $("<label>", {});			
+				var $div_option_input = $("<input>", {type: "checkbox", name: "answers"+question_index.toString()+"[]"});		
+				$div_option_input.data( "option_id", v.option_id );		
+				$div_option_label.append($div_option_input);			
+				$div_option_label.append(v.content);		
+				$div_option.append($div_option_label); 			
+				$question_options_options.append($div_option);		
+			});	
+	        break;
+	    case '1':    
+			$.each( options, function( k, v ){			
+				var $div_option = $("<div>", {class: "radio"});
+				var $div_option_label = $("<label>", {});			
+				var $div_option_input = $("<input>", {type: "radio", name: "answers"+question_index.toString()+"[]"});		
+				$div_option_input.data( "option_id", v.option_id );		
+				$div_option_label.append($div_option_input);			
+				$div_option_label.append(v.content);		
+				$div_option.append($div_option_label); 			
+				$question_options_options.append($div_option);		
+			});	   
+	        break;		
+		} 			
+		$('#quiz_take_form').append($div_question_container);
+		question_index++;		
+	}	
+/*	
+	function addFormalQuestion(index, course_id, pool_id, question_id, category, score, subject, options, comment) {
 		PoolIds.push(pool_id); 			
 		Categories.push(category);		
 		var $div_question_container = $("<div>", {id: "question_container_"+question_id, class: "col-sm-8"});	    
@@ -15,13 +83,13 @@
 		var $div_panel_title_container = $("<h3>", {class: "panel-title"});
 		var $div_panel_body_container = $("<div>", {class: "panel-body"});
 		switch(category.toString()) {
-	    case '0':
+	    case '5':
 			var $div_options_container = $("<textarea>", {class: "form-control", rows: "3", name: "answers"+question_index.toString()+"[]"});		
 	        break;
-	    case '1':
+	    case '2':
 			var $div_options_container = $("<div>", {});	    
 			$.each( options, function( k, v ){			
-				var $div_option = $("<div>", {class: "checkbox"});
+				var $div_option = $("<div>", {class: "radio"});
 				var $div_option_label = $("<label>", {});			
 				var $div_option_input = $("<input>", {type: "radio", name: "answers"+question_index.toString()+"[]"});		
 				$div_option_input.data( "option_id", v.option_id );		
@@ -31,7 +99,7 @@
 				$div_options_container.append($div_option);		
 			});	   
 	        break;
-	    case '2':
+	    case '3':
 			var $div_options_container = $("<div>", {});	    
 			$.each( options, function( k, v ){			
 				var $div_option = $("<div>", {class: "checkbox"});
@@ -44,9 +112,18 @@
 				$div_options_container.append($div_option);		
 			});	
 	        break;
-	    case '3':
-	    
-	    
+	    case '1':
+			var $div_options_container = $("<div>", {});	    
+			$.each( options, function( k, v ){			
+				var $div_option = $("<div>", {class: "radio"});
+				var $div_option_label = $("<label>", {});			
+				var $div_option_input = $("<input>", {type: "radio", name: "answers"+question_index.toString()+"[]"});		
+				$div_option_input.data( "option_id", v.option_id );		
+				$div_option_label.append($div_option_input);			
+				$div_option_label.append(v.content);		
+				$div_option.append($div_option_label); 			
+				$div_options_container.append($div_option);		
+			});	   
 	        break;		
 		} 		
 		$div_panel_title_container.html(subject);					
@@ -58,9 +135,7 @@
 		$('#quiz_take_form').append($div_question_container);
 		question_index++;
 	}	
-	//addFormalQuestion('abc', 'def', '1', "盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?", { 7: "Saab", 6: "Volvo", 81: "BMW", 65: "GIANT"}, "這題更簡單，你也是不應該不會喔！");
-	//addFormalQuestion('abc', 'def', '0', "盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?", {}, "這題更簡單，你也是不應該不會喔！");
-	//addFormalQuestion('abc', 'def', '2', "盧藏用始隱於終南山中,中宗朝累居要職。有道士司馬承禎者,睿宗迎至京,將還,藏用指終南山 謂之曰:「此中大有佳處,何必在遠!」承禎徐答曰:「以僕所觀,乃仕宦捷徑耳。」下列成語, 何者與此故事相關?", { 7: "Saab", 6: "Volvo", 81: "BMW", 65: "GIANT"}, "這題更簡單，你也是不應該不會喔！");
+*/	
 	function questionList()
 	{
 		question_index=0;
@@ -73,14 +148,52 @@
 			success : function(data) {
 				if (data.success) 
 				{
-					$.each( data.pools, function( k, v ){
-						addFormalQuestion( v.pool_id, v.question_id, v.category, v.subject, v.options, v.comment);	
+					var index = 0;					
+					$('#quiz_take_form').append('<div class="container-fluid" style="padding-top: 15px;"><div class="row"><div class="col-sm-offset-9 col-sm-3">測驗倒數時間: <span id="quiz_time_remain"></span></div></div></div>');																					
+					// countdown
+				   	$("#quiz_time_remain").countdown(data.time_out, function(event) {
+					    $(this).text(
+					      event.strftime('%H 小時 %M 分 %S 秒')
+					    );
+				 	});						
+					$.each( data.all_pools, function( k, v ){
+						if(v.length!=0)
+						{						
+							var category_title=''
+							var $question_formal_category_container = $("<div>", {class: "container-fluid question_formal_category_container"}); 	
+							var $question_formal_category_container_row = $("<div>", {class: "row question_formal_category_container_row"}); 
+							switch(k) {
+							    case '1':
+							    	category_title='是非題'
+							        break;
+							    case '2':
+							        category_title='單選題'
+							        break;
+							    case '3':
+							        category_title='複選題'
+							        break;
+							    case '5':
+							        category_title='簡答題'
+							        break;						        
+							} 						
+							$question_formal_category_container_row.append('<div class="col-sm-2">['+
+																			category_title+
+																			'][本大題配分'+
+																			data.pools_score[k]+
+																			'分]</div>'); 
+							$question_formal_category_container.append($question_formal_category_container_row); 
+							$('#quiz_take_form').append($question_formal_category_container);																					
+							$.each( v, function( kk, vv ){
+								index++;
+								addFormalQuestion(index, vv.course_id, vv.pool_id, vv.question_id, vv.category, vv.score, vv.subject, vv.options);	
+							});
+						}
 					});	
 					
 					if(data.left_count==0)
-						$('#quiz_take_form').append('<button type="submit" class="btn btn-default" id="submitBasic">確認繳卷</button>');					
+						$('#quiz_take_form').append('<div class="container-fluid" style="padding-top: 15px;"><div class="row"><div class="col-sm-offset-10 col-sm-1"><button type="submit" class="btn btn-default" id="submitBasic">確認繳卷</button></div></div></div>');					
 					else
-						$('#quiz_take_form').append('<button type="submit" class="btn btn-default" id="submitBasic">下一頁</button>');					
+						$('#quiz_take_form').append('<div class="container-fluid" style="padding-top: 15px;"><div class="row"><div class="col-sm-offset-10 col-sm-1"><button type="submit" class="btn btn-default" id="submitBasic">下一頁</button></div></div></div>');					
 																			
 				} 
 				else 
@@ -100,12 +213,12 @@ $(function() {
 		var answers = []; 		
 		$.each(Categories, function( index, value ) {		
 			switch(value.toString()) {
-				case '0':	
+				case '5':	
 					var a=[];	
 					a.push($('#quiz_take_form textarea[name="answers'+index.toString()+'[]"]').val());
 					answers[index]=a;								
 	       			break;						
-	    		case '1':
+	    		case '2':
 	    			var a=[];
 	    			var check_selected=false;	
 					$('#quiz_take_form input[name="answers'+index.toString()+'[]"]').each(function() {						
@@ -119,7 +232,7 @@ $(function() {
 						a.push("");	
 					answers[index]=a;												
 	        		break;
-	    		case '2':
+	    		case '3':
 	    			var a=[];	
 					$('#quiz_take_form input[name="answers'+index.toString()+'[]"]').each(function() {						
 						if($(this).prop('checked'))
@@ -132,8 +245,20 @@ $(function() {
 						a.push("");							
 					answers[index]=a;		    		
 	        		break;
-	    		case '3':
-	    			break;	        									
+	    		case '1':
+	    			var a=[];
+	    			var check_selected=false;	
+					$('#quiz_take_form input[name="answers'+index.toString()+'[]"]').each(function() {						
+						if($(this).prop('checked'))
+						{
+					    	a.push($(this).data( "option_id" )); 
+					    	check_selected=true
+					    }						
+					});		
+					if(!check_selected)
+						a.push("");	
+					answers[index]=a;												
+	        		break;	    		        									
 			}	
 			
 		});			

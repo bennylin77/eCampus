@@ -3,7 +3,15 @@
 		<%=@course_id%>
 		<%=currentUser.role%>
 		<%=link_to '新增討論', { controller: 'forum', action: 'new', course_id: @course_id }%>
+		
 		<%=@res%>
+		<table class="table table-bordered">
+			<% @res["DataCollection"].each do |forum| %>
+				<tr class="row">
+					<td><%=link_to forum["Title"],{controller: 'forum', action: 'show', id: forum["ForumId"]} %></td>
+				</tr>
+			<% end %>
+		</table>
 	</div>
 	<div class="col-md-3">
 		<div id="sidebar-menu" class="hidden-xs hidden-sm" style="font-size:16px;position:fixed;margin-top:100px;">

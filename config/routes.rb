@@ -10,9 +10,13 @@ Rails.application.routes.draw do
   
 #Created by ADO, Forum
   resources :courses do
-	get "forum/index"
-	get "forum/new"
-	post "forum/create"
+		resources :forum
+=begin
+		get "forum/index"
+		get "forum/new"
+		get "forum/show"
+		post "forum/create"
+=end
   end
   
   

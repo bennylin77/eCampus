@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :courses do
 	get "forum/index"
 	get "forum/new"
+	post "forum/create"
   end
   
   

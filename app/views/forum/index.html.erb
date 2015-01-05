@@ -3,7 +3,7 @@
 <%=currentUser.role%>
 <br><br>
 
-<%=link_to "新增討論區","/forum/new"%>
+<%=link_to '新增討論', { controller: 'forum', action: 'new', course_id: @course_id }%>
 
 
 <br><br><br><br>

@@ -1,2 +1,7 @@
-<%=form_tag "forum","/forum/create" do %>
+<div class="row crud_container">
+<%= form_tag controller:"forum",action: "create" do %>
+<%= text_field_tag "title" %>
+<%= submit_tag %>
 <% end %>
+</div>
+<%=currentUser.id%>

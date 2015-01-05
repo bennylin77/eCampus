@@ -19,4 +19,5 @@
 //= require bootstrap-datetimepicker
 //= require ladda.min.js
 //= require spin.min.js
+//= require bootstrap-scrollspy.min
 //= require_tree .

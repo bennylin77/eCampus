@@ -1,11 +1,50 @@
-<br><br>
-<%=@course_id%>
-<%=currentUser.role%>
-<br><br>
+<div class="row">
+	<div class="col-md-9">
+		<%=@course_id%>
+		<%=currentUser.role%>
+		<%=link_to '新增討論', { controller: 'forum', action: 'new', course_id: @course_id }%>
+		<%=@res%>
+	</div>
+	<div class="col-md-3">
+		<div id="sidebar-menu" class="hidden-xs hidden-sm" style="font-size:16px;position:fixed;margin-top:100px;">
+			<ul class="nav nav-stacked affix main-menu">
+			<li><a href="#tc">課程資訊</a></li>
+			<ul class="nav sub-menu">
+				<!--<li><a href="#tc">課程資訊</a></li>-->
+				<li><a href="#reg_nums">歷年統計</a></li>
+				<li><a href="#course-tips">課程攻略</a></li>
+				<li><a href="#messages">留言板</a></li>
+			</ul>
+			
+			<li><a href="#compare">教授比一比</a></li>
+			<li><a href="#discuss">課程(心得)討論區</a></li>
+			<li><a href="#files">考古題</a></li>
+			</ul>
+		</div>
+	</div>
 
-<%=link_to '新增討論', { controller: 'forum', action: 'new', course_id: @course_id }%>
+</div>
 
+<script>
+$(document).ready(function() {
+	$('body').scrollspy({ target: '#sidebar-menu',offset:60 });
+  var sidebarMainMenu = $('#sidebar-menu .main-menu');
+	/*var scrollcontent=$(".scroll-content");
+	scrollcontent.find('h1').each(function() {
+		sidebarMainMenu.append('<li id="'+ $(this).attr('id') + '-menu"><a href="#' + $(this).attr('id') + '" >' + $(this).text() + '</li>');
+		title = sidebarMainMenu.find('#' + $(this).attr('id'));
+	});
+	scrollcontent.find('h2').each(function() {
+		prevTitle = sidebarMainMenu.find('#' + $(this).prevAll('h1').first().attr('id') + '-menu');
+		prevTitle.not(":has(ul)").append('<ul class="sub-menu"></ul>');
+		prevTitle.find('.sub-menu').append('<li id="'+ $(this).attr('id') + '-menu"><a href="#' + $(this).attr('id') + '">' + $(this).html() + '</li>');
+	});*/
+	$('.main-menu li a').click(function(event) {
+    event.preventDefault();
+    /*$($(this).attr('href'))[0].scrollIntoView();
+    scrollBy(0, -55);*/
+		$('body').scrollTo($(this).attr('href'),700,{offset:-60});
+	});
+});
+</script>
 
-<br><br><br><br>
-
-<%=@res%>

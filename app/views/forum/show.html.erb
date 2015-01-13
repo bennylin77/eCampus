@@ -1,0 +1,20 @@
+﻿<%= tinymce_assets %>
+<%= tinymce %>
+<div class="row">
+	<div class="col-md-10">
+	<%= form_tag controller:"forum",action: "createContent" do %>
+		<%= text_area_tag :content, "", :class => "tinymce", :rows => 40, :cols => 10 %>
+		<%= hidden_field_tag "forum_id",params[:id] %>
+		<%= submit_tag %>
+	<% end %>
+	</div>
+</div>
+
+<!--
+<table class="table table-bordered">
+	<th>主題</th>
+	<th>開放/張貼</th>
+	<th>分組</th>
+	<th>人氣</th>
+</table>
+-->

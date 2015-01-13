@@ -1,18 +1,59 @@
 <div class="row">
 	<div class="col-md-9">
-		<%=@course_id%>
-		<%=currentUser.role%>
 		<%=link_to '新增討論', { controller: 'forum', action: 'new', course_id: @course_id }%>
-		
-		<%=@res%>
-		<table class="table table-bordered">
-			<% @res["DataCollection"].each do |forum| %>
-				<tr class="row">
-					<td><%=link_to forum["Title"],{controller: 'forum', action: 'show', id: forum["ForumId"]} %></td>
-				</tr>
-			<% end %>
-		</table>
+		<% if @res.empty? %>
+			尚無討論!
+		<% else %>
+			<% @res.each do |forum| %>
+			<div class="panel panel-default bs-callout-success" id="discuss_<%=forum["ForumId"]%>" style="border-left-width:5px;">
+				<div class="panel-heading row no-margin-left" >
+					<div class="col-md-1">
+					<a href="https://www.facebook.com/100000103364671" target="_blank" class="masterTooltip" title="<%='UserName'%>">
+						<%= image_tag "http://graph.facebook.com/100000103364671/picture", size: "50x50", class:"", style:"margin-top:10px;"  %>
+					</a>
+					</div>
+					<div class="col-md-6" id="main_title_<%=forum["ForumId"]%>">
+						<h4 id="title_<%=forum["ForumId"]%>" ><%=link_to forum["Title"],{controller: 'forum', action: 'show', id: forum["ForumId"]} %></h4>
+						<p><%=forum["UpdateTime"]%></p>
+					</div>
+					<div class="col-md-5">
+					<div class="row pull-right">
+						<br>
+						<% can_like=true %>					
+						<div style="display:inline-block;margin-right:5px;">
+							<div class="share-button_<%=forum["ForumId"]%>" id="<%=forum["ForumId"]%>"></div>				
+						</div>
+						<% if can_like %>
+							<%= fa_icon "thumbs-o-up 2x", title:"讚", class:"clickable-hover", onclick:"like(1,'main',#{forum["ForumId"]},$(this));"%>
+						<% else %>
+							<%= fa_icon "thumbs-o-up 2x", title:"讚" %>
+						<% end %>
+						<span class="like-count like" id="main_like_<%=forum["ForumId"]%>">8</span>
+						<% if can_like %>
+							<%= fa_icon "thumbs-o-down 2x", title:"噓", class:"clickable-hover", onclick:"like(0,'main',#{forum["ForumId"]},$(this));"%>
+						<% else %>
+							<%= fa_icon "thumbs-o-down 2x", title:"噓" %>
+						<% end %>			
+						<span class="like-count dislike"id="main_dislike_<%=forum["ForumId"]%>" >5</span>						
+					</div>
+				</div>
+			</div>
+				<% forum["Content"].each do |content| %>
+				<div class="panel-body row">
+					<div class="col-md-12" id="main_content_<%=forum["ForumId"]%>">
+						<textcontent id="content_<%=forum["ForumId"]%>"><%=content["Content"].html_safe%></textcontent>
+						<p class="text-right" >
+							<%=link_to "回覆","javascript:void(0);" , onclick:"show_sub_form(#{forum["ForumId"]})", id:"reply_but_#{forum["ForumId"]}" %>						
+							<%=link_to "修改","javascript:void(0);", onclick:"edit(#{forum["ForumId"]},'main')", id:"edit_but_#{forum["ForumId"]}" %>						
+						</p>
+					</div>
+				</div>
+				<% end %>			
+			<% end %>		
+		<% end %>
 	</div>
+	
+	
 	<div class="col-md-3">
 		<div id="sidebar-menu" class="hidden-xs hidden-sm" style="font-size:16px;position:fixed;margin-top:100px;">
 			<ul class="nav nav-stacked affix main-menu">

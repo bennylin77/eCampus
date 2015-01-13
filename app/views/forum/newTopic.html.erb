@@ -1,0 +1,7 @@
+<div class="row">
+<%= form_tag controller:"forum",action: "createTopic" do %>
+<%= text_field_tag "title" %>
+<%= submit_tag %>
+<% end %>
+</div>
+<%=currentUser.id%>

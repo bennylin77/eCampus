@@ -1,0 +1,28 @@
+toolbar:
+  - fontsizeselect | bold italic underline strikethrough superscript subscript | undo redo,alignleft aligncenter alignright
+  - cut | copy | paste | image | link | bullist | numlist
+plugins:
+  - image
+  - link
+  - advlist
+  - autolink
+  - link image
+  - lists
+  - charmap
+  - print
+  - preview
+  - autosave
+  - table
+menu : {
+  #file   : {title : 'File'  , items : 'newdocument'},
+  edit   : {title : 'Edit'  , items : 'undo redo | cut copy paste pastetext | selectall'},
+  #insert : {title : 'Insert', items : 'link media | template hr'},
+  #view   : {title : 'View'  , items : 'visualaid'},
+ # format : {title : 'Format', items : 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
+  table  : {title : 'Table' , items : 'inserttable tableprops deletetable | cell row column'},
+  tools  : {title : 'Tools' , items : 'spellchecker code'}
+}
+autosave_interval: 
+  - 20s
+#menubar : 
+#  - tools table format view insert edit
